@@ -22,7 +22,7 @@ export function TopHeader() {
         <Sun />
       </Button>
       <Button>Try AI Search</Button>
-      <Button>Submit Tool</Button>
+      <Button variant="outline">Submit Tool</Button>
       <Button>Sign Up</Button>
     </div>
   );

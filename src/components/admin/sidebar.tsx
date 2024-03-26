@@ -10,7 +10,24 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { FileBarChart2, LucideIcon, Zap } from "lucide-react";
+import {
+  Bot,
+  Cast,
+  Contact,
+  FileBarChart2,
+  FileCode2,
+  Folder,
+  Hash,
+  Headset,
+  ListTodo,
+  LucideIcon,
+  MailOpen,
+  PencilRuler,
+  SquareGanttChart,
+  SquarePlay,
+  Target,
+  Zap,
+} from "lucide-react";
 
 const links: { title: string; href: string; Icon: LucideIcon }[] = [
   {
@@ -26,67 +43,67 @@ const links: { title: string; href: string; Icon: LucideIcon }[] = [
   {
     title: "Design",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: PencilRuler,
   },
   {
     title: "Productivity",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: ListTodo,
   },
   {
     title: "Email Marketing",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: MailOpen,
   },
   {
     title: "Social Media",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Hash,
   },
   {
     title: "Customer Support",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Headset,
   },
   {
     title: "File Management",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Folder,
   },
   {
     title: "Project Management",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: SquareGanttChart,
   },
   {
     title: "SEO",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: FileCode2,
   },
   {
     title: "Marketing",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Target,
   },
   {
     title: "Influencer Management",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Contact,
   },
   {
     title: "Content",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: SquarePlay,
   },
   {
     title: "Ads Management",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Cast,
   },
   {
     title: "AI",
     href: "#",
-    Icon: FileBarChart2,
+    Icon: Bot,
   },
 ];
 

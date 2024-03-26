@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 @layer base {
   :root {
@@ -13,7 +12,7 @@
     --popover-foreground: 20 14.3% 4.1%;
     --primary: 0 0% 0%;
     --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
+    --secondary: 222deg 93.75% 56.08%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 60 4.8% 95.9%;
     --muted-foreground: 25 5.3% 44.7%;
@@ -50,7 +49,6 @@
   }
 }
 
- 
 @layer base {
   * {
     @apply border-border;
@@ -58,4 +56,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.admin-footer {
+  box-shadow: -3px 8px 9px 5px rgba(0, 0, 0, 0.5);
 }
