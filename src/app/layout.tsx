@@ -1,8 +1,6 @@
 import { TanstackProvider } from "@/providers/TanstackProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { EdgeStoreProvider } from "@/lib/edgestore";
-
 import "./globals.css";
 import { DashBoard } from "@/components/admin/dash-board";
 
