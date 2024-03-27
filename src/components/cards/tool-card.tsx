@@ -1,9 +1,8 @@
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Card } from "../ui/card";
 import { StaticImageData } from "next/image";
 import Link from "next/link";
 import GasIcon from "../common/icons/gas";
+import { Card } from "../ui/card";
+import Image from 'next/image'
 
 export const ToolCard = ({
   logo,
@@ -16,7 +15,7 @@ export const ToolCard = ({
   variant?: "default" | "thumbnail";
   title: string;
   description: string;
-  thumbnail?: StaticImageData;
+  thumbnail: StaticImageData;
 }) => {
   if (variant === "thumbnail") {
     return (
@@ -25,14 +24,14 @@ export const ToolCard = ({
           <Card className="relative flex flex-col items-center shadow-lg">
             <div className="absolute top-0 left-0 z-10 flex justify-between w-full p-3">
               <div className="w-12 h-12 p-2">
-                <img src={logo.src} alt="logo" />
+                <Image src={logo.src} alt="logo" />
               </div>
               <div className="flex gap-2">
                 <GasIcon />
                 <span className="font-semibold text-secondary">Deal</span>
               </div>
             </div>
-            <img className="w-3/4" src={thumbnail?.src} alt="thumbnail" />
+            <Image className="w-3/4" src={thumbnail.src} alt="thumbnail" />
           </Card>
         </Link>
         <div className="mt-4">
@@ -48,7 +47,7 @@ export const ToolCard = ({
       <Card className={`flex shadow-lg`}>
         <div className="p-3">
           <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">
-            <img src={logo.src} alt="logo" />
+            <Image width={48} height={48} src={logo.src} alt="logo" />
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">

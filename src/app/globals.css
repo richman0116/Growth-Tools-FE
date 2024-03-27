@@ -61,3 +61,10 @@
 .admin-footer {
   box-shadow: -3px 8px 9px 5px rgba(0, 0, 0, 0.5);
 }
+
+.bgPrimaryGradient {
+  background: linear-gradient(0deg, #164CD9, #32AADD),
+    linear-gradient(93.25deg, #164CD9 -12.45%, #32AADD 205.53%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

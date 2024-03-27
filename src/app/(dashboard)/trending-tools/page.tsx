@@ -1,12 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import useUserStore from "@/stores/user";
-import { Search, Table, TableProperties } from "lucide-react";
-import { ToolCard } from "@/components/cards/tool-card";
 import TOOL_LOGO_1 from "@/assets/images/tool-logo-1.png";
 import TOOL_LOGO_2 from "@/assets/images/tool-logo-2.png";
 import TOOL_LOGO_3 from "@/assets/images/tool-logo-3.png";
@@ -17,9 +10,12 @@ import TOOL_THUMBNAIL_2 from "@/assets/images/tool-thumbnail-2.png";
 import TOOL_THUMBNAIL_3 from "@/assets/images/tool-thumbnail-3.png";
 import TOOL_THUMBNAIL_4 from "@/assets/images/tool-thumbnail-4.png";
 import TOOL_THUMBNAIL_5 from "@/assets/images/tool-thumbnail-5.png";
+import { ToolCard } from "@/components/cards/tool-card";
+import { Button } from "@/components/ui/button";
+import { Table, TableProperties } from "lucide-react";
 import { useState } from "react";
 
-export default function Index() {
+export default function TrendingToolsPage() {
   const [varinat, setVariant] = useState<"default" | "thumbnail">("default");
 
   return (

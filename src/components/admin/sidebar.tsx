@@ -1,128 +1,83 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import {
-  Bot,
-  Cast,
-  Contact,
-  FileBarChart2,
-  FileCode2,
-  Folder,
-  Hash,
-  Headset,
-  ListTodo,
-  LucideIcon,
-  MailOpen,
-  PencilRuler,
-  SquareGanttChart,
-  SquarePlay,
-  Target,
-  Zap,
-} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { NavProps } from "@/navigation";
+import { usePathname } from "next/navigation";
+import { buttonVariants } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-const links: { title: string; href: string; Icon: LucideIcon }[] = [
-  {
-    title: "Trending Tools",
-    href: "#",
-    Icon: Zap,
-  },
-  {
-    title: "Analytics",
-    href: "#",
-    Icon: FileBarChart2,
-  },
-  {
-    title: "Design",
-    href: "#",
-    Icon: PencilRuler,
-  },
-  {
-    title: "Productivity",
-    href: "#",
-    Icon: ListTodo,
-  },
-  {
-    title: "Email Marketing",
-    href: "#",
-    Icon: MailOpen,
-  },
-  {
-    title: "Social Media",
-    href: "#",
-    Icon: Hash,
-  },
-  {
-    title: "Customer Support",
-    href: "#",
-    Icon: Headset,
-  },
-  {
-    title: "File Management",
-    href: "#",
-    Icon: Folder,
-  },
-  {
-    title: "Project Management",
-    href: "#",
-    Icon: SquareGanttChart,
-  },
-  {
-    title: "SEO",
-    href: "#",
-    Icon: FileCode2,
-  },
-  {
-    title: "Marketing",
-    href: "#",
-    Icon: Target,
-  },
-  {
-    title: "Influencer Management",
-    href: "#",
-    Icon: Contact,
-  },
-  {
-    title: "Content",
-    href: "#",
-    Icon: SquarePlay,
-  },
-  {
-    title: "Ads Management",
-    href: "#",
-    Icon: Cast,
-  },
-  {
-    title: "AI",
-    href: "#",
-    Icon: Bot,
-  },
-];
+export function Sidebar({ links, isCollapsed }: Readonly<NavProps>) {
+  const pathname = usePathname();
 
-export function Sidebar() {
   return (
-    <NavigationMenu className="min-h-[100vh] border-r-[1px] items-start px-2 py-4">
-      <NavigationMenuList className="flex-col gap-2">
-        {links.map((link) => (
-          <NavigationMenuItem className="w-full" key={link.href}>
-            <Link href={link.href} legacyBehavior passHref>
-              <NavigationMenuLink
-                className={`${navigationMenuTriggerStyle()} w-full text-sm`}
-              >
-                <link.Icon className="mr-2" /> {link.title}
-              </NavigationMenuLink>
+    <div
+      data-collapsed={isCollapsed}
+      className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+    >
+      <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        {links.map((link, index) =>
+          isCollapsed ? (
+            <Tooltip key={index} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Link
+                  href={link.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: "ghost",
+                      size: "icon",
+                    }),
+                    "h-9 w-9",
+                    link.href === pathname &&
+                      "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                  )}
+                >
+                  <i className="mr-2 h-6 w-6">
+                    {link?.icon(link.href === pathname ? "#164CD9" : "#636363")}
+                  </i>
+                  <span className="sr-only">{link.title}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="flex items-center gap-4">
+                {link.title}
+                {link.label && (
+                  <span className="ml-auto text-muted-foreground">
+                    {link.label}
+                  </span>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Link
+              key={index}
+              href={link.href}
+              className={cn(
+                buttonVariants({
+                  variant: "ghost",
+                }),
+                link.href === pathname && "text-secondary",
+                "justify-start"
+              )}
+            >
+              <i className="mr-2 h-6 w-6">
+                {link?.icon(link.href === pathname ? "#164CD9" : "#636363")}
+              </i>
+              {link.title}
+              {link.label && (
+                <span
+                  className={cn(
+                    "ml-auto",
+                    link.href === pathname && "text-background dark:text-white"
+                  )}
+                >
+                  {link.label}
+                </span>
+              )}
             </Link>
-          </NavigationMenuItem>
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+          )
+        )}
+      </nav>
+    </div>
   );
 }

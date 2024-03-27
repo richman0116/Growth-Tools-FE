@@ -25,8 +25,8 @@ export default function DiscordIcon({ className }: { className?: string }) {
           y2="7.91827"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#2661FA" />
-          <stop offset="1" stop-color="#32DDB4" />
+          <stop stopColor="#2661FA" />
+          <stop offset="1" stopColor="#32DDB4" />
         </linearGradient>
       </defs>
     </svg>

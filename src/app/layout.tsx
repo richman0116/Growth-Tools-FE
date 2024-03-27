@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 
 import "./globals.css";
+import { DashBoard } from "@/components/admin/dash-board";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TanstackProvider>{children}</TanstackProvider>
+        <TanstackProvider>
+          <DashBoard navCollapsedSize={0}>{children}</DashBoard>
+        </TanstackProvider>
       </body>
     </html>
   );
