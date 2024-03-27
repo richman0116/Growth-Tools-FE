@@ -9,6 +9,8 @@ import { TooltipProvider } from "../ui/tooltip";
 import { Footer } from "./footer";
 import { TopHeader } from "./header";
 import { Sidebar } from "./sidebar";
+import { ArrowBigLeft, ChevronRight, ChevronLeft } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface DashboardBoardProps {
   navCollapsedSize: number;
@@ -57,12 +59,26 @@ export function DashBoard({
           }}
           className={cn(
             isCollapsed && "min-w-[50px]",
-            "relative transition-all duration-300 ease-in-out border-r-[1px]"
+            "relative transition-all duration-300 ease-in-out border-r-[1px] overflow-visible"
           )}
         >
+          <div
+            onClick={collapsePanel}
+            className="rounded-full w-8 h-8 border flex items-center justify-center absolute top-4 -right-4 z-10 bg-white cursor-pointer"
+          >
+            {isCollapsed ? (
+              <ChevronRight className="w-5" color="#1F6BDA" />
+            ) : (
+              <ChevronLeft className="w-5" color="#1F6BDA" />
+            )}
+          </div>
           <Sidebar isCollapsed={isCollapsed} links={dashboardNavigation} />
         </ResizablePanel>
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+        <ResizablePanel
+          defaultSize={defaultLayout[1]}
+          minSize={30}
+          className="relative"
+        >
           <TopHeader />
           {children}
           <Footer />

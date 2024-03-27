@@ -14,7 +14,7 @@ export function Sidebar({ links, isCollapsed }: Readonly<NavProps>) {
   return (
     <div
       data-collapsed={isCollapsed}
-      className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
+      className="group flex flex-col gap-4 py-4 data-[collapsed=true]:py-4"
     >
       <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) =>
@@ -33,7 +33,7 @@ export function Sidebar({ links, isCollapsed }: Readonly<NavProps>) {
                       "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                   )}
                 >
-                  <i className="mr-2 h-6 w-6">
+                  <i className="h-6 w-6">
                     {link?.icon(link.href === pathname ? "#164CD9" : "#636363")}
                   </i>
                   <span className="sr-only">{link.title}</span>
