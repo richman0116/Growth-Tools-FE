@@ -21,18 +21,16 @@ import { useState } from "react";
 export default function TrendingToolsPage() {
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
 
-  console.log(variant);
-
   return (
     <>
       <section className="relative">
         <Image
           src={ANNOUNCEMENT}
           width={427}
-          className="absolute right-0"
+          className="absolute right-0 hidden md:block"
           alt=""
         />
-        <div className="py-[52px] px-12 max-w-4xl">
+        <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
           <h1 className="font-extrabold text-4xl lg:text-5xl mb-6">
             Discover <span className="textGradient">marketing tools</span> that{" "}
             <br />
@@ -43,13 +41,15 @@ export default function TrendingToolsPage() {
             startup. Start by clicking Categories below to pick tools in
             different marketing topics.
           </p>
-          <div className="flex gap-6">
-            <Button className="font-bold">View Latest Tools</Button>
-            <Button variant="outline">Trending tools</Button>
+          <div className="flex gap-2 md:gap-6">
+            <Button className="font-bold h-12">View Latest Tools</Button>
+            <Button variant="outline" className="h-12">
+              Trending tools
+            </Button>
           </div>
         </div>
       </section>
-      <section className="flex flex-col gap-6 p-12">
+      <section className="flex flex-col gap-6 p-4 md:p-12">
         <div className="flex gap-4 items-center">
           <div className="cursor-pointer py-2 px-4 flex items-center gap-3 rounded-full bg-gray-50">
             <Filter />
@@ -75,7 +75,7 @@ export default function TrendingToolsPage() {
             <Grid3X3 color={variant === "thumbnail" ? "#164CD9" : "black"} />
           </Button>
         </div>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-col-1 md:grid-cols-3 gap-6">
           {[
             {
               logo: TOOL_LOGO_1,

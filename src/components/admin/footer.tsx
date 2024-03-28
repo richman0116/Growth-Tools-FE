@@ -16,6 +16,7 @@ import DiscordIcon from "../common/icons/discord";
 import TiktokIcon from "../common/icons/tiktok";
 import XIcon from "../common/icons/x";
 import InstagramIcon from "../common/icons/instagram";
+import Image from "next/image";
 
 const links: { title: string; href: string }[] = [
   {
@@ -34,8 +35,8 @@ const links: { title: string; href: string }[] = [
 
 export function Footer() {
   return (
-    <div className="admin-footer flex items-start justify-between gap-2 px-12 py-4">
-      <img src={LOGO.src} alt="logo" />
+    <div className="admin-footer grid grid-cols-1 md:flex items-start justify-between gap-4 md:gap-2 p-4 md:px-12 md:py-4">
+      <Image src={LOGO.src} width={100} height={30} alt="logo" />
       <NavigationMenu className="block">
         <h4 className="text-base font-bold px-4 mb-2">Menu</h4>
         <NavigationMenuList className="flex-col gap-1">

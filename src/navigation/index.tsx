@@ -48,6 +48,7 @@ export interface NavProps {
     roles?: Role[];
   }[];
   userRole?: Role;
+  onCollapse: () => void;
 }
 
 export const dashboardNavigation: NavProps["links"] = [

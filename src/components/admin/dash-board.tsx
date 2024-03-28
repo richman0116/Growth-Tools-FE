@@ -3,13 +3,14 @@
 import { cn } from "@/lib/utils";
 import { dashboardNavigation } from "@/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import { ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { TooltipProvider } from "../ui/tooltip";
 import { Footer } from "./footer";
 import { TopHeader } from "./header";
 import { Sidebar } from "./sidebar";
+import { useMediaQuery } from "usehooks-ts";
 
 interface DashboardBoardProps {
   navCollapsedSize: number;
@@ -24,6 +25,7 @@ export function DashBoard({
 }: Readonly<DashboardBoardProps>) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const ref = useRef<ImperativePanelHandle>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const collapsePanel = () => {
     const panel = ref.current;
@@ -36,6 +38,12 @@ export function DashBoard({
       }
     }
   };
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsCollapsed(true);
+    }
+  }, [isMobile]);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -51,9 +59,11 @@ export function DashBoard({
           minSize={15}
           maxSize={20}
           onCollapse={() => {
+            if (isMobile) return;
             setIsCollapsed(true);
           }}
           onExpand={() => {
+            if (isMobile) return;
             setIsCollapsed(false);
           }}
           className={cn(
@@ -61,17 +71,11 @@ export function DashBoard({
             "relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible"
           )}
         >
-          <div
-            onClick={collapsePanel}
-            className="rounded-full w-8 h-8 border flex items-center justify-center absolute top-4 -right-4 z-10 bg-white cursor-pointer"
-          >
-            {isCollapsed ? (
-              <ChevronRight className="w-5" color="#1F6BDA" />
-            ) : (
-              <ChevronLeft className="w-5" color="#1F6BDA" />
-            )}
-          </div>
-          <Sidebar isCollapsed={isCollapsed} links={dashboardNavigation} />
+          <Sidebar
+            isCollapsed={isCollapsed}
+            links={dashboardNavigation}
+            onCollapse={collapsePanel}
+          />
         </ResizablePanel>
         <ResizablePanel
           defaultSize={defaultLayout[1]}
