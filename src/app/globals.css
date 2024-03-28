@@ -68,3 +68,28 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.textGradient {
+  background: linear-gradient(91.38deg, #2661FA -12.84%, #32DDB4 104.02%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cardItem:hover {
+  background: #DDDDDD;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cardItem:hover .tagItem {
+  background: white;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cardItem:hover .cardImageItem {
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  scale: 1.25;
+}
+
+.clapIcon:hover > svg path {
+  fill: white;
+}

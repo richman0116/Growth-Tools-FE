@@ -1,6 +1,6 @@
 import React, { SVGProps } from "react";
 
-export const Ftp = ({ fill = "black" }: SVGProps<any>) => {
+export const Filter = ({ fill = "#1855D9" }: SVGProps<any>) => {
   return (
     <svg
       width="24"

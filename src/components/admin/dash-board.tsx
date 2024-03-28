@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { dashboardNavigation } from "@/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ReactNode, useRef, useState } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import { ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
@@ -9,8 +10,6 @@ import { TooltipProvider } from "../ui/tooltip";
 import { Footer } from "./footer";
 import { TopHeader } from "./header";
 import { Sidebar } from "./sidebar";
-import { ArrowBigLeft, ChevronRight, ChevronLeft } from "lucide-react";
-import { Button } from "../ui/button";
 
 interface DashboardBoardProps {
   navCollapsedSize: number;
@@ -59,7 +58,7 @@ export function DashBoard({
           }}
           className={cn(
             isCollapsed && "min-w-[50px]",
-            "relative transition-all duration-300 ease-in-out border-r-[1px] overflow-visible"
+            "relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible"
           )}
         >
           <div
