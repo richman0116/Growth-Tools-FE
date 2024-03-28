@@ -41,13 +41,14 @@ export const ToolCard = ({
                 </div>
               </div>
             </div>
-            <Image
-              className="w-3/4 cardImageItem"
-              src={thumbnail.src}
-              width={225}
-              height={200}
-              alt="thumbnail"
-            />
+            <div className="relative h-64 w-[70%]">
+              <Image
+                className="w-3/4 cardImageItem"
+                src={thumbnail.src}
+                fill
+                alt="thumbnail"
+              />
+            </div>
           </Card>
         </Link>
         <div className="mt-4">
@@ -60,7 +61,7 @@ export const ToolCard = ({
 
   return (
     <Link href="#">
-      <Card className={`flex shadow-lg`}>
+      <Card className="flex shadow-lg">
         <div className="p-3">
           <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">
             <Image width={48} height={48} src={logo.src} alt="logo" />

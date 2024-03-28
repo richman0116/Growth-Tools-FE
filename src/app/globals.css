@@ -90,6 +90,13 @@
   scale: 1.25;
 }
 
+.defautlCard > .clapIcon {
+  visibility: visible;
+  display: flex;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .clapIcon:hover > svg path {
   fill: white;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
