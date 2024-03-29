@@ -5,7 +5,7 @@ import WHITE_BOT_ICON from "@/assets/icons/white-bot.svg";
 import LOGO from "@/assets/images/logo-growth-tools.png";
 import { AlignJustify, Plus, Sun } from "lucide-react";
 import Image from "next/image";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import {
@@ -15,6 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export function AuthHeader() {
   return (
@@ -51,7 +53,9 @@ export function AuthHeader() {
             <Plus className="w-5" />
             Submit Tool
           </Button>
-          <Button>Sign Up</Button>
+          <Link className={cn(buttonVariants())} href="/sign-up">
+            Sign Up
+          </Link>
         </div>
       </div>
 
@@ -98,9 +102,12 @@ export function AuthHeader() {
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Button size="sm" className="w-full">
+                  <Link
+                    className={(cn(buttonVariants()), "w-full")}
+                    href="/sign-up"
+                  >
                     Sign Up
-                  </Button>
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>
