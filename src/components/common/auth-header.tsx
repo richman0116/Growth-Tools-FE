@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-export function TopHeader() {
+export function AuthHeader() {
   return (
     <>
       <div className="px-12 py-4 items-center justify-between h-[70px] md:flex hidden">

@@ -2,15 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import { dashboardNavigation } from "@/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
+import { useMediaQuery } from "usehooks-ts";
+import { AuthHeader } from "../common/auth-header";
+import { Footer } from "../common/footer";
 import { ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { TooltipProvider } from "../ui/tooltip";
-import { Footer } from "./footer";
-import { TopHeader } from "./header";
 import { Sidebar } from "./sidebar";
-import { useMediaQuery } from "usehooks-ts";
 
 interface DashboardBoardProps {
   navCollapsedSize: number;
@@ -19,13 +18,13 @@ interface DashboardBoardProps {
 
 const defaultLayout = [16, 84];
 
-export function DashBoard({
+export function DashBoardTemplate({
   navCollapsedSize,
   children,
 }: Readonly<DashboardBoardProps>) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const ref = useRef<ImperativePanelHandle>(null);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 480px)");
 
   const collapsePanel = () => {
     const panel = ref.current;
@@ -82,7 +81,7 @@ export function DashBoard({
           minSize={30}
           className="relative"
         >
-          <TopHeader />
+          <AuthHeader />
           {children}
           <Footer />
         </ResizablePanel>
