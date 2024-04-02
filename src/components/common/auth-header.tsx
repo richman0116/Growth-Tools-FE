@@ -22,12 +22,14 @@ export function AuthHeader() {
   return (
     <>
       <div className="px-12 py-4 items-center justify-between h-[70px] md:flex hidden">
-        <Image
-          width={LOGO.width}
-          height={LOGO.height}
-          alt="logo"
-          src={LOGO.src}
-        />
+        <Link href={"/"}>
+          <Image
+            width={LOGO.width}
+            height={LOGO.height}
+            alt="logo"
+            src={LOGO.src}
+          />
+        </Link>
         <div className="flex items-center gap-2">
           <div className="relative">
             <Input
@@ -45,7 +47,7 @@ export function AuthHeader() {
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />
           </Button>
-          <Button className="flex items-center gap-2 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500">
+          <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-pink-500 hover:to-yellow-500">
             <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
             Try AI Search
           </Button>
@@ -60,13 +62,15 @@ export function AuthHeader() {
       </div>
 
       <div className="flex p-4 md:hidden items-center justify-end h-14">
-        <Image
-          width={LOGO.width}
-          height={LOGO.height}
-          alt="logo"
-          className="ml-2"
-          src={LOGO.src}
-        />
+        <Link href={"/"}>
+          <Image
+            width={LOGO.width}
+            height={LOGO.height}
+            alt="logo"
+            className="ml-2"
+            src={LOGO.src}
+          />
+        </Link>
         <div className="ml-auto">
           <Button size="icon" className="p-[6px] w-8 h-8 ">
             <Image src={SEARCHICON} alt="search" className="w-5" />
@@ -85,7 +89,7 @@ export function AuthHeader() {
                 <DropdownMenuItem>
                   <Button
                     size="sm"
-                    className="flex items-center gap-2 bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+                    className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
                   >
                     <Image src={WHITE_BOT_ICON} alt="search" className="w-3" />
                     Try AI Search

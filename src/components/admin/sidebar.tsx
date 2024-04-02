@@ -2,24 +2,20 @@
 
 import Link from "next/link";
 
+import AI_SEARCH from "@/assets/images/ai-search.png";
 import { cn } from "@/lib/utils";
 import { NavProps } from "@/navigation";
-import { usePathname } from "next/navigation";
-import { Button, buttonVariants } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import AI_SEARCH from "@/assets/images/ai-search.png";
+import { usePathname } from "next/navigation";
+import { buttonVariants } from "../ui/button";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "../ui/drawer";
-import { ChevronLeft, ChevronRight, Minus } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function Sidebar({
   links,
@@ -32,9 +28,9 @@ export function Sidebar({
     return (
       <>
         <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-          {links.map((link, index) =>
+          {links.map((link) =>
             !isFullText && isCollapsed ? (
-              <Tooltip key={index} delayDuration={0}>
+              <Tooltip key={link.href} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
                     href={link.href}
@@ -70,7 +66,7 @@ export function Sidebar({
               </Tooltip>
             ) : (
               <Link
-                key={index}
+                key={link.href}
                 href={link.href}
                 className={cn(
                   buttonVariants({

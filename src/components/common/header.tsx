@@ -20,12 +20,14 @@ export function Header() {
   return (
     <>
       <div className="px-12 py-4 items-center justify-between h-[70px] md:flex hidden">
-        <Image
-          width={LOGO.width}
-          height={LOGO.height}
-          alt="logo"
-          src={LOGO.src}
-        />
+        <Link href={"/"}>
+          <Image
+            width={LOGO.width}
+            height={LOGO.height}
+            alt="logo"
+            src={LOGO.src}
+          />
+        </Link>
         <div className="flex items-center gap-2">
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />

@@ -1,19 +1,19 @@
-import { StaticImageData } from "next/image";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import GasIcon from "../common/icons/gas";
-import { Card } from "../ui/card";
-import Image from "next/image";
-import { Prize } from "../icons/Prize";
+import GasIcon from "../icons/gas";
 import { Clap } from "../icons/Clap";
-import { useRef } from "react";
+import { Prize } from "../icons/Prize";
+import { Card } from "../ui/card";
 
 export const ToolCard = ({
+  id,
   logo,
   variant = "default",
   title,
   description,
   thumbnail,
 }: {
+  id: string;
   logo: StaticImageData;
   variant?: "default" | "thumbnail";
   title: string;
@@ -23,7 +23,7 @@ export const ToolCard = ({
   if (variant === "thumbnail") {
     return (
       <div>
-        <Link href="#">
+        <Link href={id}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
               <div className="w-12 h-12 p-2 rounded-lg tagItem">
@@ -60,7 +60,7 @@ export const ToolCard = ({
   }
 
   return (
-    <Link href="#">
+    <Link href={id}>
       <Card className="flex shadow-lg">
         <div className="p-3">
           <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">

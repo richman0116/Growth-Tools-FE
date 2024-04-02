@@ -12,24 +12,24 @@ import {
 } from "@/components/ui/navigation-menu";
 import LOGO from "@/assets/images/footer-logo.svg";
 import { Button } from "../ui/button";
-import DiscordIcon from "./icons/discord";
-import TiktokIcon from "./icons/tiktok";
-import XIcon from "./icons/x";
-import InstagramIcon from "./icons/instagram";
+import DiscordIcon from "../icons/discord";
+import TiktokIcon from "../icons/tiktok";
+import XIcon from "../icons/x";
+import InstagramIcon from "../icons/instagram";
 import Image from "next/image";
 
 const links: { title: string; href: string }[] = [
   {
     title: "Growth Virality",
-    href: "#",
+    href: "/growth-virality",
   },
   {
     title: "Growth Newsletter",
-    href: "#",
+    href: "/growth-newsletter",
   },
   {
     title: "Growth Articles",
-    href: "#",
+    href: "/growth-articles",
   },
 ];
 
@@ -56,7 +56,7 @@ export function Footer() {
       <div className="self-center">
         <p className="px-4 mb-2">Get in touch</p>
         <Button variant="ghost" asChild>
-          <Link href="#">
+          <Link href="/discord">
             <DiscordIcon className="mr-2" /> Join our Discord community
           </Link>
         </Button>

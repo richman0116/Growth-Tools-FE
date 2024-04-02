@@ -19,12 +19,16 @@ const config = {
     },
     extend: {
       borderColor: {
-        grGray: "#D9D9D9"
+        grGray: "#D9D9D9",
+        grGray2: "#F1F1F1"
       },
       boxShadow: {
         grSoft: `box-shadow: 0px 6px 12px 0px #8490A91A`
       },
       colors: {
+        description: "#494949",
+        label: "#AFAFAF",
+        accentGreen: "#2CCDA6",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

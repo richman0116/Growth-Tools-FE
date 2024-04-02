@@ -78,6 +78,7 @@ export default function TrendingToolsPage() {
         <div className="grid grid-col-1 md:grid-cols-3 gap-6">
           {[
             {
+              id: "/trending-tools/tool-1",
               logo: TOOL_LOGO_1,
               thumbnail: TOOL_THUMBNAIL_1,
               title: "Tool 1",
@@ -85,6 +86,7 @@ export default function TrendingToolsPage() {
                 "Quickly publish, edit and distribute more engaging content for your multi-page, long format newsletter.",
             },
             {
+              id: "/trending-tools/tool-2",
               logo: TOOL_LOGO_2,
               thumbnail: TOOL_THUMBNAIL_2,
               title: "Tool 2",
@@ -92,6 +94,7 @@ export default function TrendingToolsPage() {
                 "Quickly publish, edit and distribute more engaging content for your multi-page, long format newsletter.",
             },
             {
+              id: "/trending-tools/tool-3",
               logo: TOOL_LOGO_3,
               thumbnail: TOOL_THUMBNAIL_3,
               title: "Tool 3",
@@ -99,6 +102,7 @@ export default function TrendingToolsPage() {
                 "Quickly publish, edit and distribute more engaging content for your multi-page, long format newsletter.",
             },
             {
+              id: "/trending-tools/tool-4",
               logo: TOOL_LOGO_4,
               thumbnail: TOOL_THUMBNAIL_4,
               title: "Tool 4",
@@ -106,6 +110,7 @@ export default function TrendingToolsPage() {
                 "Quickly publish, edit and distribute more engaging content for your multi-page, long format newsletter.",
             },
             {
+              id: "/trending-tools/tool-5",
               logo: TOOL_LOGO_5,
               thumbnail: TOOL_THUMBNAIL_5,
               title: "Tool 5",
@@ -113,6 +118,7 @@ export default function TrendingToolsPage() {
                 "Quickly publish, edit and distribute more engaging content for your multi-page, long format newsletter.",
             },
             {
+              id: "/trending-tools/tool-6",
               logo: TOOL_LOGO_1,
               thumbnail: TOOL_THUMBNAIL_1,
               title: "Tool 6",
