@@ -54,3 +54,22 @@ type ReadMessageData = {
   roomId: string;
   userId: string;
 };
+
+type Filters = {
+  filter: {
+    deals: boolean;
+    trends: boolean;
+  };
+  categories: {
+    analytics: boolean;
+    design: boolean;
+    productivity: boolean;
+    emailMarketing: boolean;
+    customerSupport: boolean;
+    fileManagement: boolean;
+    content: boolean;
+    seo: boolean;
+    socialMedia: boolean;
+  };
+  sortBy: "rating" | "az" | "za";
+};

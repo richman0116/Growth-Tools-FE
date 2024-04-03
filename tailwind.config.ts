@@ -20,14 +20,15 @@ const config = {
     extend: {
       borderColor: {
         grGray: "#D9D9D9",
-        grGray2: "#F1F1F1"
+        grGray2: "#F1F1F1",
       },
       boxShadow: {
-        grSoft: `box-shadow: 0px 6px 12px 0px #8490A91A`
+        grSoft: `box-shadow: 0px 6px 12px 0px #8490A91A`,
       },
       colors: {
         description: "#494949",
         label: "#AFAFAF",
+        label2: "#636363",
         accentGreen: "#2CCDA6",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -83,9 +84,9 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundImage: (theme) => ({
-        'blue-gradient':
+        "blue-gradient":
           "background: linear-gradient(0deg, #000000, #000000),linear-gradient(93.25deg, #164CD9 -12.45%, #32AADD 205.53%)",
-      })
+      }),
     },
   },
   plugins: [require("tailwindcss-animate")],

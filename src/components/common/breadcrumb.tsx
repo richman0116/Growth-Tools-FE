@@ -12,11 +12,8 @@ export function BreadcrumbDashboard() {
   const pathName = usePathname();
   const keyPage = pathName.split("/")[1];
   const idPage = pathName.split("/")[2];
-  const urlPage = `/${keyPage}`;
 
   const listPathName = pathName.split("/").map((item) => `/${item}`);
-
-  console.log(listPathName);
 
   const textPage = (link: string) => {
     switch (link) {
@@ -26,6 +23,34 @@ export function BreadcrumbDashboard() {
         return "Trending tools";
       case "/analytics":
         return "Analytics";
+      case "/design":
+        return "Design";
+      case "/productivity":
+        return "Productivity";
+      case "/social-media":
+        return "Social Media";
+      case "/email-marketing":
+        return "Email Marketing";
+      case "/email-marketing":
+        return "Email Marketing";
+      case "/customer-support":
+        return "Customer Support";
+      case "/file-management":
+        return "File Management";
+      case "/project-management":
+        return "Project Management";
+      case "/seo":
+        return "SEO";
+      case "/marketing":
+        return "Marketing";
+      case "/influencer-management":
+        return "Influencer Management";
+      case "/content":
+        return "Content";
+      case "/ads-management":
+        return "Ads Management";
+      case "/ai":
+        return "AI";
       default:
         return "Unknown page";
     }
@@ -37,11 +62,14 @@ export function BreadcrumbDashboard() {
         {listPathName?.map((link, i) => {
           const isLastItem = i + 1 === listPathName.length;
 
+          console.log(`${link.split("/")[1]}`);
           if (isLastItem) {
             return (
               <BreadcrumbItem key={link}>
                 <BreadcrumbPage className="font-normal capitalize">
-                  {link.split("/")[1]}
+                  {idPage
+                    ? link.split("/")[1]
+                    : textPage(`/${link.split("/")[1]}`)}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             );
