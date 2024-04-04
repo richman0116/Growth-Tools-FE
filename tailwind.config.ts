@@ -29,6 +29,7 @@ const config = {
         description: "#494949",
         label: "#AFAFAF",
         label2: "#636363",
+        label3: "#696969",
         accentGreen: "#2CCDA6",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

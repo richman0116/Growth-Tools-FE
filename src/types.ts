@@ -73,3 +73,24 @@ type Filters = {
   };
   sortBy: "rating" | "az" | "za";
 };
+
+type Deal = {
+  id: string;
+  title: string;
+  price: string;
+  salePrice: string;
+  url?: string;
+}
+
+type SubmitToolForm = {
+  name: string;
+  shortDescription: string;
+  description: string;
+  website: string;
+  logo?: string;
+  deal: Deal[]
+  keyFeatures: string[]
+  useCases: string[]
+  price: number
+  category: string;
+};
