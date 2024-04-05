@@ -57,6 +57,8 @@ const languages = [
 export default function SubmitToolPage() {
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
+  const [fileAvatarPreview, setFileAvatarPreview] = useState<string>("");
+  const [fileCompanyPreview, setFileCompanyPreview] = useState<string>("");
   const [deal, setDeal] = useState<Deal>({
     id: "",
     price: "",
