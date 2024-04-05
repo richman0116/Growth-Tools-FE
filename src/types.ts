@@ -54,3 +54,7 @@ type ReadMessageData = {
   roomId: string;
   userId: string;
 };
+
+type SubscriptionResponse = {
+  url: string;
+}
