@@ -2,8 +2,9 @@
 
 import { ToolCard } from "@/components/cards/tool-card";
 import { AddDealCard } from "@/components/common/add-deal-card";
-import { ButtonUpload } from "@/components/common/button-upload";
 import { DealCard } from "@/components/common/deal-card";
+import { UploadIcon } from "@/components/icons/UploadIcon";
+import { TOOL_MOCK_DATA } from "@/components/mockData/tool-mock-data";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -37,8 +38,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { regexFloat } from "@/helpers/regex";
 import { cn } from "@/lib/utils";
-import { ArrowBigDown, Check, ChevronDown, ChevronsUpDown } from "lucide-react";
-import { useCallback, useState } from "react";
+import { Check, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
@@ -57,8 +59,7 @@ const languages = [
 export default function SubmitToolPage() {
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
-  const [fileAvatarPreview, setFileAvatarPreview] = useState<string>("");
-  const [fileCompanyPreview, setFileCompanyPreview] = useState<string>("");
+  const [logoPreview, setFilePreview] = useState<string>("");
   const [deal, setDeal] = useState<Deal>({
     id: "",
     price: "",
@@ -72,7 +73,6 @@ export default function SubmitToolPage() {
       shortDescription: "",
       description: "",
       website: "",
-      logo: "",
       deal: [
         {
           id: uuidv4(),
@@ -104,6 +104,12 @@ export default function SubmitToolPage() {
     name: "useCases",
     control: form.control,
   });
+
+  const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+    form.setValue("logo", file);
+    file && setFilePreview(URL.createObjectURL(file));
+  };
 
   const currentDeals = form.getValues("deal");
 
@@ -224,8 +230,8 @@ export default function SubmitToolPage() {
       {editModalComp()}
 
       <div className="container">
-        <div className="grid grid-cols-[minmax(0,_1fr)_400px] gap-2 md:gap-6 my-10">
-          <div>
+        <div className="grid grid-1 md:grid-cols-[minmax(0,_1fr)_400px] gap-2 md:gap-28 my-10">
+          <div className="mb-6">
             <h3 className="font-bold text-[32px] mb-6">
               Post your tool to a global audience
             </h3>
@@ -324,8 +330,39 @@ export default function SubmitToolPage() {
                       <FormLabel className="font-semibold text-[18px]">
                         Logo
                       </FormLabel>
+
                       <FormControl>
-                        <ButtonUpload {...field} />
+                        <div className="relative w-max">
+                          {logoPreview && (
+                            <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
+                              <Image
+                                id="upload-avatar"
+                                src={logoPreview}
+                                width={160}
+                                height={160}
+                                alt="file-preview"
+                                className="overflow-hidden"
+                              />
+                            </div>
+                          )}
+                          <Button
+                            className={cn(
+                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
+                            )}
+                            variant="outline"
+                            size="lg"
+                          >
+                            Upload
+                            <UploadIcon />
+                          </Button>
+                          <input
+                            type="file"
+                            className={
+                              "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                            }
+                            onChange={handleUploadImage}
+                          />
+                        </div>
                       </FormControl>
                       <FormDescription>
                         png, svg formats. 5mb max
@@ -335,7 +372,7 @@ export default function SubmitToolPage() {
                 />
                 <div>
                   <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
-                  <div className="grid grid-cols-2 gap-[30px]">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
                     {form?.watch("deal").map((item) => (
                       <DealCard
                         key={item?.id}
@@ -532,16 +569,16 @@ export default function SubmitToolPage() {
               </form>
             </Form>
           </div>
-          <div className="">
-            <h3>Card Preview</h3>
-            {/* <ToolCard
+          <div>
+            <h3 className="font-semibold text-[18px] mb-4">Card Preview</h3>
+            <ToolCard
               variant="thumbnail"
               id={"new-tool"}
-              logo={undefined}
-              title={form?.watch("name")}
-              description={form?.watch("description")}
-              thumbnail={undefined}
-            /> */}
+              title={TOOL_MOCK_DATA[0].title}
+              description={TOOL_MOCK_DATA[0].description}
+              thumbnail={TOOL_MOCK_DATA[0].thumbnail}
+              logo={TOOL_MOCK_DATA[0].logo}
+            />
           </div>
         </div>
       </div>

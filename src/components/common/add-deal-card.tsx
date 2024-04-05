@@ -8,7 +8,7 @@ type AddDealCardProps = {
 export const AddDealCard = ({ title, onClick }: AddDealCardProps) => {
   return (
     <div
-      className="rounded-xl border border-grGray flex flex-col gap-4 items-center justify-center shadow-lg p-5 cursor-pointer w-full"
+      className="rounded-xl border border-grGray flex flex-col min-h-44 gap-4 items-center justify-center shadow-lg p-5 cursor-pointer w-full"
       onClick={onClick}
     >
       <CirclePlus size={48} className="text-secondary" />

@@ -5,12 +5,13 @@ import { cn } from "@/lib/utils";
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   suffix?: string;
+  classNameContainer?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, prefix, suffix, ...props }, ref) => {
+  ({ className, classNameContainer, type, prefix, suffix, ...props }, ref) => {
     return (
-      <div className="flex items-center relative">
+      <div className={cn("flex items-center relative", classNameContainer)}>
         {prefix && (
           <span className="border-r left-0 absolute w-24 h-full flex items-center justify-center font-bold text-[#8C8C8C] text-base">
             {prefix}

@@ -87,7 +87,7 @@ type SubmitToolForm = {
   shortDescription: string;
   description: string;
   website: string;
-  logo?: string;
+  logo?: File;
   deal: Deal[];
   features: {
     value: string;
