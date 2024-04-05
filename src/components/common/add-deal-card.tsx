@@ -1,6 +1,3 @@
-import React from "react";
-import { Button } from "../ui/button";
-import { EditIcon } from "../icons/EditIcon";
 import { CirclePlus } from "lucide-react";
 
 type AddDealCardProps = {

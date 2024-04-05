@@ -1,9 +1,18 @@
 "use client";
 
+import { ToolCard } from "@/components/cards/tool-card";
 import { AddDealCard } from "@/components/common/add-deal-card";
 import { ButtonUpload } from "@/components/common/button-upload";
 import { DealCard } from "@/components/common/deal-card";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -20,14 +29,34 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { regexFloat } from "@/helpers/regex";
-import { ChangeEvent, useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
+import { ArrowBigDown, Check, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { useCallback, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+
+const languages = [
+  { label: "English", value: "en" },
+  { label: "French", value: "fr" },
+  { label: "German", value: "de" },
+  { label: "Spanish", value: "es" },
+  { label: "Portuguese", value: "pt" },
+  { label: "Russian", value: "ru" },
+  { label: "Japanese", value: "ja" },
+  { label: "Korean", value: "ko" },
+  { label: "Chinese", value: "zh" },
+] as const;
 
 export default function SubmitToolPage() {
   const [editModal, setEditModal] = useState(false);
+  const [keyModal, setKeyModal] = useState("");
   const [deal, setDeal] = useState<Deal>({
     id: "",
     price: "",
@@ -50,24 +79,139 @@ export default function SubmitToolPage() {
           title: "Lifetime 50% off",
         },
       ],
+      features: [
+        { value: "https://shadcn.com" },
+        { value: "http://twitter.com/shadcn" },
+      ],
+      useCases: [
+        { value: "https://shadcn.com" },
+        { value: "http://twitter.com/shadcn" },
+      ],
+      price: "0",
+      free: false,
+      category: "",
     },
+  });
+
+  const { fields, append } = useFieldArray({
+    name: "features",
+    control: form.control,
+  });
+
+  const { fields: filedsUseCase, append: appendUseCase } = useFieldArray({
+    name: "useCases",
+    control: form.control,
   });
 
   const currentDeals = form.getValues("deal");
 
-  const handleEditDeal = useCallback((data: Deal) => {
-    setDeal(data);
-    setEditModal(true);
-  }, []);
+  const handleEditDeal = useCallback(
+    (key: "update" | "create", data?: Deal) => {
+      data && key === "update" && setDeal(data);
+      setKeyModal(key);
+      setEditModal(true);
+    },
+    []
+  );
+
+  const handleCreateDeal = useCallback(() => {
+    form.setValue("deal", [...currentDeals, deal]);
+    setDeal({
+      id: uuidv4(),
+      price: "",
+      salePrice: "",
+      title: "",
+    });
+    setEditModal(false);
+  }, [currentDeals, deal, form]);
 
   const handleUpdateDeal = useCallback(() => {
     form.setValue(
       "deal",
       currentDeals?.map((item) => (item.id === deal.id ? deal : item))
     );
-
+    setDeal({
+      id: uuidv4(),
+      price: "",
+      salePrice: "",
+      title: "",
+    });
     setEditModal(false);
   }, [currentDeals, deal, form]);
+
+  const handleDeleteDeal = useCallback(
+    (id: string) => {
+      form.setValue(
+        "deal",
+        currentDeals?.filter((item) => item.id === deal.id)
+      );
+    },
+    [currentDeals, deal.id, form]
+  );
+
+  const editModalComp = () => {
+    return (
+      <Dialog open={editModal} onOpenChange={(open) => setEditModal(open)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-semibold mb-4">
+              {keyModal === "create" ? "Create deal" : "Update deal"}
+            </DialogTitle>
+            <DialogDescription className="pb-6">
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription>
+            <div className="grid grid-cols-1 gap-4">
+              <Input
+                className="h-12 px-6"
+                value={deal?.title}
+                onChange={(e) =>
+                  setDeal((prv) => ({
+                    ...prv,
+                    title: e.target.value,
+                  }))
+                }
+              />
+              <Input
+                prefix="USD"
+                className="h-12 px-6"
+                value={deal?.price}
+                onChange={(e) =>
+                  setDeal((prv) => ({
+                    ...prv,
+                    price: regexFloat.test(e.target.value)
+                      ? e.target.value
+                      : "",
+                  }))
+                }
+              />
+              <Input
+                prefix="USD"
+                className="h-12 px-6"
+                value={deal?.salePrice}
+                onChange={(e) =>
+                  setDeal((prv) => ({
+                    ...prv,
+                    salePrice: regexFloat.test(e.target.value)
+                      ? e.target.value
+                      : "",
+                  }))
+                }
+              />
+              <Button
+                onClick={
+                  keyModal === "create" ? handleCreateDeal : handleUpdateDeal
+                }
+                className="h-12 px-6"
+              >
+                {keyModal === "create" ? "Create" : "Update"}
+              </Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
   const onSubmit = async (data: SubmitToolForm) => {
     console.log(data);
@@ -75,6 +219,8 @@ export default function SubmitToolPage() {
 
   return (
     <section>
+      {editModalComp()}
+
       <div className="container">
         <div className="grid grid-cols-[minmax(0,_1fr)_400px] gap-2 md:gap-6 my-10">
           <div>
@@ -86,64 +232,6 @@ export default function SubmitToolPage() {
               with our audiences. Use our form to submit yours today.
             </p>
             <Separator className="my-10" />
-
-            <Dialog
-              open={editModal}
-              onOpenChange={(open) => setEditModal(open)}
-            >
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="font-semibold mb-4">
-                    Update deal
-                  </DialogTitle>
-                  <DialogDescription className="pb-6">
-                    This action cannot be undone. This will permanently delete
-                    your account and remove your data from our servers.
-                  </DialogDescription>
-                  <div className="grid grid-cols-1 gap-4">
-                    <Input
-                      className="h-12 px-6"
-                      value={deal?.title}
-                      onChange={(e) =>
-                        setDeal((prv) => ({
-                          ...prv,
-                          title: e.target.value,
-                        }))
-                      }
-                    />
-                    <Input
-                      prefix="USD"
-                      className="h-12 px-6"
-                      value={deal?.price}
-                      onChange={(e) =>
-                        setDeal((prv) => ({
-                          ...prv,
-                          price: regexFloat.test(e.target.value)
-                            ? e.target.value
-                            : "",
-                        }))
-                      }
-                    />
-                    <Input
-                      prefix="USD"
-                      className="h-12 px-6"
-                      value={deal?.salePrice}
-                      onChange={(e) =>
-                        setDeal((prv) => ({
-                          ...prv,
-                          salePrice: regexFloat.test(e.target.value)
-                            ? e.target.value
-                            : "",
-                        }))
-                      }
-                    />
-                    <Button onClick={handleUpdateDeal} className="h-12 px-6">
-                      Update
-                    </Button>
-                  </div>
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
 
             <Form {...form}>
               <form
@@ -252,12 +340,15 @@ export default function SubmitToolPage() {
                         title={item.title}
                         price={item.price}
                         salePrice={item.salePrice}
-                        onEdit={() => handleEditDeal(item)}
-                        onRemove={() => {}}
+                        onEdit={() => handleEditDeal("update", item)}
+                        onRemove={() => handleDeleteDeal(item.id)}
                       />
                     ))}
 
-                    <AddDealCard title={"Create new"} onClick={() => {}} />
+                    <AddDealCard
+                      title={"Create new"}
+                      onClick={() => handleEditDeal("create")}
+                    />
                   </div>
                 </div>
                 <div>
@@ -267,18 +358,188 @@ export default function SubmitToolPage() {
                   <p className="text-label3 text-base mb-4">
                     Sed ut perspiciatis unde omnis iste natus{" "}
                   </p>
-                  <div className="grid grid-cols-2 gap-[30px]"></div>
+                  <div className="grid gap-4">
+                    {fields.map((field, index) => (
+                      <FormField
+                        control={form.control}
+                        key={field.id}
+                        name={`features.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                placeholder=""
+                                className="h-12 px-6"
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    <Button
+                      variant="link"
+                      className="text-secondary p-0 h-max flex justify-start"
+                      onClick={() => append({ value: "" })}
+                    >
+                      Add Key Features +
+                    </Button>
+                    <p className="text-label3 text-base mb-4">
+                      Maximum 15 words per each
+                    </p>
+                  </div>
                 </div>
+                <div>
+                  <h4 className="font-semibold mb-4 text-[18px]">Use Cases</h4>
+                  <p className="text-label3 text-base mb-4">
+                    Sed ut perspiciatis unde omnis iste natus{" "}
+                  </p>
+                  <div className="grid gap-4">
+                    {filedsUseCase.map((field, index) => (
+                      <FormField
+                        control={form.control}
+                        key={field.id}
+                        name={`features.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                placeholder=""
+                                className="h-12 px-6"
+                                {...field}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    ))}
+                    <Button
+                      variant="link"
+                      className="text-secondary p-0 h-max flex justify-start"
+                      onClick={() => appendUseCase({ value: "" })}
+                    >
+                      Add Use Case +
+                    </Button>
+                    <p className="text-label3 text-base mb-4">
+                      Maximum 25 words per each
+                    </p>
+                  </div>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormLabel className="font-semibold text-[18px]">
+                        Price
+                      </FormLabel>
+                      <FormControl>
+                        <Input className="h-14 px-6" suffix="USD" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="free"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center gap-2 space-y-0 !my-6">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className="data-[state=checked]:bg-secondary border-secondary"
+                        />
+                      </FormControl>
+                      <div className="leading-none font-normal text-label2 text-sm">
+                        <FormLabel>Free</FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="font-semibold text-[18px] mb-3">
+                        Category
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between h-14 shadow-md border-input",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value
+                                ? languages.find(
+                                    (language) => language.value === field.value
+                                  )?.label
+                                : "Select category"}
+                              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          align="start"
+                          className="w-full md:min-w-96 p-0"
+                        >
+                          <Command>
+                            <CommandInput placeholder="Search language..." />
+                            <CommandEmpty>No language found.</CommandEmpty>
+                            <CommandGroup>
+                              {languages.map((language) => (
+                                <CommandItem
+                                  value={language.label}
+                                  key={language.value}
+                                  onSelect={() => {
+                                    form.setValue("category", language.value);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      language.value === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0"
+                                    )}
+                                  />
+                                  {language.label}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
                 <div className="pt-9">
                   <Button
                     type="submit"
                     className="w-full h-14 text-[18px] font-bold"
                   >
-                    Apply
+                    Publish
                   </Button>
                 </div>
               </form>
             </Form>
+          </div>
+          <div className="">
+            <h3>Card Preview</h3>
+            {/* <ToolCard
+              variant="thumbnail"
+              id={"new-tool"}
+              logo={undefined}
+              title={form?.watch("name")}
+              description={form?.watch("description")}
+              thumbnail={undefined}
+            /> */}
           </div>
         </div>
       </div>

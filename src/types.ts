@@ -80,7 +80,7 @@ type Deal = {
   price: string;
   salePrice: string;
   url?: string;
-}
+};
 
 type SubmitToolForm = {
   name: string;
@@ -88,9 +88,14 @@ type SubmitToolForm = {
   description: string;
   website: string;
   logo?: string;
-  deal: Deal[]
-  keyFeatures: string[]
-  useCases: string[]
-  price: number
+  deal: Deal[];
+  features: {
+    value: string;
+  }[];
+  useCases: {
+    value: string;
+  }[];
+  price: string;
+  free: boolean;
   category: string;
 };
