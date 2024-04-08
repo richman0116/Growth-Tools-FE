@@ -1,47 +1,29 @@
 "use client";
 
-import ANNOUNCEMENT from "@/assets/images/announcement.png";
-
 import { FilterPopover } from "@/components/admin/filter-popover";
 import { ToolCard } from "@/components/cards/tool-card";
+import { BreadcrumbDashboard } from "@/components/common/breadcrumb";
 import { TOOL_MOCK_DATA } from "@/components/mockData/tool-mock-data";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 
-export default function TrendingToolsPage() {
+export default function EmailMarketingPage() {
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
 
   return (
     <>
-      <section className="relative">
-        <Image
-          src={ANNOUNCEMENT}
-          width={427}
-          className="absolute right-0 hidden md:hidden lg:block"
-          alt=""
-        />
-        <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
-          <h1 className="font-extrabold text-4xl lg:text-5xl mb-6">
-            Discover <span className="textGradient">marketing tools</span> that{" "}
-            <br />
-            supercharge your growth
-          </h1>
-          <p className="mb-6">
-            Browse through hundreds of unique tools to boost your marketing &
-            startup. Start by clicking Categories below to pick tools in
-            different marketing topics.
-          </p>
-          <div className="flex gap-2 md:gap-6">
-            <Button className="font-bold h-12">View Latest Tools</Button>
-            <Button variant="outline" className="h-12">
-              Trending tools
-            </Button>
-          </div>
-        </div>
-      </section>
-      <section className="flex flex-col gap-6 p-4 md:p-12">
+      <div className="px-12 pt-16">
+        <BreadcrumbDashboard />
+
+        <h3 className="font-bold text-[32px] mt-6 mb-8">
+          528 <span className="font-medium">File Management Tools</span>
+        </h3>
+        <Separator />
+      </div>
+
+      <section className="flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopover />
 

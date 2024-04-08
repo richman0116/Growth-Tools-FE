@@ -9,6 +9,7 @@ import TOOL_THUMBNAIL_1 from "@/assets/images/tool-thumbnail-1.png";
 import TOOL_THUMBNAIL_2 from "@/assets/images/tool-thumbnail-2.png";
 import { ToolCard } from "@/components/cards/tool-card";
 import { BreadcrumbDashboard } from "@/components/common/breadcrumb";
+import { DealCard } from "@/components/common/deal-card";
 import { IdeaButton } from "@/components/common/idea-button";
 import { VisitButtonList } from "@/components/common/visit-button";
 import { Prize } from "@/components/icons/Prize";
@@ -61,34 +62,16 @@ export default function TrendingToolsDetailPage() {
             </div>
             <h4 className="text-[18px] font-semibold mb-4">Deals</h4>
             <div className="grid grid-col-1 lg:grid-cols-2 gap-[30px]">
-              <div className="rounded-xl border border-grGray shadow-lg p-5">
-                <h4 className="mb-2 font-semibold text-[18px]">
-                  Lifetime 50% off
-                </h4>
-                <p className="font-medium text-sm mb-2">
-                  $4.99 <span className="text-label">$10</span> / monthly
-                </p>
-                <p className="text-accentGreen font-medium p-2 rounded-lg border border-grGray2 w-max mb-2">
-                  You save $5.01
-                </p>
-                <Button variant="link" className="text-secondary p-0 h-max">
-                  Click to learn more
-                </Button>
-              </div>
-              <div className="rounded-xl border border-grGray shadow-lg p-5">
-                <h4 className="mb-2 font-semibold text-[18px]">
-                  Lifetime 50% off
-                </h4>
-                <p className="font-medium text-sm mb-2">
-                  $4.99 <span className="text-label">$10</span> / monthly
-                </p>
-                <p className="text-accentGreen font-medium p-2 rounded-lg border border-grGray2 w-max mb-2">
-                  You save $5.01
-                </p>
-                <Button variant="link" className="text-secondary p-0 h-max">
-                  Click to learn more
-                </Button>
-              </div>
+              <DealCard
+                title={"Lifetime 50% off"}
+                price={"10"}
+                salePrice={"4.99"}
+              />
+              <DealCard
+                title={"Lifetime 50% off"}
+                price={"10"}
+                salePrice={"4.99"}
+              />
             </div>
           </div>
 

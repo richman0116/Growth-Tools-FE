@@ -51,10 +51,16 @@ export function AuthHeader() {
             <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
             Try AI Search
           </Button>
-          <Button variant="outline" className="flex items-center gap-2">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "flex items-center gap-2"
+            )}
+            href="/submit-tool"
+          >
             <Plus className="w-5" />
             Submit Tool
-          </Button>
+          </Link>
           <Link className={cn(buttonVariants())} href="/sign-up">
             Sign Up
           </Link>
@@ -96,18 +102,22 @@ export function AuthHeader() {
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Button
-                    size="sm"
-                    className="w-full flex items-center gap-2"
-                    variant="outline"
+                  <Link
+                    className={cn(
+                      buttonVariants({ variant: "secondary" }),
+                      "w-full flex items-center gap-2 border"
+                    )}
+                    href="/submit-tool"
                   >
-                    Submit Tool
                     <Plus className="w-5" />
-                  </Button>
+                    Submit Tool
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link
-                    className={(cn(buttonVariants()), "w-full")}
+                    className={
+                      (cn(buttonVariants({ variant: "default" })), "w-full")
+                    }
                     href="/sign-up"
                   >
                     Sign Up

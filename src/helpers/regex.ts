@@ -1,0 +1,1 @@
+export const regexFloat = /^[+-]?\d+(\.\d*)?$/;
