@@ -14,19 +14,3 @@ export const getCurrentUser = async (): Promise<User> => {
     return errData;
   }
 };
-
-export const getAllUsers = async (): Promise<User[]> => {
-  try {
-    const { data } = await axiosClient.get<null, AxiosResponse<User[]>>(
-      "/user/all"
-    );
-
-    const users = data;
-
-    return users;
-  } catch (error) {
-    const err = error as AxiosError<any>;
-    const errData = err.response?.data;
-    throw errData;
-  }
-};

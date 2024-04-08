@@ -4,7 +4,10 @@ import axiosClient from "./config";
 export type AuthRequest = {
   email: string;
   password: string;
-  photoURL?: string;
+  phone: string;
+  firstName: string;
+  lastName: string;
+  company: string;
 };
 
 export type LoginResponse = {
@@ -21,7 +24,7 @@ export const login = async (authData: AuthRequest) => {
     const { data } = await axiosClient.post<
       AuthRequest,
       AxiosResponse<LoginResponse>
-    >(`/auth/signin`, authData);
+    >(`/auth/authenticate`, authData);
 
     return data;
   } catch (error) {
@@ -36,7 +39,7 @@ export const register = async (authData: AuthRequest) => {
     const { status } = await axiosClient.post<
       AuthRequest,
       AxiosResponse<RegisterResponse>
-    >(`/auth/create`, authData);
+    >(`/auth/sign-up`, authData);
 
     return {
       status,
