@@ -2,6 +2,7 @@ import { DashBoardTemplate } from "@/components/admin/dash-board-template";
 import { TanstackProvider } from "@/providers/TanstackProvider";
 import type { Metadata } from "next";
 import "../globals.css";
+import Template from "./template";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -15,7 +16,9 @@ export default function DashBoardLayout({
   return (
     <section lang="en" suppressHydrationWarning>
       <TanstackProvider>
-        <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
+        <Template>
+          <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
+        </Template>
       </TanstackProvider>
     </section>
   );

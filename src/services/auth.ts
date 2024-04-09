@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import axiosClient from "./config";
 
 export type AuthRequest = {
@@ -11,22 +11,32 @@ export type AuthRequest = {
 };
 
 export type LoginResponse = {
-  _id: string;
-  access_token: string;
+  success: boolean;
+  result: {
+    user: User;
+    accessToken: string;
+    refreshToken: string;
+  };
 };
 
 export type RegisterResponse = {
-  status: boolean;
+  success: boolean;
 };
 
-export const login = async (authData: AuthRequest) => {
+export const login = async (
+  authData: Pick<AuthRequest, "email" | "password">
+) => {
   try {
-    const { data } = await axiosClient.post<
-      AuthRequest,
-      AxiosResponse<LoginResponse>
-    >(`/auth/authenticate`, authData);
+    const res = await axiosClient.post<AuthRequest, LoginResponse>(
+      `/auth/authenticate`,
+      authData
+    );
 
-    return data;
+    return {
+      user: res.result.user,
+      accessToken: res.result.accessToken,
+      refreshToken: res.result.refreshToken,
+    };
   } catch (error) {
     const err = error as AxiosError<any>;
     const errData = err.response?.data;
@@ -36,13 +46,13 @@ export const login = async (authData: AuthRequest) => {
 
 export const register = async (authData: AuthRequest) => {
   try {
-    const { status } = await axiosClient.post<
-      AuthRequest,
-      AxiosResponse<RegisterResponse>
-    >(`/auth/sign-up`, authData);
+    const { success } = await axiosClient.post<AuthRequest, RegisterResponse>(
+      `/auth/sign-up`,
+      authData
+    );
 
     return {
-      status,
+      success,
     };
   } catch (error) {
     const err = error as AxiosError<any>;

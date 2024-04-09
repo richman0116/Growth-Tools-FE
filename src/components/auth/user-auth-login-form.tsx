@@ -4,7 +4,17 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
 import { Input } from "../ui/input";
 
+import GOOGLE_ICON from "@/assets/images/google.png";
+import CookieHandler, { TOKEN } from "@/helpers/cookie";
+import LocalStorageHandler, {
+  REFRESH_TOKEN,
+  USER,
+} from "@/helpers/localStorage";
+import { AuthRequest, login } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,9 +26,7 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import GOOGLE_ICON from "@/assets/images/google.png";
-import Image from "next/image";
-import Link from "next/link";
+import { toastError } from "@/helpers/toasts";
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -42,25 +50,29 @@ export function UserAuthLoginForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "info10@gmail.com",
+      password: "c3RyaW5n",
     },
   });
 
-  // const loginMutation = useMutation({
-  //   mutationFn: (authData: AuthRequest) => login(authData),
-  //   mutationKey: ["login"],
-  //   onSuccess(data, variables, context) {
-  //     setCookieToken(data?.access_token);
-  //     replace("/");
-  //   },
-  //   onError: (_error, variables, _context) => {
-  //     form.reset({ ...variables });
-  //   },
-  // });
+  const loginMutation = useMutation({
+    mutationFn: (authData: Pick<AuthRequest, "email" | "password">) =>
+      login(authData),
+    mutationKey: ["login"],
+    onSuccess(data, variables, context) {
+      CookieHandler.set(TOKEN, data?.accessToken);
+      LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
+      LocalStorageHandler.set(USER, data?.user);
+      replace("/");
+    },
+    onError: (error, variables, _context) => {
+      form.reset({ ...variables });
+      toastError(error?.message ?? "Oop's! Something wrong");
+    },
+  });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
+    loginMutation.mutate(data);
   };
 
   return (

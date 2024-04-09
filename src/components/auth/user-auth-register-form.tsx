@@ -22,7 +22,7 @@ import {
 } from "../ui/form";
 import { AuthRequest, register } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
-import { toastError } from "@/helpers/toasts";
+import { toastError, toastSuccess } from "@/helpers/toasts";
 
 interface UserAuthRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -56,10 +56,10 @@ export function UserAuthRegisterForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
+      email: "info@gmail.com",
+      phone: "058612341424",
+      password: "c3RyaW5n",
+      confirmPassword: "c3RyaW5n",
       firstName: "string",
       lastName: "string",
       company: "string",
@@ -70,6 +70,7 @@ export function UserAuthRegisterForm({
     mutationFn: (authData: AuthRequest) => register(authData),
     mutationKey: ["register"],
     onSuccess(data, _variables, _context) {
+      toastSuccess("Create user successfully!, you can login now");
       form.reset();
     },
     onError(data) {
@@ -79,7 +80,7 @@ export function UserAuthRegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    registerMutation(data);
+    registerMutation.mutate(data);
   };
 
   return (

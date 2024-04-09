@@ -8,14 +8,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
+import useAuth from "@/hooks/useAuth";
+import { useCallback } from "react";
+import CookieHandler, { TOKEN } from "@/helpers/cookie";
+import LocalStorageHandler from "@/helpers/localStorage";
 
 export function Header() {
   const patchName = usePathname();
+  const { isLoggedIn } = useAuth();
 
   const isSignIn = patchName === "/sign-in";
 
   const urlByStatus = isSignIn ? "/sign-up" : "/sign-in";
-  const textByStatus = isSignIn ? "Sign Up" : "Sign In";
+  const textByStatus = isLoggedIn ? "Logout" : isSignIn ? "Sign Up" : "Sign In";
+
+  const handleLogout = useCallback(() => {
+    CookieHandler.remove(TOKEN);
+    LocalStorageHandler.clear();
+    window.location.reload();
+  }, []);
 
   return (
     <>
@@ -32,9 +43,14 @@ export function Header() {
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />
           </Button>
-          <Link className={cn(buttonVariants())} href={urlByStatus}>
-            {textByStatus}
-          </Link>
+
+          {isLoggedIn ? (
+            <Button onClick={handleLogout}>Logout</Button>
+          ) : (
+            <Link className={cn(buttonVariants())} href={urlByStatus}>
+              {textByStatus}
+            </Link>
+          )}
         </div>
       </div>
 

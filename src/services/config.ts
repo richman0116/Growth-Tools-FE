@@ -1,4 +1,4 @@
-import { getCookieToken, removeAllCookie } from "@/helpers/cookie";
+import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import axios, { AxiosInstance } from "axios";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,7 +13,7 @@ const axiosClient: AxiosInstance = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  config.headers["Authorization"] = `Bearer ${getCookieToken()}`;
+  config.headers["Authorization"] = `Bearer ${CookieHandler.get(TOKEN)}`;
   return config;
 });
 
@@ -25,7 +25,7 @@ axiosClient.interceptors.response.use(
     // Expired token
     if (response && response.status === 401) {
       console.error("Unauthenticated - 401 on client", { data: response.data });
-      removeAllCookie();
+      CookieHandler.remove(TOKEN);
       window.location.reload();
       return Promise.reject(error);
     }
