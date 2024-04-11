@@ -15,6 +15,9 @@ type User = {
   refreshToken: string;
 };
 
+type SubscriptionResponse = {
+  url: string;
+}
 type Filters = {
   filter: {
     deals: boolean;

@@ -23,6 +23,7 @@ import {
 import { AuthRequest, register } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { toastError, toastSuccess } from "@/helpers/toasts";
+import { useGoogleLogin } from "@react-oauth/google";
 
 interface UserAuthRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -65,6 +66,21 @@ export function UserAuthRegisterForm({
       company: "string",
     },
   });
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse: any) => {
+      const response = {
+        access_token:
+          "ya29.a0Ad52N390T-FXqqs4X4qNgUW6njOpun9x9-Kbg8wfwAQ6yLTarSzwD74QuDNqUHNV42QLEMZKv3qDZSQp3tI6HxZOZ8DEDtJNVRsJZxHrjQ3BM8u2IPdJez0q7evryq7Azea_AvvKBlXk83pcFmmmAM34wvQEFFD6mQaCgYKAS4SARESFQHGX2MiuNlrX9z8pNbpG7m4i_X7qQ0169",
+        token_type: "Bearer",
+        expires_in: 3599,
+        scope:
+          "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
+        authuser: "0",
+        prompt: "consent",
+      };
+      console.log(tokenResponse);
+    },
+  });
 
   const registerMutation = useMutation({
     mutationFn: (authData: AuthRequest) => register(authData),
@@ -81,6 +97,9 @@ export function UserAuthRegisterForm({
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     registerMutation.mutate(data);
+  };
+  const onGoogleSignIn = () => {
+    login();
   };
 
   return (
@@ -172,6 +191,7 @@ export function UserAuthRegisterForm({
           <Button
             variant="outline"
             className="w-full mt-9 h-14 py-3 px-4 font-bold border border-grGray flex items-center justify-center gap-2 text-base"
+            onClick={onGoogleSignIn}
           >
             <Image src={GOOGLE_ICON} width={26} height={26} alt="" />
             <span>Sign In with Google</span>
