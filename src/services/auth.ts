@@ -23,6 +23,10 @@ export type RegisterResponse = {
   success: boolean;
 };
 
+export type RefreshTokenResponse = {
+  refreshToken: string;
+};
+
 export const login = async (
   authData: Pick<AuthRequest, "email" | "password">
 ) => {
@@ -44,6 +48,27 @@ export const login = async (
   }
 };
 
+export const refreshToken = async (
+  refreshToken: string
+) => {
+  try {
+    const res = await axiosClient.post<AuthRequest, RefreshTokenResponse>(
+      `/auth/refresh-token`,
+      {
+        refreshToken
+      }
+    );
+
+    return {
+      refreshToken: res.refreshToken
+    };
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    throw errData;
+  }
+};
+
 export const register = async (authData: AuthRequest) => {
   try {
     const { success } = await axiosClient.post<AuthRequest, RegisterResponse>(
@@ -53,6 +78,27 @@ export const register = async (authData: AuthRequest) => {
 
     return {
       success,
+    };
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    throw errData;
+  }
+};
+
+export const googleSignIn = async (tokenGoogle: string) => {
+  try {
+    const res = await axiosClient.post<AuthRequest, LoginResponse>(
+      `/auth/google-authenticate`,
+      {
+        token: tokenGoogle
+      }
+    );
+
+    return {
+      user: res.result.user,
+      accessToken: res.result.accessToken,
+      refreshToken: res.result.refreshToken,
     };
   } catch (error) {
     const err = error as AxiosError<any>;

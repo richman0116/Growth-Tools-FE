@@ -10,15 +10,19 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   // }
   const session = request.cookies.get(TOKEN);
 
-  // if (!session?.value) {
-  //   request.cookies.delete(TOKEN);
-  //   return NextResponse.redirect(new URL("/sign-in", request.url));
-  // }
+  const isEmptyToken = session?.value && session.value === "undefined"
 
-  const userDecode = session?.value
+  if (isEmptyToken) {
+    request.cookies.clear();
+  }
+
+
+  const userDecode = session?.value && session.value !== "undefined"
     ? jwtDecode<JwtPayload>(session?.value ?? "")
     : "";
+
   const userRole = (userDecode as any)?.role;
+
 
   // if (!session?.value) {
   //   return NextResponse.redirect(new URL("/sign-in", request.url));

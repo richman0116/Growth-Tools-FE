@@ -10,7 +10,7 @@ import LocalStorageHandler, {
   REFRESH_TOKEN,
   USER,
 } from "@/helpers/localStorage";
-import { AuthRequest, login } from "@/services/auth";
+import { AuthRequest, googleSignIn, login } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
@@ -27,6 +27,8 @@ import {
   FormMessage,
 } from "../ui/form";
 import { toastError } from "@/helpers/toasts";
+import { useGoogleLogin } from "@react-oauth/google";
+import { SyntheticEvent } from "react";
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -71,8 +73,47 @@ export function UserAuthLoginForm({
     },
   });
 
+  const googleSignInMutaion = useMutation({
+    mutationFn: (token: string) => googleSignIn(token),
+    mutationKey: ["login-google"],
+    onSuccess(data, variables, context) {
+      CookieHandler.set(TOKEN, data?.accessToken);
+      LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
+      LocalStorageHandler.set(USER, data?.user);
+      replace("/");
+    },
+    onError: (error, variables, _context) => {
+      toastError(
+        error?.message ?? "Oop's! Something wrong when try to login with google"
+      );
+    },
+  });
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     loginMutation.mutate(data);
+  };
+
+  const loginGg = useGoogleLogin({
+    onSuccess: (tokenResponse: any) => {
+      // Example data
+      // const response = {
+      //   access_token:
+      //     "ya29.a0Ad52N390T-FXqqs4X4qNgUW6njOpun9x9-Kbg8wfwAQ6yLTarSzwD74QuDNqUHNV42QLEMZKv3qDZSQp3tI6HxZOZ8DEDtJNVRsJZxHrjQ3BM8u2IPdJez0q7evryq7Azea_AvvKBlXk83pcFmmmAM34wvQEFFD6mQaCgYKAS4SARESFQHGX2MiuNlrX9z8pNbpG7m4i_X7qQ0169",
+      //   token_type: "Bearer",
+      //   expires_in: 3599,
+      //   scope:
+      //     "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
+      //   authuser: "0",
+      //   prompt: "consent",
+      // };
+      console.log("-----google-signin-----", tokenResponse);
+      googleSignInMutaion.mutate(tokenResponse?.access_token);
+    },
+  });
+
+  const onGoogleSignIn = (e: SyntheticEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    loginGg();
   };
 
   return (
@@ -135,6 +176,8 @@ export function UserAuthLoginForm({
 
           <Button
             variant="outline"
+            onClick={onGoogleSignIn}
+            type="button"
             className="w-full mt-9 h-14 py-3 px-4 font-bold border border-grGray flex items-center justify-center gap-2 text-base"
           >
             <Image src={GOOGLE_ICON} width={26} height={26} alt="" />

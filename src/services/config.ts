@@ -1,7 +1,11 @@
 import CookieHandler, { TOKEN } from "@/helpers/cookie";
+import LocalStorageHandler, { REFRESH_TOKEN } from "@/helpers/localStorage";
 import axios, { AxiosInstance } from "axios";
+import { refreshToken } from "./auth";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+const refreshTokenStorage = LocalStorageHandler.get(REFRESH_TOKEN);
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL,
@@ -24,10 +28,21 @@ axiosClient.interceptors.response.use(
 
     // Expired token
     if (response && response.status === 401) {
-      console.error("Unauthenticated - 401 on client", { data: response.data });
-      CookieHandler.remove(TOKEN);
-      window.location.reload();
-      return Promise.reject(error);
+      if (refreshTokenStorage) {
+        refreshToken(refreshTokenStorage)
+          .then((data) => {
+            CookieHandler.set(TOKEN, data?.refreshToken);
+          })
+          .catch(() => {
+            console.error("Unauthenticated - 401 on client")
+            CookieHandler.remove(TOKEN);
+            window.location.reload();
+          });
+      } else {
+        console.error("Unauthenticated - 401 on client");
+        CookieHandler.remove(TOKEN);
+        window.location.reload();
+      }
     }
 
     throw error;

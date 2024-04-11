@@ -1,13 +1,18 @@
 "use client";
 
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, SyntheticEvent } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
 import { Input } from "../ui/input";
 
 import GOOGLE_ICON from "@/assets/images/google.png";
+import CookieHandler, { TOKEN } from "@/helpers/cookie";
+import { toastError, toastSuccess } from "@/helpers/toasts";
+import { AuthRequest, googleSignIn, register } from "@/services/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -20,10 +25,11 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { AuthRequest, register } from "@/services/auth";
-import { useMutation } from "@tanstack/react-query";
-import { toastError, toastSuccess } from "@/helpers/toasts";
-import { useGoogleLogin } from "@react-oauth/google";
+import { useRouter } from "next/navigation";
+import LocalStorageHandler, {
+  REFRESH_TOKEN,
+  USER,
+} from "@/helpers/localStorage";
 
 interface UserAuthRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -54,6 +60,8 @@ export function UserAuthRegisterForm({
   className,
   ...props
 }: UserAuthRegisterFormProps) {
+  const { replace } = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -64,21 +72,6 @@ export function UserAuthRegisterForm({
       firstName: "string",
       lastName: "string",
       company: "string",
-    },
-  });
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse: any) => {
-      const response = {
-        access_token:
-          "ya29.a0Ad52N390T-FXqqs4X4qNgUW6njOpun9x9-Kbg8wfwAQ6yLTarSzwD74QuDNqUHNV42QLEMZKv3qDZSQp3tI6HxZOZ8DEDtJNVRsJZxHrjQ3BM8u2IPdJez0q7evryq7Azea_AvvKBlXk83pcFmmmAM34wvQEFFD6mQaCgYKAS4SARESFQHGX2MiuNlrX9z8pNbpG7m4i_X7qQ0169",
-        token_type: "Bearer",
-        expires_in: 3599,
-        scope:
-          "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
-        authuser: "0",
-        prompt: "consent",
-      };
-      console.log(tokenResponse);
     },
   });
 
@@ -95,11 +88,47 @@ export function UserAuthRegisterForm({
     },
   });
 
+  const googleSignInMutaion = useMutation({
+    mutationFn: (token: string) => googleSignIn(token),
+    mutationKey: ["login-google"],
+    onSuccess(data, variables, context) {
+      CookieHandler.set(TOKEN, data?.accessToken);
+      LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
+      LocalStorageHandler.set(USER, data?.user);
+      replace("/");
+    },
+    onError: (error, variables, _context) => {
+      toastError(
+        error?.message ?? "Oop's! Something wrong when try to login with google"
+      );
+    },
+  });
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     registerMutation.mutate(data);
   };
-  const onGoogleSignIn = () => {
-    login();
+
+  const loginGg = useGoogleLogin({
+    onSuccess: (tokenResponse: any) => {
+      // Example data
+      // const response = {
+      //   access_token:
+      //     "ya29.a0Ad52N390T-FXqqs4X4qNgUW6njOpun9x9-Kbg8wfwAQ6yLTarSzwD74QuDNqUHNV42QLEMZKv3qDZSQp3tI6HxZOZ8DEDtJNVRsJZxHrjQ3BM8u2IPdJez0q7evryq7Azea_AvvKBlXk83pcFmmmAM34wvQEFFD6mQaCgYKAS4SARESFQHGX2MiuNlrX9z8pNbpG7m4i_X7qQ0169",
+      //   token_type: "Bearer",
+      //   expires_in: 3599,
+      //   scope:
+      //     "email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email",
+      //   authuser: "0",
+      //   prompt: "consent",
+      // };
+      console.log("-----google-signin-----", tokenResponse);
+      googleSignInMutaion.mutate(tokenResponse?.access_token);
+    },
+  });
+
+  const onGoogleSignIn = (e: SyntheticEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    loginGg();
   };
 
   return (
@@ -192,6 +221,7 @@ export function UserAuthRegisterForm({
             variant="outline"
             className="w-full mt-9 h-14 py-3 px-4 font-bold border border-grGray flex items-center justify-center gap-2 text-base"
             onClick={onGoogleSignIn}
+            type="button"
           >
             <Image src={GOOGLE_ICON} width={26} height={26} alt="" />
             <span>Sign In with Google</span>
