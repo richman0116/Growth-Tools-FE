@@ -5,8 +5,6 @@ import { refreshToken } from "./auth";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-const refreshTokenStorage = LocalStorageHandler.get(REFRESH_TOKEN);
-
 const axiosClient: AxiosInstance = axios.create({
   baseURL,
   timeout: 5000,
@@ -24,6 +22,7 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
   (response) => response?.data,
   (error) => {
+    const refreshTokenStorage = LocalStorageHandler.get(REFRESH_TOKEN);
     const { response } = error;
 
     // Expired token
@@ -34,7 +33,7 @@ axiosClient.interceptors.response.use(
             CookieHandler.set(TOKEN, data?.refreshToken);
           })
           .catch(() => {
-            console.error("Unauthenticated - 401 on client")
+            console.error("Unauthenticated - 401 on client");
             CookieHandler.remove(TOKEN);
             window.location.reload();
           });
