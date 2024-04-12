@@ -10,14 +10,14 @@ type User = {
     gender: string;
     type: string;
     permissions: string[];
-  }
+  };
   accessToken: string;
   refreshToken: string;
 };
 
 type SubscriptionResponse = {
   url: string;
-}
+};
 type Filters = {
   filter: {
     deals: boolean;
@@ -51,6 +51,7 @@ type SubmitToolForm = {
   description: string;
   website: string;
   logo?: File;
+  thumbnail?: File;
   deal: Deal[];
   features: {
     value: string;
@@ -61,4 +62,5 @@ type SubmitToolForm = {
   price: string;
   free: boolean;
   category: string;
+  subscription: string;
 };

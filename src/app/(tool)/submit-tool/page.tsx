@@ -38,8 +38,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { regexFloat } from "@/helpers/regex";
 import { cn } from "@/lib/utils";
+import { getSubscriptions } from "@/services/subscription";
+import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
@@ -60,11 +62,17 @@ export default function SubmitToolPage() {
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
   const [logoPreview, setFilePreview] = useState<string>("");
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const [deal, setDeal] = useState<Deal>({
     id: "",
     price: "",
     salePrice: "",
     title: "",
+  });
+
+  const { data } = useQuery({
+    queryKey: ["subscription"],
+    queryFn: getSubscriptions,
   });
 
   const form = useForm<SubmitToolForm>({
@@ -92,6 +100,7 @@ export default function SubmitToolPage() {
       price: "0",
       free: false,
       category: "",
+      subscription: "",
     },
   });
 
@@ -109,6 +118,12 @@ export default function SubmitToolPage() {
     const file = e.target?.files?.[0];
     form.setValue("logo", file);
     file && setFilePreview(URL.createObjectURL(file));
+  };
+
+  const handleUploadThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+    form.setValue("thumbnail", file);
+    file && setThumbnailPreview(URL.createObjectURL(file));
   };
 
   const currentDeals = form.getValues("deal");
@@ -370,6 +385,54 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="thumbnail"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormLabel className="font-semibold text-[18px]">
+                        Thumbnail
+                      </FormLabel>
+
+                      <FormControl>
+                        <div className="relative w-max">
+                          {thumbnailPreview && (
+                            <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
+                              <Image
+                                id="upload-thumbnail"
+                                src={thumbnailPreview}
+                                width={160}
+                                height={160}
+                                alt="file-preview"
+                                className="overflow-hidden"
+                              />
+                            </div>
+                          )}
+                          <Button
+                            className={cn(
+                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
+                            )}
+                            variant="outline"
+                            size="lg"
+                          >
+                            Upload
+                            <UploadIcon />
+                          </Button>
+                          <input
+                            type="file"
+                            className={
+                              "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                            }
+                            onChange={handleUploadThumbnail}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormDescription>
+                        png, svg formats. 5mb max
+                      </FormDescription>
+                    </FormItem>
+                  )}
+                />
                 <div>
                   <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
@@ -558,6 +621,17 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="font-semibold text-[18px] mb-3">
+                        Category
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
                 <div className="pt-9">
                   <Button
                     type="submit"
@@ -574,10 +648,10 @@ export default function SubmitToolPage() {
             <ToolCard
               variant="thumbnail"
               id={"new-tool"}
-              title={TOOL_MOCK_DATA[0].title}
-              description={TOOL_MOCK_DATA[0].description}
-              thumbnail={TOOL_MOCK_DATA[0].thumbnail}
-              logo={TOOL_MOCK_DATA[0].logo}
+              title={form.watch("name")}
+              description={form.watch("shortDescription")}
+              thumbnail={thumbnailPreview as unknown as StaticImageData}
+              logo={logoPreview as unknown as StaticImageData}
             />
           </div>
         </div>
