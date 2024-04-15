@@ -4,8 +4,14 @@ import { ToolCard } from "@/components/cards/tool-card";
 import { AddDealCard } from "@/components/common/add-deal-card";
 import { DealCard } from "@/components/common/deal-card";
 import { UploadIcon } from "@/components/icons/UploadIcon";
-import { TOOL_MOCK_DATA } from "@/components/mockData/tool-mock-data";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
@@ -30,33 +36,26 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { regexFloat } from "@/helpers/regex";
+import { toastError } from "@/helpers/toasts";
 import { cn } from "@/lib/utils";
+import { getCategoriesList } from "@/services/category";
 import { getSubscriptions } from "@/services/subscription";
-import { useQuery } from "@tanstack/react-query";
+import { SubmitToolRequest, submitTool } from "@/services/tool";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
 
 export default function SubmitToolPage() {
   const [editModal, setEditModal] = useState(false);
@@ -70,9 +69,27 @@ export default function SubmitToolPage() {
     title: "",
   });
 
-  const { data } = useQuery({
+  const { data: subscriptions } = useQuery({
     queryKey: ["subscription"],
     queryFn: getSubscriptions,
+  });
+
+  const { data: categories } = useQuery({
+    queryKey: ["category"],
+    queryFn: getCategoriesList,
+  });
+
+  const submitToolWithSubs = useMutation({
+    mutationFn: (data: SubmitToolRequest) => submitTool(data),
+    mutationKey: ["submit-tool"],
+    onSuccess(data, variables, context) {
+      console.log(data);
+    },
+    onError: (error, variables, _context) => {
+      toastError(
+        error?.message ?? "Oop's! Something wrong when try to submit tool"
+      );
+    },
   });
 
   const form = useForm<SubmitToolForm>({
@@ -166,10 +183,10 @@ export default function SubmitToolPage() {
     (id: string) => {
       form.setValue(
         "deal",
-        currentDeals?.filter((item) => item.id === deal.id)
+        currentDeals?.filter((item) => item.id !== id)
       );
     },
-    [currentDeals, deal.id, form]
+    [currentDeals, form]
   );
 
   const editModalComp = () => {
@@ -237,7 +254,25 @@ export default function SubmitToolPage() {
   };
 
   const onSubmit = async (data: SubmitToolForm) => {
-    console.log(data);
+    const mapToolDeal = data?.deal.map((item) => ({
+      name: item?.title,
+      descriptions: item?.title,
+      price: +item?.price,
+      discountPrice: +item?.salePrice,
+    }));
+
+    submitToolWithSubs.mutate({
+      name: data?.name,
+      shortDescription: data?.description,
+      description: data?.shortDescription,
+      website: data?.website,
+      toolDeals: mapToolDeal,
+      keyFeatures: data?.features.map((data) => data.value),
+      useCases: data?.useCases.map((data) => data.value),
+      price: +data?.price,
+      categoryId: data?.category,
+      subscriptionId: data?.subscription,
+    });
   };
 
   return (
@@ -579,9 +614,9 @@ export default function SubmitToolPage() {
                               )}
                             >
                               {field.value
-                                ? languages.find(
-                                    (language) => language.value === field.value
-                                  )?.label
+                                ? categories?.find(
+                                    (category) => category.id === field.value
+                                  )?.name
                                 : "Select category"}
                               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
@@ -595,23 +630,23 @@ export default function SubmitToolPage() {
                             <CommandInput placeholder="Search language..." />
                             <CommandEmpty>No language found.</CommandEmpty>
                             <CommandGroup>
-                              {languages.map((language) => (
+                              {categories?.map((category) => (
                                 <CommandItem
-                                  value={language.label}
-                                  key={language.value}
+                                  value={category.id}
+                                  key={category.id}
                                   onSelect={() => {
-                                    form.setValue("category", language.value);
+                                    form.setValue("category", category.id);
                                   }}
                                 >
                                   <Check
                                     className={cn(
                                       "mr-2 h-4 w-4",
-                                      language.value === field.value
+                                      category.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0"
                                     )}
                                   />
-                                  {language.label}
+                                  {category.name}
                                 </CommandItem>
                               ))}
                             </CommandGroup>
@@ -623,12 +658,54 @@ export default function SubmitToolPage() {
                 />
                 <FormField
                   control={form.control}
-                  name="category"
+                  name="subscription"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="font-semibold text-[18px] mb-3">
-                        Category
-                      </FormLabel>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="font-semibold text-[18px] mb-2">
+                            Subscriptions
+                          </CardTitle>
+                          <CardDescription>
+                            Please select Subscriptions
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid gap-6">
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            className="grid grid-cols-3 gap-4"
+                          >
+                            {subscriptions?.map((sub) => (
+                              <div key={sub.id}>
+                                <RadioGroupItem
+                                  value={sub.id}
+                                  id={sub.id}
+                                  className="peer sr-only"
+                                />
+                                <Label
+                                  htmlFor={sub.id}
+                                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary relative"
+                                >
+                                  <span className="absolute -top-4 text-white bg-black py-1 px-2 rounded-lg text-base shadow-lg">
+                                    {sub?.name}
+                                  </span>
+                                  <p className="relative py-14 text-center">
+                                    <b className="text-[64px] font-bold text-secondary">
+                                      {sub?.price}
+                                    </b>
+                                    <span className="absolute font-medium">
+                                      {sub?.currency}
+                                    </span>
+                                    <span className="text-white bg-secondary inline-block rounded-full mt-3 capitalize px-4 py-1">
+                                      {sub?.interval}
+                                    </span>
+                                  </p>
+                                </Label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </CardContent>
+                      </Card>
                     </FormItem>
                   )}
                 />

@@ -65,10 +65,10 @@ export function UserAuthRegisterForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "info@gmail.com",
-      phone: "058612341424",
-      password: "c3RyaW5n",
-      confirmPassword: "c3RyaW5n",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
       firstName: "string",
       lastName: "string",
       company: "string",

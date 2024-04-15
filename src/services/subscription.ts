@@ -1,11 +1,17 @@
 import { AxiosError } from "axios";
 import axiosClient from "./config";
 
+export type Subcriptions = {
+  currency: string;
+  id: string;
+  interval: string;
+  name: string;
+  price: number;
+};
+
 export type SubcriptionsResponse = {
-  amount: 0;
-  name: "string";
-  recursionPlan: "string";
-}[];
+  result: Subcriptions[];
+};
 
 export const getSubscriptions = async () => {
   try {
@@ -13,9 +19,7 @@ export const getSubscriptions = async () => {
       `/subscriptions/list`
     );
 
-    console.log(res);
-
-    return res;
+    return res?.result;
   } catch (error) {
     const err = error as AxiosError<any>;
     const errData = err.response?.data;
