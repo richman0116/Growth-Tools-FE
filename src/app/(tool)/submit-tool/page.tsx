@@ -56,8 +56,11 @@ import Image, { StaticImageData } from "next/image";
 import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { Icons } from "@/components/common/icon";
+import { useRouter } from "next/navigation";
 
 export default function SubmitToolPage() {
+  const { push } = useRouter();
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
   const [logoPreview, setFilePreview] = useState<string>("");
@@ -83,9 +86,10 @@ export default function SubmitToolPage() {
     mutationFn: (data: SubmitToolRequest) => submitTool(data),
     mutationKey: ["submit-tool"],
     onSuccess(data, variables, context) {
-      console.log(data);
+      push(data?.url);
     },
     onError: (error, variables, _context) => {
+      form.reset();
       toastError(
         error?.message ?? "Oop's! Something wrong when try to submit tool"
       );
@@ -712,9 +716,14 @@ export default function SubmitToolPage() {
                 <div className="pt-9">
                   <Button
                     type="submit"
+                    disabled={form.formState.isSubmitSuccessful}
                     className="w-full h-14 text-[18px] font-bold"
                   >
-                    Publish
+                    {form.formState.isSubmitSuccessful ? (
+                      <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
+                    ) : (
+                      "Publish"
+                    )}
                   </Button>
                 </div>
               </form>

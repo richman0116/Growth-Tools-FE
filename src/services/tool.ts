@@ -22,7 +22,25 @@ export type SubmitToolRequest = {
 };
 
 export type SubmitToolResponse = {
-  url: string;
+  result: {
+    checkoutUrl: string;
+    tool: {
+      name: string;
+      shortDescription: string;
+      description: string;
+    };
+    category: {
+      id: string;
+      name: string;
+      handle: string;
+    };
+    description: string;
+    logo: string;
+    name: string;
+    price: number;
+    shortDescription: string;
+    website: string;
+  };
 };
 
 export const submitTool = async (data: SubmitToolRequest) => {
@@ -32,9 +50,9 @@ export const submitTool = async (data: SubmitToolRequest) => {
       data
     );
 
-    console.log(res);
-
-    return {};
+    return {
+      url: res.result.checkoutUrl,
+    };
   } catch (error) {
     const err = error as AxiosError<any>;
     const errData = err.response?.data;
