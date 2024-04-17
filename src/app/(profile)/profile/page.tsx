@@ -12,6 +12,8 @@ export default function ProfilePage() {
     queryFn: getTools,
   });
 
+  console.log(data);
+
   return (
     <section>
       <div className="container">
