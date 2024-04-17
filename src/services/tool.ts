@@ -43,6 +43,19 @@ export type SubmitToolResponse = {
   };
 };
 
+export type Tool = {
+  description: string;
+  logo: string;
+  name: string;
+  price: number;
+  shortDescription: string;
+  website: string;
+};
+
+export type GetToolResponse = {
+  result: Tool[];
+};
+
 export const submitTool = async (data: SubmitToolRequest) => {
   try {
     const res = await axiosClient.post<SubmitToolRequest, SubmitToolResponse>(
@@ -57,5 +70,31 @@ export const submitTool = async (data: SubmitToolRequest) => {
     const err = error as AxiosError<any>;
     const errData = err.response?.data;
     throw errData;
+  }
+};
+
+export const getTools = async () => {
+  try {
+    const res = await axiosClient.get<null, GetToolResponse>(`/tools/list`);
+
+    return res.result;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
+  }
+};
+
+export const deleteTool = async (id: string) => {
+  try {
+    const res = await axiosClient.delete<null, GetToolResponse>(`/tools/${id}`);
+
+    console.log(res);
+
+    return res.result;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
   }
 };

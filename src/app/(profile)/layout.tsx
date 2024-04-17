@@ -3,10 +3,10 @@ import { Header } from "@/components/common/header";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Submit tool",
+  title: "Profile",
 };
 
-export default function ToolLayout({
+export default function ProfileLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
