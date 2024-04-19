@@ -30,7 +30,6 @@ export default function TrendingToolsDetailPage() {
     const name = pathName.split("/")[2];
 
     const [tool, setTool] = useState<Tool | undefined>(undefined);
-
     useEffect(() => {
         getToolByName(name).then((res: Tool) => {
           setTool(res);

@@ -4,6 +4,7 @@ import GasIcon from "../icons/gas";
 import { Clap } from "../icons/Clap";
 import { Prize } from "../icons/Prize";
 import { Card } from "../ui/card";
+import Placeholder from "@/assets/images/placeholder.png";
 
 export const ToolCard = ({
   id,
@@ -27,7 +28,12 @@ export const ToolCard = ({
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
               <div className="w-12 h-12 p-2 rounded-lg tagItem">
-                <Image src={logo.src} width={48} height={48} alt="logo" />
+                <Image
+                  src={logo ? logo : Placeholder}
+                  width={48}
+                  height={48}
+                  alt="logo"
+                />
               </div>
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg tagItem">
@@ -44,7 +50,7 @@ export const ToolCard = ({
             <div className="relative h-64 w-[70%]">
               <Image
                 className="w-3/4 cardImageItem"
-                src={thumbnail.src}
+                src={thumbnail ? thumbnail : Placeholder}
                 fill
                 alt="thumbnail"
               />
@@ -64,7 +70,7 @@ export const ToolCard = ({
       <Card className="flex shadow-lg">
         <div className="p-3">
           <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">
-            <Image width={48} height={48} src={logo.src} alt="logo" />
+            <Image width={48} height={48} src={logo} alt="logo" />
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">

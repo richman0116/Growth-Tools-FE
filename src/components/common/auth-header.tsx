@@ -7,7 +7,7 @@ import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler from "@/helpers/localStorage";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { AlignJustify, Plus, Sun } from "lucide-react";
+import { AlignJustify, PencilRuler, Plus, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback } from "react";
@@ -74,7 +74,19 @@ export function AuthHeader() {
             Submit Tool
           </Link>
           {isLoggedIn ? (
-            <Button onClick={handleLogout}>Logout</Button>
+            <>
+              <Link
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "flex items-center gap-2"
+                )}
+                href={"/profile"}
+              >
+                <PencilRuler className="w-5" />
+                Profile
+              </Link>
+              <Button onClick={handleLogout}>Logout</Button>
+            </>
           ) : (
             <Link className={cn(buttonVariants())} href="/sign-up">
               Sign Up
@@ -109,18 +121,15 @@ export function AuthHeader() {
             <DropdownMenuContent className="w-auto border-none">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Button
-                    size="sm"
-                    className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
-                  >
-                    <Image src={WHITE_BOT_ICON} alt="search" className="w-3" />
+                  <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-pink-500 hover:to-yellow-500">
+                    <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
                     Try AI Search
                   </Button>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="block">
                   <Link
                     className={cn(
-                      buttonVariants({ variant: "secondary" }),
+                      buttonVariants({ variant: "outline" }),
                       "w-full flex items-center gap-2 border"
                     )}
                     href={isLoggedIn ? "/submit-tool" : "/sign-in"}
@@ -129,14 +138,31 @@ export function AuthHeader() {
                     Submit Tool
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {isLoggedIn && (
+                  <DropdownMenuItem className="block">
+                    <Link
+                      className={cn(
+                        buttonVariants({ variant: "outline" }),
+                        "flex items-center gap-2"
+                      )}
+                      href={"/profile"}
+                    >
+                      <PencilRuler className="w-5" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem className="block">
                   {isLoggedIn ? (
-                    <Button onClick={handleLogout}>Logout</Button>
+                    <Button className="w-full" onClick={handleLogout}>
+                      Logout
+                    </Button>
                   ) : (
                     <Link
-                      className={
-                        (cn(buttonVariants({ variant: "default" })), "w-full")
-                      }
+                      className={cn(
+                        buttonVariants({ variant: "default" }),
+                        "w-full"
+                      )}
                       href="/sign-up"
                     >
                       Sign Up

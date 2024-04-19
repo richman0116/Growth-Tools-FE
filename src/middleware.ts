@@ -9,19 +9,18 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   // }
   const session = request.cookies.get(TOKEN);
 
-  const isEmptyToken = session?.value && session.value === "undefined"
+  const isEmptyToken = session?.value && session.value === "undefined";
 
   if (isEmptyToken) {
     request.cookies.clear();
   }
 
-
-  const userDecode = session?.value && session.value !== "undefined"
-    ? jwtDecode<JwtPayload>(session?.value ?? "")
-    : "";
+  const userDecode =
+    session?.value && session.value !== "undefined"
+      ? jwtDecode<JwtPayload>(session?.value ?? "")
+      : "";
 
   const userRole = (userDecode as any)?.role;
-
 
   // if (!session?.value) {
   //   return NextResponse.redirect(new URL("/sign-in", request.url));
@@ -32,7 +31,11 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     return NextResponse.redirect(new URL("/trending-tools", request.url));
   }
 
-  if (request.nextUrl.pathname === "/submit-tool" && !session?.value) {
+  if (
+    (request.nextUrl.pathname === "/submit-tool" ||
+      request.nextUrl.pathname === "/profile") &&
+    !session?.value
+  ) {
     return NextResponse.redirect(new URL("/trending-tools", request.url));
   }
 

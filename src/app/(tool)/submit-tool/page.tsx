@@ -4,8 +4,14 @@ import { ToolCard } from "@/components/cards/tool-card";
 import { AddDealCard } from "@/components/common/add-deal-card";
 import { DealCard } from "@/components/common/deal-card";
 import { UploadIcon } from "@/components/icons/UploadIcon";
-import { TOOL_MOCK_DATA } from "@/components/mockData/tool-mock-data";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
@@ -30,41 +36,65 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { regexFloat } from "@/helpers/regex";
+import { toastError } from "@/helpers/toasts";
 import { cn } from "@/lib/utils";
+import { getCategoriesList } from "@/services/category";
+import { getSubscriptions } from "@/services/subscription";
+import { SubmitToolRequest, submitTool } from "@/services/tool";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
-import Image from "next/image";
-import { ChangeEvent, useCallback, useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
+import { Icons } from "@/components/common/icon";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SubmitToolPage() {
+  const { push } = useRouter();
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
   const [logoPreview, setFilePreview] = useState<string>("");
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
   const [deal, setDeal] = useState<Deal>({
     id: "",
     price: "",
     salePrice: "",
     title: "",
+  });
+
+  const { data: subscriptions } = useQuery({
+    queryKey: ["subscription"],
+    queryFn: getSubscriptions,
+  });
+
+  const { data: categories } = useQuery({
+    queryKey: ["category"],
+    queryFn: getCategoriesList,
+  });
+
+  const submitToolWithSubs = useMutation({
+    mutationFn: (data: SubmitToolRequest) => submitTool(data),
+    mutationKey: ["submit-tool"],
+    onSuccess(data, variables, context) {
+      push(data?.url);
+    },
+    onError: (error, variables, _context) => {
+      form.reset();
+      toastError(
+        error?.message ?? "Oop's! Something wrong when try to submit tool"
+      );
+    },
   });
 
   const form = useForm<SubmitToolForm>({
@@ -92,6 +122,7 @@ export default function SubmitToolPage() {
       price: "0",
       free: false,
       category: "",
+      subscription: "",
     },
   });
 
@@ -104,6 +135,20 @@ export default function SubmitToolPage() {
     name: "useCases",
     control: form.control,
   });
+
+  const { fields: fieldScreenshots } = useFieldArray({
+    name: "screenshots",
+    control: form.control,
+  });
+
+  const handleUploadThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files).map((file) => ({ value: file }));
+      form.setValue("screenshots", fileArray);
+    }
+    files && setThumbnailPreview(URL.createObjectURL(files[0]));
+  };
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
@@ -151,10 +196,10 @@ export default function SubmitToolPage() {
     (id: string) => {
       form.setValue(
         "deal",
-        currentDeals?.filter((item) => item.id === deal.id)
+        currentDeals?.filter((item) => item.id !== id)
       );
     },
-    [currentDeals, deal.id, form]
+    [currentDeals, form]
   );
 
   const editModalComp = () => {
@@ -222,7 +267,45 @@ export default function SubmitToolPage() {
   };
 
   const onSubmit = async (data: SubmitToolForm) => {
-    console.log(data);
+    const mapToolDeal = data?.deal.map((item) => ({
+      name: item?.title,
+      descriptions: item?.title,
+      price: +item?.price,
+      discountPrice: +item?.salePrice,
+    }));
+
+    const formData = new FormData();
+    formData.append("name", data?.name);
+    formData.append("shortDescription", data?.description);
+    formData.append("description", data?.shortDescription);
+    formData.append("website", data?.website);
+    formData.append("toolDeals", [] as any);
+    formData.append(
+      "keyFeatures",
+      JSON.stringify(data?.features.map((data) => data.value))
+    );
+    formData.append(
+      "useCases",
+      JSON.stringify(data?.useCases.map((data) => data.value))
+    );
+    formData.append("price", data?.price);
+    formData.append("categoryId", data?.category);
+    formData.append("subscriptionId", data?.subscription);
+    formData.append("logo", data.logo!);
+    data.screenshots?.forEach((screenshot) => {
+      formData.append("screenshots", screenshot.value);
+    });
+
+    try {
+      const response = await submitTool(
+        formData as unknown as SubmitToolRequest
+      );
+
+      push(response?.url);
+    } catch (error) {
+      form.reset();
+      toastError("Oop's! Something wrong when try to submit tool");
+    }
   };
 
   return (
@@ -336,7 +419,7 @@ export default function SubmitToolPage() {
                           {logoPreview && (
                             <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
                               <Image
-                                id="upload-avatar"
+                                id="upload-logo"
                                 src={logoPreview}
                                 width={160}
                                 height={160}
@@ -370,6 +453,55 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+                <div className="relative">
+                  <h4 className="font-semibold mb-4 text-[18px]">
+                    Screenshots
+                  </h4>
+                  <div className="grid grid-cols-1">
+                    <div className="flex gap-6">
+                      {fieldScreenshots?.map((item, i) => (
+                        <div
+                          key={`screenshot-${i}`}
+                          className=" relative w-max"
+                        >
+                          {item && (
+                            <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
+                              <Image
+                                id="upload-thumbnail"
+                                src={URL.createObjectURL(item.value)}
+                                width={160}
+                                height={160}
+                                alt="file-preview"
+                                className="overflow-hidden"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      className={cn(
+                        "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
+                      )}
+                      variant="outline"
+                      size="lg"
+                    >
+                      Upload
+                      <UploadIcon />
+                    </Button>
+                    <input
+                      type="file"
+                      multiple
+                      className={
+                        "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                      }
+                      onChange={handleUploadThumbnail}
+                    />
+                  </div>
+                  <p className="mt-6 text-[0.8rem] text-muted-foreground">
+                    png, svg formats. 5mb max
+                  </p>
+                </div>
                 <div>
                   <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
@@ -516,9 +648,9 @@ export default function SubmitToolPage() {
                               )}
                             >
                               {field.value
-                                ? languages.find(
-                                    (language) => language.value === field.value
-                                  )?.label
+                                ? categories?.find(
+                                    (category) => category.id === field.value
+                                  )?.name
                                 : "Select category"}
                               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
@@ -532,23 +664,23 @@ export default function SubmitToolPage() {
                             <CommandInput placeholder="Search language..." />
                             <CommandEmpty>No language found.</CommandEmpty>
                             <CommandGroup>
-                              {languages.map((language) => (
+                              {categories?.map((category) => (
                                 <CommandItem
-                                  value={language.label}
-                                  key={language.value}
+                                  value={category.id}
+                                  key={category.id}
                                   onSelect={() => {
-                                    form.setValue("category", language.value);
+                                    form.setValue("category", category.id);
                                   }}
                                 >
                                   <Check
                                     className={cn(
                                       "mr-2 h-4 w-4",
-                                      language.value === field.value
+                                      category.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0"
                                     )}
                                   />
-                                  {language.label}
+                                  {category.name}
                                 </CommandItem>
                               ))}
                             </CommandGroup>
@@ -558,12 +690,70 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="subscription"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="font-semibold text-[18px] mb-2">
+                            Subscriptions
+                          </CardTitle>
+                          <CardDescription>
+                            Please select Subscriptions
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid gap-6">
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            className="grid grid-cols-3 gap-4"
+                          >
+                            {subscriptions?.map((sub) => (
+                              <div key={sub.id}>
+                                <RadioGroupItem
+                                  value={sub.id}
+                                  id={sub.id}
+                                  className="peer sr-only"
+                                />
+                                <Label
+                                  htmlFor={sub.id}
+                                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary relative"
+                                >
+                                  <span className="absolute -top-4 text-white bg-black py-1 px-2 rounded-lg text-base shadow-lg">
+                                    {sub?.name}
+                                  </span>
+                                  <p className="relative py-14 text-center">
+                                    <b className="text-[64px] font-bold text-secondary">
+                                      {sub?.price}
+                                    </b>
+                                    <span className="absolute font-medium">
+                                      {sub?.currency}
+                                    </span>
+                                    <span className="text-white bg-secondary inline-block rounded-full mt-3 capitalize px-4 py-1">
+                                      {sub?.interval}
+                                    </span>
+                                  </p>
+                                </Label>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </CardContent>
+                      </Card>
+                    </FormItem>
+                  )}
+                />
                 <div className="pt-9">
                   <Button
                     type="submit"
+                    disabled={form.formState.isSubmitSuccessful}
                     className="w-full h-14 text-[18px] font-bold"
                   >
-                    Publish
+                    {form.formState.isSubmitSuccessful ? (
+                      <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
+                    ) : (
+                      "Publish"
+                    )}
                   </Button>
                 </div>
               </form>
@@ -574,10 +764,10 @@ export default function SubmitToolPage() {
             <ToolCard
               variant="thumbnail"
               id={"new-tool"}
-              title={TOOL_MOCK_DATA[0].title}
-              description={TOOL_MOCK_DATA[0].description}
-              thumbnail={TOOL_MOCK_DATA[0].thumbnail}
-              logo={TOOL_MOCK_DATA[0].logo}
+              title={form.watch("name")}
+              description={form.watch("shortDescription")}
+              thumbnail={thumbnailPreview as unknown as StaticImageData}
+              logo={logoPreview as unknown as StaticImageData}
             />
           </div>
         </div>

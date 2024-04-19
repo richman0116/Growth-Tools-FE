@@ -38,8 +38,8 @@ const FormSchema = z.object({
     .min(1, { message: "This field has to be filled." })
     .email("This is not a valid email."),
   // .refine((e) => e === "abcd@fg.com", "This email is not in our database"),
-  password: z.string().min(8, {
-    message: "Your password must be at least 8 characters.",
+  password: z.string().min(6, {
+    message: "Your password must be at least 6 characters.",
   }),
 });
 
@@ -52,8 +52,8 @@ export function UserAuthLoginForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "info10@gmail.com",
-      password: "c3RyaW5n",
+      email: "",
+      password: "",
     },
   });
 

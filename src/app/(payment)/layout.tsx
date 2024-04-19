@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Submit tool",
 };
 
-export default function ToolLayout({
+export default function PaymentLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

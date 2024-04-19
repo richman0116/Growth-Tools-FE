@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getCategoryByHandle, getCategoryList, getTools } from "../../../../services/tool";
+import { filterTool, getCategoryByHandle, getCategoryList } from "../../../../services/tool";
 import { usePathname } from "next/navigation";
 
 export default function MarketingPage() {
@@ -16,7 +16,7 @@ export default function MarketingPage() {
     const categoryHandle = pathName.split("/")[2];
 
     const [categoryId, setCategoryId] = useState<string>("");
-    const [tools, setTools] = useState<Tool[]>([]);
+    const [tools, setTools] = useState<ToolInfo[]>([]);
     const [page, setPage] = useState(1);
     const [take] = useState(10);
     const [sort, setSort] = useState<string | undefined>(undefined);
@@ -68,13 +68,13 @@ export default function MarketingPage() {
     useEffect(() => {
         setIsLoading(true)
         if (!categoryId) return;
-        getTools({
+        filterTool({
             order,
             page,
             take,
             sort,
             categoryId,
-        }).then((res: PaginationResponse<Tool>) => {
+        }).then((res) => {
             setTools(res?.data);
             setPagination(res?.pagination)
             setIsLoading(false)
