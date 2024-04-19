@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 import { TOKEN } from "./helpers/cookie";
-import { dashboardNavigation } from "./navigation";
 
 export async function middleware(request: NextRequest, response: NextResponse) {
   // if (request.nextUrl.pathname === "/") {
@@ -46,17 +45,17 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   }
 
   // Check protected route by route
-  const checkProtectRoute =
-    dashboardNavigation.find((link) => link.href === request.nextUrl.pathname)
-      ?.roles ?? [];
+//   const checkProtectRoute =
+//     dashboardNavigation.find((link) => link.href === request.nextUrl.pathname)
+//       ?.roles ?? [];
 
-  if (
-    checkProtectRoute &&
-    checkProtectRoute?.length &&
-    checkProtectRoute?.some((role) => role !== userRole)
-  ) {
-    return NextResponse.redirect(new URL("/trending-tools", request.url));
-  }
+//   if (
+//     checkProtectRoute &&
+//     checkProtectRoute?.length &&
+//     checkProtectRoute?.some((role) => role !== userRole)
+//   ) {
+//     return NextResponse.redirect(new URL("/trending-tools", request.url));
+//   }
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("authorization", `Bearer ${session?.value}`);

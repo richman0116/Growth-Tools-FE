@@ -23,18 +23,8 @@ type Filters = {
     deals: boolean;
     trends: boolean;
   };
-  categories: {
-    analytics: boolean;
-    design: boolean;
-    productivity: boolean;
-    emailMarketing: boolean;
-    customerSupport: boolean;
-    fileManagement: boolean;
-    content: boolean;
-    seo: boolean;
-    socialMedia: boolean;
-  };
-  sortBy: "rating" | "az" | "za";
+  categories: any;
+  sortBy: string;
 };
 
 type Deal = {
@@ -62,3 +52,57 @@ type SubmitToolForm = {
   free: boolean;
   category: string;
 };
+
+type Category = {
+  id: string;
+  name: string;
+  description: string;
+  handle: string;
+  icon: string;
+}
+
+
+type PaginationMeta = {
+    page: number;
+    take: number;
+    itemCount: number;
+    pageCount: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+}
+type PaginationResponse<T> = {
+    data: T[];
+    pagination: PaginationMeta;
+}
+
+type Author = {
+    id: string;
+    email: string;
+    avatar: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+}
+
+type ToolDeal = {
+    id: string,
+    name: string,
+    descriptions: string,
+    discountPrice: string,
+    price: string,
+}
+
+type Tool = {
+    id: string;
+    name: string;
+    shortDescription?: string;
+    description?: string;
+    website?: string;
+    logo?: string;
+    screenshots?: string[];
+    keyFeatures?: string[];
+    useCases?: string[];
+    price: number;
+    author: Author;
+    toolDeals: ToolDeal[];
+}

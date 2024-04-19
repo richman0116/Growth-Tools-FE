@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { NavProps } from "@/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { buttonVariants } from "../ui/button";
 import {
   Drawer,
@@ -23,74 +24,76 @@ export function Sidebar({
   onCollapse,
 }: Readonly<NavProps>) {
   const pathname = usePathname();
-
   const navigation = (isFullText?: boolean) => {
     return (
       <>
         <nav className="grid gap-3 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
           {links.map((link) =>
             !isFullText && isCollapsed ? (
-              <Tooltip key={link.href} delayDuration={0}>
+              <Tooltip key={link.handle} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
-                    href={link.href}
+                    href={link.handle}
                     className={cn(
                       buttonVariants({
                         variant: "ghost",
                         size: "icon",
                       }),
                       "h-9 w-9",
-                      link.href === pathname &&
+                      link.handle === pathname &&
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     )}
                   >
-                    <i className="h-6 w-6">
+                    {/* <i className="h-6 w-6">
                       {link?.icon(
                         link.href === pathname ? "#164CD9" : "#636363"
                       )}
-                    </i>
-                    <span className="sr-only">{link.title}</span>
+                    </i> */}
+                    <span className="sr-only">{link.name}</span>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
                   className="flex items-center gap-4"
                 >
-                  {link.title}
-                  {link.label && (
+                  {link.name}
+                  {link.description && (
                     <span className="ml-auto text-muted-foreground">
-                      {link.label}
+                      {link.description}
                     </span>
                   )}
                 </TooltipContent>
               </Tooltip>
             ) : (
               <Link
-                key={link.href}
-                href={link.href}
+                key={link.handle}
+                href={`/category/${link.handle}`}
                 className={cn(
                   buttonVariants({
                     variant: "ghost",
                   }),
-                  link.href === pathname && "text-secondary",
-                  "justify-start"
+                  link.handle === pathname && "text-secondary",
+                  "justify-start",
+                  link.handle === pathname && "bg-gray-200",
+                  link.handle === pathname && "text-gray-700"
                 )}
               >
-                <i className="mr-2 h-6 w-6">
+                {/* <i className="mr-2 h-6 w-6">
                   {link?.icon(link.href === pathname ? "#164CD9" : "#636363")}
-                </i>
-                {link.title}
-                {link.label && (
+                </i> */}
+                <img className="mr-2 h-6 w-6" src={link.icon} alt={link.description} />
+                {link.name}
+                {/* {link.description && (
                   <span
                     className={cn(
                       "ml-auto",
-                      link.href === pathname &&
+                      link.handle === pathname &&
                         "text-background dark:text-white"
                     )}
                   >
-                    {link.label}
+                    {link.description}
                   </span>
-                )}
+                )} */}
               </Link>
             )
           )}
