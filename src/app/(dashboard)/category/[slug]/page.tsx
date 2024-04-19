@@ -7,15 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-<<<<<<< Updated upstream
-import { filterTool, getCategoryByHandle, getCategoryById, getCategoryList } from "../../../../services/tool";
-=======
 import {
   filterTool,
   getCategoryByHandle,
   getCategoryList,
 } from "../../../../services/tool";
->>>>>>> Stashed changes
 import { usePathname } from "next/navigation";
 
 export default function MarketingPage() {
@@ -23,23 +19,6 @@ export default function MarketingPage() {
   const keyPage = pathName.split("/")[1];
   const categoryHandle = pathName.split("/")[2];
 
-<<<<<<< Updated upstream
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [category, setCategory] = useState<Category | undefined>(undefined);
-    const [tools, setTools] = useState<ToolInfo[]>([]);
-    const [page, setPage] = useState(1);
-    const [take] = useState(10);
-    const [sort, setSort] = useState<string | undefined>(undefined);
-    const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-    const [isLoading, setIsLoading] = useState(true);
-    const [pagination, setPagination] = useState<PaginationMeta>({
-        page: 0,
-        take: 0,
-        itemCount: 0,
-        pageCount: 0,
-        hasPreviousPage: false,
-        hasNextPage: false
-=======
   const [categoryId, setCategoryId] = useState<string>("");
   const [tools, setTools] = useState<ToolInfo[]>([]);
   const [page, setPage] = useState(1);
@@ -82,7 +61,6 @@ export default function MarketingPage() {
   useEffect(() => {
     getCategoryByHandle(categoryHandle).then((res) => {
       setCategoryId(res?.id);
->>>>>>> Stashed changes
     });
     getCategoryList().then((res) => {
       setCategories(res);
@@ -121,63 +99,6 @@ export default function MarketingPage() {
         <Separator />
       </div>
 
-<<<<<<< Updated upstream
-    const onFilter = (category?: Category, sort?: string, order?: "ASC" | "DESC") => {
-        if (category) {
-            setCategoryId(category.id)
-            getCategoryById(category.id).then((res) => {
-                setCategory(res)
-            })
-        }
-        if (sort) {
-            setSort(sort)
-        }
-        if (order) {
-            setOrder(order);
-        }
-    }
-
-    useEffect(() => {
-        getCategoryByHandle(categoryHandle).then((res) => {
-            setCategoryId(res?.id)
-            setCategory(res)
-        })
-        getCategoryList().then((res) => {
-            setCategories(res || []);
-        })
-        // if (!categoryId) {
-        //     const redirectedCategoryId = localStorage.getItem('categoryId');
-        //     if (!redirectedCategoryId) return;
-        //     setCategoryId(redirectedCategoryId);
-        // }
-    }, [])
-
-    useEffect(() => {
-        setIsLoading(true)
-        if (!categoryId) return;
-        filterTool({
-            order,
-            page,
-            take,
-            sort,
-            categoryId,
-        }).then((res) => {
-            setTools(res?.data);
-            setPagination(res?.pagination)
-            setIsLoading(false)
-        })
-    }, [order, page, sort, take, categoryId])
-
-    return (
-        <>
-            <div className="px-12 pt-16">
-                <BreadcrumbDashboard />
-
-                <h3 className="font-bold text-[32px] mt-6 mb-8">
-                    {pagination.itemCount} <span className="font-medium">{category?.name} tools</span>
-                </h3>
-                <Separator />
-=======
       <section className="min-h-[700px] flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopoverTool
@@ -213,7 +134,6 @@ export default function MarketingPage() {
             >
               <p className="font-bold">Ops</p>
               <p className="text-sm">We have no tool to show.</p>
->>>>>>> Stashed changes
             </div>
           )}
           {isLoading && (
