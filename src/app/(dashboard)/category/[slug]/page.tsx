@@ -7,11 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  filterTool,
-  getCategoryByHandle,
-  getCategoryList,
-} from "../../../../services/tool";
+import { filterTool, getCategoryByHandle, getCategoryById, getCategoryList } from "../../../../services/tool";
 import { usePathname } from "next/navigation";
 
 export default function MarketingPage() {
@@ -19,58 +15,60 @@ export default function MarketingPage() {
   const keyPage = pathName.split("/")[1];
   const categoryHandle = pathName.split("/")[2];
 
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [tools, setTools] = useState<ToolInfo[]>([]);
-  const [page, setPage] = useState(1);
-  const [take] = useState(10);
-  const [sort, setSort] = useState<string | undefined>(undefined);
-  const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-  const [isLoading, setIsLoading] = useState(true);
-  const [pagination, setPagination] = useState<PaginationMeta>({
-    page: 0,
-    take: 0,
-    itemCount: 0,
-    pageCount: 0,
-    hasPreviousPage: false,
-    hasNextPage: false,
-  });
-  const [categories, setCategories] = useState<Category[]>([]);
+    const [categoryId, setCategoryId] = useState<string>("");
+    const [category, setCategory] = useState<Category | undefined>(undefined);
+    const [tools, setTools] = useState<ToolInfo[]>([]);
+    const [page, setPage] = useState(1);
+    const [take] = useState(10);
+    const [sort, setSort] = useState<string | undefined>(undefined);
+    const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
+    const [isLoading, setIsLoading] = useState(true);
+    const [pagination, setPagination] = useState<PaginationMeta>({
+        page: 0,
+        take: 0,
+        itemCount: 0,
+        pageCount: 0,
+        hasPreviousPage: false,
+        hasNextPage: false
+    });
+    const [categories, setCategories] = useState<Category[]>([]);
+
 
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
 
-  const onNextPage = () => {
-    setPage(page + 1);
-  };
+    const onNextPage = () => {
+        setPage(page + 1);
+    }
 
-  const onFilter = (
-    category?: Category,
-    sort?: string,
-    order?: "ASC" | "DESC"
-  ) => {
-    if (category) {
-      setCategoryId(category.id);
+    const onFilter = (category?: Category, sort?: string, order?: "ASC" | "DESC") => {
+        if (category) {
+            setCategoryId(category.id)
+            getCategoryById(category.id).then((res) => {
+                setCategory(res)
+            })
+        }
+        if (sort) {
+            setSort(sort)
+        }
+        if (order) {
+            setOrder(order);
+        }
     }
-    if (sort) {
-      setSort(sort);
-    }
-    if (order) {
-      setOrder(order);
-    }
-  };
 
-  useEffect(() => {
-    getCategoryByHandle(categoryHandle).then((res) => {
-      setCategoryId(res?.id);
-    });
-    getCategoryList().then((res) => {
-      setCategories(res);
-    });
-    // if (!categoryId) {
-    //     const redirectedCategoryId = localStorage.getItem('categoryId');
-    //     if (!redirectedCategoryId) return;
-    //     setCategoryId(redirectedCategoryId);
-    // }
-  }, []);
+    useEffect(() => {
+        getCategoryByHandle(categoryHandle).then((res) => {
+            setCategoryId(res?.id)
+            setCategory(res)
+        })
+        getCategoryList().then((res) => {
+            setCategories(res || []);
+        })
+        // if (!categoryId) {
+        //     const redirectedCategoryId = localStorage.getItem('categoryId');
+        //     if (!redirectedCategoryId) return;
+        //     setCategoryId(redirectedCategoryId);
+        // }
+    }, [])
 
   useEffect(() => {
     setIsLoading(true);
@@ -93,11 +91,11 @@ export default function MarketingPage() {
       <div className="px-12 pt-16">
         <BreadcrumbDashboard />
 
-        <h3 className="font-bold text-[32px] mt-6 mb-8">
-          528 <span className="font-medium">File Management Tools</span>
-        </h3>
-        <Separator />
-      </div>
+                <h3 className="font-bold text-[32px] mt-6 mb-8">
+                    {pagination.itemCount} <span className="font-medium">{category?.name} tools</span>
+                </h3>
+                <Separator />
+            </div>
 
       <section className="min-h-[700px] flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
