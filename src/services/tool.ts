@@ -138,9 +138,9 @@ export const getCategoryByHandle = async (handle: string): Promise<Category> => 
     }
   };
   
-export const getToolByName = async (name: string): Promise<Tool> => {
+export const getToolByName = async (name: string): Promise<ToolInfo> => {
     try {
-      const  response = await axiosClient.get<null, AxiosResponse<Tool>>(`/tools/info/${name}`);
+      const  response = await axiosClient.get<null, AxiosResponse<ToolInfo>>(`/tools/info/${name}`);
   
       return (response as any)?.result;
     } catch (error) {

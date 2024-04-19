@@ -6,8 +6,11 @@ import { Clap } from "../icons/Clap";
 import { Prize } from "../icons/Prize";
 import { Card } from "../ui/card";
 
+
+
+
 export const ToolCardInfo = (props: {
-  tool: Tool,
+  tool: ToolInfo,
   isLoading: boolean,
   variant: "default" | "thumbnail",
 }) => {

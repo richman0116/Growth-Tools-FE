@@ -29,9 +29,9 @@ export default function TrendingToolsDetailPage() {
     const keyPage = pathName.split("/")[1];
     const name = pathName.split("/")[2];
 
-    const [tool, setTool] = useState<Tool | undefined>(undefined);
+    const [tool, setTool] = useState<ToolInfo | undefined>(undefined);
     useEffect(() => {
-        getToolByName(name).then((res: Tool) => {
+        getToolByName(name).then((res: ToolInfo) => {
           setTool(res);
         })
     }, [])
