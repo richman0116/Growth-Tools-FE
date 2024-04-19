@@ -725,7 +725,7 @@ export default function SubmitToolPage() {
                                   </span>
                                   <p className="relative py-14 text-center">
                                     <b className="text-[64px] font-bold text-secondary">
-                                      {sub?.price}
+                                      {Number(sub?.price)}
                                     </b>
                                     <span className="absolute font-medium">
                                       {sub?.currency}
