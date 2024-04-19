@@ -41,11 +41,11 @@ const FormSchema = z
       .email("This is not a valid email."),
     // .refine((e) => e === "abcd@fg.com", "This email is not in our database"),
     phone: z.string().min(1, { message: "This field has to be filled." }),
-    password: z.string().min(8, {
-      message: "Your password must be at least 8 characters.",
+    password: z.string().min(6, {
+      message: "Your password must be at least 6 characters.",
     }),
-    confirmPassword: z.string().min(8, {
-      message: "Your password must be at least 8 characters.",
+    confirmPassword: z.string().min(6, {
+      message: "Your password must be at least 6 characters.",
     }),
     firstName: z.string(),
     lastName: z.string(),
@@ -94,7 +94,7 @@ export function UserAuthRegisterForm({
     onSuccess(data, variables, context) {
       CookieHandler.set(TOKEN, data?.accessToken);
       LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
-      LocalStorageHandler.set(USER, data?.user);
+      LocalStorageHandler.set(USER, JSON.stringify(data?.user));
       replace("/");
     },
     onError: (error, variables, _context) => {

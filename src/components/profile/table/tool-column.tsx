@@ -5,6 +5,8 @@ import Placeholder from "@/assets/images/placeholder.png";
 import { DataTableColumnHeader } from "@/components/common/table/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import Image from "next/image";
+import { GeneralStatus } from "@/lib/enum";
+import { toolStatus } from "@/components/common/table-options";
 
 export const toolColumns: ColumnDef<any>[] = [
   {
@@ -62,40 +64,40 @@ export const toolColumns: ColumnDef<any>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   accessorKey: "status",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Status" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const status = toolStatus.find(
-  //       (status) => status.value === row.getValue("status")
-  //     );
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => {
+      const status = toolStatus.find(
+        (status) => status.value === row.getValue("status")
+      );
 
-  //     const colorSwitch =
-  //       status?.value === GeneralStatus.Active
-  //         ? "text-green-500"
-  //         : "text-red-500";
+      const colorSwitch =
+        status?.value === GeneralStatus.Published
+          ? "text-green-500"
+          : "text-red-500";
 
-  //     if (!status) {
-  //       return null;
-  //     }
+      if (!status) {
+        return null;
+      }
 
-  //     return (
-  //       <div className="flex w-[100px] items-center">
-  //         {status.icon && (
-  //           <status.icon className={`mr-1 h-4 w-4 ${colorSwitch}`} />
-  //         )}
-  //         <span className={`${colorSwitch} font-medium text-sm`}>
-  //           {status.label}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  //   filterFn: (row, id, value) => {
-  //     return value.includes(row.getValue(id));
-  //   },
-  // },
+      return (
+        <div className="flex w-[100px] items-center">
+          {status.icon && (
+            <status.icon className={`mr-1 h-4 w-4 ${colorSwitch}`} />
+          )}
+          <span className={`${colorSwitch} font-medium text-sm`}>
+            {status.label}
+          </span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,

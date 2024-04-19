@@ -19,6 +19,8 @@ export type SubmitToolRequest = {
   price: number;
   categoryId: string;
   subscriptionId: string;
+  logo: File;
+  screenshots: File[];
 };
 
 export type SubmitToolResponse = {
@@ -45,7 +47,13 @@ export type SubmitToolResponse = {
 
 export type Tool = {
   description: string;
+  id: string;
+  keyFeatures: string[];
+  screenshots: string[];
+  useCases: string[];
   logo: string;
+  status: string;
+  toolDeals: Tool;
   name: string;
   price: number;
   shortDescription: string;
@@ -53,14 +61,21 @@ export type Tool = {
 };
 
 export type GetToolResponse = {
-  result: Tool[];
+  result: {
+    data: Tool[];
+  };
 };
 
 export const submitTool = async (data: SubmitToolRequest) => {
   try {
     const res = await axiosClient.post<SubmitToolRequest, SubmitToolResponse>(
       `/tools/submit-tool`,
-      data
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
 
     return {
@@ -85,11 +100,11 @@ export const getTools = async () => {
   }
 };
 
-export const deleteTool = async (id: string) => {
+export const publishTool = async (id: string) => {
   try {
-    const res = await axiosClient.delete<null, GetToolResponse>(`/tools/${id}`);
-
-    console.log(res);
+    const res = await axiosClient.post<null, GetToolResponse>(
+      `/tools/publish-tool/${id}`
+    );
 
     return res.result;
   } catch (error) {

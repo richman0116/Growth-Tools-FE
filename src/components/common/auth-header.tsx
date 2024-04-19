@@ -82,7 +82,7 @@ export function AuthHeader() {
                 )}
                 href={"/profile"}
               >
-                <PencilRuler className="w=5" />
+                <PencilRuler className="w-5" />
                 Profile
               </Link>
               <Button onClick={handleLogout}>Logout</Button>
@@ -147,7 +147,7 @@ export function AuthHeader() {
                       )}
                       href={"/profile"}
                     >
-                      <PencilRuler className="w=5" />
+                      <PencilRuler className="w-5" />
                       Profile
                     </Link>
                   </DropdownMenuItem>

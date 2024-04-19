@@ -14,13 +14,13 @@ export const options = [
 
 export const toolStatus = [
   {
-    value: GeneralStatus.Active,
-    label: "Active",
+    value: GeneralStatus.Published,
+    label: "Published",
     icon: ShieldCheck,
   },
   {
-    value: GeneralStatus.Inactive,
-    label: "Inactive",
+    value: GeneralStatus.Pending,
+    label: "Pending",
     icon: ShieldX,
   },
 ];

@@ -12,8 +12,6 @@ export default function ProfilePage() {
     queryFn: getTools,
   });
 
-  console.log(data);
-
   return (
     <section>
       <div className="container">
@@ -26,8 +24,8 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
-          {data?.length ? (
-            <DataTable data={data as any} columns={toolColumns} />
+          {data?.data?.length ? (
+            <DataTable data={data?.data as any} columns={toolColumns} />
           ) : (
             <SkeletonTable />
           )}

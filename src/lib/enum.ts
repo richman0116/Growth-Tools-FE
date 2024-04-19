@@ -6,8 +6,8 @@ export enum Role {
 }
 
 export enum GeneralStatus {
-  Active = "active",
-  Inactive = "inactive",
+  Published = "published",
+  Pending = "pending",
 }
 
 export enum DriverSchedulerType {

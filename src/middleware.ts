@@ -32,7 +32,11 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     return NextResponse.redirect(new URL("/trending-tools", request.url));
   }
 
-  if (request.nextUrl.pathname === "/submit-tool" && !session?.value) {
+  if (
+    (request.nextUrl.pathname === "/submit-tool" ||
+      request.nextUrl.pathname === "/profile") &&
+    !session?.value
+  ) {
     return NextResponse.redirect(new URL("/trending-tools", request.url));
   }
 

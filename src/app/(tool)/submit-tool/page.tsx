@@ -53,11 +53,12 @@ import { SubmitToolRequest, submitTool } from "@/services/tool";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Icons } from "@/components/common/icon";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function SubmitToolPage() {
   const { push } = useRouter();
@@ -135,16 +136,24 @@ export default function SubmitToolPage() {
     control: form.control,
   });
 
+  const { fields: fieldScreenshots } = useFieldArray({
+    name: "screenshots",
+    control: form.control,
+  });
+
+  const handleUploadThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target?.files;
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files).map((file) => ({ value: file }));
+      form.setValue("screenshots", fileArray);
+    }
+    files && setThumbnailPreview(URL.createObjectURL(files[0]));
+  };
+
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     form.setValue("logo", file);
     file && setFilePreview(URL.createObjectURL(file));
-  };
-
-  const handleUploadThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target?.files?.[0];
-    form.setValue("thumbnail", file);
-    file && setThumbnailPreview(URL.createObjectURL(file));
   };
 
   const currentDeals = form.getValues("deal");
@@ -265,18 +274,38 @@ export default function SubmitToolPage() {
       discountPrice: +item?.salePrice,
     }));
 
-    submitToolWithSubs.mutate({
-      name: data?.name,
-      shortDescription: data?.description,
-      description: data?.shortDescription,
-      website: data?.website,
-      toolDeals: mapToolDeal,
-      keyFeatures: data?.features.map((data) => data.value),
-      useCases: data?.useCases.map((data) => data.value),
-      price: +data?.price,
-      categoryId: data?.category,
-      subscriptionId: data?.subscription,
+    const formData = new FormData();
+    formData.append("name", data?.name);
+    formData.append("shortDescription", data?.description);
+    formData.append("description", data?.shortDescription);
+    formData.append("website", data?.website);
+    formData.append("toolDeals", [] as any);
+    formData.append(
+      "keyFeatures",
+      JSON.stringify(data?.features.map((data) => data.value))
+    );
+    formData.append(
+      "useCases",
+      JSON.stringify(data?.useCases.map((data) => data.value))
+    );
+    formData.append("price", data?.price);
+    formData.append("categoryId", data?.category);
+    formData.append("subscriptionId", data?.subscription);
+    formData.append("logo", data.logo!);
+    data.screenshots?.forEach((screenshot) => {
+      formData.append("screenshots", screenshot.value);
     });
+
+    try {
+      const response = await submitTool(
+        formData as unknown as SubmitToolRequest
+      );
+
+      push(response?.url);
+    } catch (error) {
+      form.reset();
+      toastError("Oop's! Something wrong when try to submit tool");
+    }
   };
 
   return (
@@ -390,7 +419,7 @@ export default function SubmitToolPage() {
                           {logoPreview && (
                             <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
                               <Image
-                                id="upload-avatar"
+                                id="upload-logo"
                                 src={logoPreview}
                                 width={160}
                                 height={160}
@@ -424,22 +453,22 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="thumbnail"
-                  render={({ field }) => (
-                    <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
-                        Thumbnail
-                      </FormLabel>
-
-                      <FormControl>
-                        <div className="relative w-max">
-                          {thumbnailPreview && (
+                <div className="relative">
+                  <h4 className="font-semibold mb-4 text-[18px]">
+                    Screenshots
+                  </h4>
+                  <div className="grid grid-cols-1">
+                    <div className="flex gap-6">
+                      {fieldScreenshots?.map((item, i) => (
+                        <div
+                          key={`screenshot-${i}`}
+                          className=" relative w-max"
+                        >
+                          {item && (
                             <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
                               <Image
                                 id="upload-thumbnail"
-                                src={thumbnailPreview}
+                                src={URL.createObjectURL(item.value)}
                                 width={160}
                                 height={160}
                                 alt="file-preview"
@@ -447,31 +476,32 @@ export default function SubmitToolPage() {
                               />
                             </div>
                           )}
-                          <Button
-                            className={cn(
-                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
-                            )}
-                            variant="outline"
-                            size="lg"
-                          >
-                            Upload
-                            <UploadIcon />
-                          </Button>
-                          <input
-                            type="file"
-                            className={
-                              "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
-                            }
-                            onChange={handleUploadThumbnail}
-                          />
                         </div>
-                      </FormControl>
-                      <FormDescription>
-                        png, svg formats. 5mb max
-                      </FormDescription>
-                    </FormItem>
-                  )}
-                />
+                      ))}
+                    </div>
+                    <Button
+                      className={cn(
+                        "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
+                      )}
+                      variant="outline"
+                      size="lg"
+                    >
+                      Upload
+                      <UploadIcon />
+                    </Button>
+                    <input
+                      type="file"
+                      multiple
+                      className={
+                        "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                      }
+                      onChange={handleUploadThumbnail}
+                    />
+                  </div>
+                  <p className="mt-6 text-[0.8rem] text-muted-foreground">
+                    png, svg formats. 5mb max
+                  </p>
+                </div>
                 <div>
                   <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">

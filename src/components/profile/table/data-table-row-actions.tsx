@@ -14,7 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useMutation } from "@tanstack/react-query";
 import { toastError } from "@/helpers/toasts";
-import { deleteTool } from "@/services/tool";
+import { Tool, publishTool } from "@/services/tool";
+import { GeneralStatus } from "@/lib/enum";
+import { queryClient } from "@/providers/client";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -23,16 +25,31 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  // console.log(row.original);
+  const toolData = row.original as Tool;
 
-  const deleteToolMutation = useMutation({
-    mutationFn: (id: string) => deleteTool(id),
-    mutationKey: ["delete-tool"],
+  // const deleteToolMutation = useMutation({
+  //   mutationFn: (id: string) => deleteTool(id),
+  //   mutationKey: ["delete-tool"],
+  //   onSuccess(data, _variables, _context) {
+  //     console.log(data);
+  //   },
+  //   onError: (error, _variables, _context) => {
+  //     toastError(error?.message ?? "Can't delete tool, please try again!");
+  //   },
+  // });
+
+  const publishedMutation = useMutation({
+    mutationFn: (id: string) => publishTool(id),
+    mutationKey: ["publish-tool"],
     onSuccess(data, _variables, _context) {
-      console.log(data);
+      if (data?.status === GeneralStatus.Published) {
+        queryClient.invalidateQueries({ queryKey: ["tool"] });
+      } else {
+        toastError("Can't published tool, please try again!");
+      }
     },
     onError: (error, _variables, _context) => {
-      toastError(error?.message ?? "Can't delete tool, please try again!");
+      toastError(error?.message ?? "Can't published tool, please try again!");
     },
   });
 
@@ -50,6 +67,13 @@ export function DataTableRowActions<TData>({
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>Edit</DropdownMenuItem>
         <DropdownMenuItem>View</DropdownMenuItem>
+        {toolData?.status === GeneralStatus.Pending && (
+          <DropdownMenuItem
+            onClick={() => publishedMutation.mutate(toolData.id)}
+          >
+            Published
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           Delete
