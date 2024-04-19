@@ -137,6 +137,18 @@ export const getCategoryByHandle = async (handle: string): Promise<Category> => 
       return errData;
     }
   };
+
+export const getCategoryById = async (id: string): Promise<Category> => {
+    try {
+      const  response = await axiosClient.get<null, AxiosResponse<Category>>(`/categories/info-by-id/${id}`);
+  
+      return (response as any)?.result;
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      const errData = err.response?.data;
+      return errData;
+    }
+  };
   
 export const getToolByName = async (name: string): Promise<ToolInfo> => {
     try {

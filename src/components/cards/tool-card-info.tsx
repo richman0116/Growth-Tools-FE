@@ -7,8 +7,6 @@ import { Prize } from "../icons/Prize";
 import { Card } from "../ui/card";
 
 
-
-
 export const ToolCardInfo = (props: {
   tool: ToolInfo,
   isLoading: boolean,

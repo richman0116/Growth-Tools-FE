@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import { filterTool, getCategoryByHandle, getCategoryList } from "../../../../services/tool";
+import { filterTool, getCategoryByHandle, getCategoryById, getCategoryList } from "../../../../services/tool";
 import { usePathname } from "next/navigation";
 
 export default function MarketingPage() {
@@ -16,6 +16,7 @@ export default function MarketingPage() {
     const categoryHandle = pathName.split("/")[2];
 
     const [categoryId, setCategoryId] = useState<string>("");
+    const [category, setCategory] = useState<Category | undefined>(undefined);
     const [tools, setTools] = useState<ToolInfo[]>([]);
     const [page, setPage] = useState(1);
     const [take] = useState(10);
@@ -42,6 +43,9 @@ export default function MarketingPage() {
     const onFilter = (category?: Category, sort?: string, order?: "ASC" | "DESC") => {
         if (category) {
             setCategoryId(category.id)
+            getCategoryById(category.id).then((res) => {
+                setCategory(res)
+            })
         }
         if (sort) {
             setSort(sort)
@@ -54,9 +58,10 @@ export default function MarketingPage() {
     useEffect(() => {
         getCategoryByHandle(categoryHandle).then((res) => {
             setCategoryId(res?.id)
+            setCategory(res)
         })
         getCategoryList().then((res) => {
-            setCategories(res);
+            setCategories(res || []);
         })
         // if (!categoryId) {
         //     const redirectedCategoryId = localStorage.getItem('categoryId');
@@ -87,7 +92,7 @@ export default function MarketingPage() {
                 <BreadcrumbDashboard />
 
                 <h3 className="font-bold text-[32px] mt-6 mb-8">
-                    528 <span className="font-medium">File Management Tools</span>
+                    {pagination.itemCount} <span className="font-medium">{category?.name} tools</span>
                 </h3>
                 <Separator />
             </div>
