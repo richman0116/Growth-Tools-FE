@@ -6,20 +6,19 @@ import { Clap } from "../icons/Clap";
 import { Prize } from "../icons/Prize";
 import { Card } from "../ui/card";
 
-
 export const ToolCardInfo = (props: {
-  tool: ToolInfo,
-  isLoading: boolean,
-  variant: "default" | "thumbnail",
+  tool: ToolInfo;
+  isLoading: boolean;
+  variant: "default" | "thumbnail";
 }) => {
-  const { tool, variant, isLoading } = props
+  const { tool, variant, isLoading } = props;
   if (variant === "thumbnail") {
     return (
       <div>
         <Link href={`/tool/${tool.name}`}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-              <div className="w-12 h-12 p-2 rounded-lg tagItem">
+              <div className="w-12 h-12 p-2 rounded-lg tagItem flex items-center justify-center">
                 <img src={tool.logo} alt="logo" />
               </div>
               <div className="flex items-center gap-2">
@@ -34,9 +33,9 @@ export const ToolCardInfo = (props: {
                 </div>
               </div>
             </div>
-            <div className="relative h-64 w-[70%]">
+            <div className="relative h-64 w-[70%] flex items-end justify-end">
               <img
-                className="w-3/4 cardImageItem"
+                className="w-full cardImageItem"
                 src={tool.logo}
                 alt="thumbnail"
               />
