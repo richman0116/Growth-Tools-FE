@@ -89,7 +89,7 @@ export default function MarketingPage() {
 
   return (
     <>
-     <section className="relative">
+      <section className="relative">
         <Image
           src={ANNOUNCEMENT}
           width={427}
@@ -116,7 +116,7 @@ export default function MarketingPage() {
         </div>
       </section>
 
-      <section className="min-h-[700px] flex flex-col gap-6 p-4 md:p-8">
+      <section className="h-svh flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopoverTool
             categories={categories}

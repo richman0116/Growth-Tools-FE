@@ -23,7 +23,7 @@ export default function SeoPage() {
         <Separator />
       </div>
 
-      <section className="min-h-[700px] flex flex-col gap-6 p-4 md:p-8">
+      <section className="h-svh flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopover />
 
