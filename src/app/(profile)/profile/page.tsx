@@ -7,7 +7,7 @@ import { getTools } from "@/services/tool";
 import { useQuery } from "@tanstack/react-query";
 
 export default function ProfilePage() {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["tool"],
     queryFn: getTools,
   });
@@ -32,10 +32,18 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
-          {data?.data?.length ? (
+          {isLoading ? (
+            <SkeletonTable />
+          ) : data?.data?.length ? (
             <DataTable data={data?.data as any} columns={toolColumns} />
           ) : (
-            <SkeletonTable />
+            <div
+              className="bg-blue-100 border border-secondary text-secondary rounded-md px-4 py-3"
+              role="alert"
+            >
+              <p className="font-bold">Ops</p>
+              <p className="text-sm">We have no tool to show.</p>
+            </div>
           )}
         </div>
       </div>
