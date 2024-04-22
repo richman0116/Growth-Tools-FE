@@ -59,7 +59,7 @@ export const ToolCard = ({
         </Link>
         <div className="mt-4">
           <h4 className="text-base font-bold mb-2">{title}</h4>
-          <p className="text-sm mb-3">{description}</p>
+          <p className="text-sm mb-3 line-clamp-3">{description}</p>
         </div>
       </div>
     );
@@ -75,7 +75,7 @@ export const ToolCard = ({
         </div>
         <div className="flex-1 py-3 pr-3">
           <h4 className="text-base font-bold mb-2">{title}</h4>
-          <p className="text-sm mb-3">{description}</p>
+          <p className="text-sm mb-3 line-clamp-3">{description}</p>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg border h-9">

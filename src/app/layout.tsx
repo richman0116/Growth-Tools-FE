@@ -2,8 +2,10 @@ import { TanstackProvider } from "@/providers/TanstackProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import "./globals.css";
+import { DashBoardTemplate } from "@/components/admin/dash-board-template";
+import { useRouter } from "next/router";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,7 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <TanstackProvider>
           <Toaster />
-          {children}
+          <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
         </TanstackProvider>
       </body>
     </html>

@@ -13,3 +13,5 @@ export const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/svg+xml",
 ];
+
+export const NOT_DASHBOARD_URL = ["/sign-in", "/sign-up", "/submit-tool"];

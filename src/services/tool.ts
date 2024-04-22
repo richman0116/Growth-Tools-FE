@@ -66,6 +66,10 @@ export type GetToolResponse = {
   };
 };
 
+export type GetToolByNameResponse = {
+  result: ToolInfo;
+};
+
 export const submitTool = async (data: SubmitToolRequest) => {
   try {
     const res = await axiosClient.post<SubmitToolRequest, SubmitToolResponse>(
@@ -116,7 +120,9 @@ export const publishTool = async (id: string) => {
 
 export const getCategoryList = async (): Promise<Category[]> => {
   try {
-    const  response = await axiosClient.get<null, AxiosResponse<Category[]>>(`/categories/list`);
+    const response = await axiosClient.get<null, AxiosResponse<Category[]>>(
+      `/categories/list`
+    );
 
     return (response as any)?.result;
   } catch (error) {
@@ -126,66 +132,77 @@ export const getCategoryList = async (): Promise<Category[]> => {
   }
 };
 
-export const getCategoryByHandle = async (handle: string): Promise<Category> => {
-    try {
-      const  response = await axiosClient.get<null, AxiosResponse<Category>>(`/categories/info/${handle}`);
-  
-      return (response as any)?.result;
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      const errData = err.response?.data;
-      return errData;
-    }
-  };
+export const getCategoryByHandle = async (
+  handle: string
+): Promise<Category> => {
+  try {
+    const response = await axiosClient.get<null, AxiosResponse<Category>>(
+      `/categories/info/${handle}`
+    );
+
+    return (response as any)?.result;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
+  }
+};
 
 export const getCategoryById = async (id: string): Promise<Category> => {
-    try {
-      const  response = await axiosClient.get<null, AxiosResponse<Category>>(`/categories/info-by-id/${id}`);
-  
-      return (response as any)?.result;
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      const errData = err.response?.data;
-      return errData;
-    }
-  };
-  
-export const getToolByName = async (name: string): Promise<ToolInfo> => {
-    try {
-      const  response = await axiosClient.get<null, AxiosResponse<ToolInfo>>(`/tools/info/${name}`);
-  
-      return (response as any)?.result;
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      const errData = err.response?.data;
-      return errData;
-    }
-  };
-  
+  try {
+    const response = await axiosClient.get<null, AxiosResponse<Category>>(
+      `/categories/info-by-id/${id}`
+    );
+
+    return (response as any)?.result;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
+  }
+};
+
+export const getToolByName = async (
+  name: string
+): Promise<GetToolByNameResponse> => {
+  try {
+    const response = await axiosClient.get<null, GetToolByNameResponse>(
+      `/tools/info/${name}`
+    );
+
+    return response;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
+  }
+};
 
 export const filterTool = async (params: {
-    page: number;
-    take: number;
-    order: string;
-    sort?: string;
-    categoryId?: string;
+  page: number;
+  take: number;
+  order: string;
+  sort?: string;
+  categoryId?: string;
 }): Promise<PaginationResponse<ToolInfo>> => {
-    let url = `/tools/filter?page=${params.page}&take=${params.take}&order=${params.order}`;
-    if (params.sort) {
-        url += `&sort=${params.sort}`
-    }
-    if (params.categoryId) {
-        url += `&categoryId=${params.categoryId}`
-    }
+  let url = `/tools/filter?page=${params.page}&take=${params.take}&order=${params.order}`;
+  if (params.sort) {
+    url += `&sort=${params.sort}`;
+  }
+  if (params.categoryId) {
+    url += `&categoryId=${params.categoryId}`;
+  }
 
-    try {
-      const  response = await axiosClient.get<null, AxiosResponse<PaginationResponse<ToolInfo>>>(url);
-  
-      return (response as any)?.result;
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      const errData = err.response?.data;
-      return errData;
-    }
-  };
-  
+  try {
+    const response = await axiosClient.get<
+      null,
+      AxiosResponse<PaginationResponse<ToolInfo>>
+    >(url);
+
+    return (response as any)?.result;
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    const errData = err.response?.data;
+    return errData;
+  }
+};

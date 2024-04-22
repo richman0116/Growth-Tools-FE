@@ -16,7 +16,7 @@ export const IdeaButton = () => {
       <Button
         variant="ghost"
         size="lg"
-        className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-green-500 rounded-full text-white text-base"
+        className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-green-500 rounded-full text-white text-base hover:text-white"
       >
         <Plus className="w-5" />
         Submit Tool

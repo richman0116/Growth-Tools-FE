@@ -15,7 +15,7 @@ export const ToolCardInfo = (props: {
   if (variant === "thumbnail") {
     return (
       <div>
-        <Link href={`/tool/${tool.name}`}>
+        <Link href={`/${tool.name}`}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
               <div className="w-12 h-12 p-2 rounded-lg tagItem flex items-center justify-center">
@@ -44,14 +44,14 @@ export const ToolCardInfo = (props: {
         </Link>
         <div className="mt-4">
           <h4 className="text-base font-bold mb-2">{tool.name}</h4>
-          <p className="text-sm mb-3">{tool.description}</p>
+          <p className="text-sm mb-3 line-clamp-3">{tool.description}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <Link href={`/tool/${tool.name}`}>
+    <Link href={`/${tool.name}`}>
       <Card className="flex shadow-lg">
         <div className="p-3">
           <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">
@@ -60,7 +60,7 @@ export const ToolCardInfo = (props: {
         </div>
         <div className="flex-1 py-3 pr-3">
           <h4 className="text-base font-bold mb-2">{tool.name}</h4>
-          <p className="text-sm mb-3">{tool.description}</p>
+          <p className="text-sm mb-3 line-clamp-3">{tool.description}</p>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg border h-9">

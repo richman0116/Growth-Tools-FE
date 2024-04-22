@@ -12,13 +12,13 @@ import {
   getCategoryByHandle,
   getCategoryById,
   getCategoryList,
-} from "../../../../services/tool";
+} from "@/services/tool";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MarketingPage() {
   const pathName = usePathname();
-  const keyPage = pathName.split("/")[1];
-  const categoryHandle = pathName.split("/")[2];
+  const categoryHandle = pathName.split("/")[1];
 
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
@@ -76,11 +76,12 @@ export default function MarketingPage() {
     //     if (!redirectedCategoryId) return;
     //     setCategoryId(redirectedCategoryId);
     // }
-  }, []);
+  }, [categoryHandle]);
 
   useEffect(() => {
     setIsLoading(true);
     if (!categoryId) return;
+
     filterTool({
       order,
       page,
@@ -133,25 +134,23 @@ export default function MarketingPage() {
             <Grid3X3 color={variant === "thumbnail" ? "#164CD9" : "black"} />
           </Button>
         </div>
+        {!tools?.length && !isLoading && (
+          <div
+            className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+            role="alert"
+          >
+            <p className="font-bold">Ops</p>
+            <p className="text-sm">We have no tool to show.</p>
+          </div>
+        )}
         <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {!tools?.length && !isLoading && (
-            <div
-              className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
-              role="alert"
-            >
-              <p className="font-bold">Ops</p>
-              <p className="text-sm">We have no tool to show.</p>
-            </div>
-          )}
           {isLoading && (
-            <div role="status" className="max-w-sm animate-pulse">
-              <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-              <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
-              <span className="sr-only">Loading...</span>
+            <div className="flex items-center space-x-4">
+              <Skeleton className="h-12 w-12 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
             </div>
           )}
           {!!tools?.length &&

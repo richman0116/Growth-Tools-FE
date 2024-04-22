@@ -394,7 +394,7 @@ export const FilterPopover = () => {
         {open && <Overlay />}
         <Popover onOpenChange={(open: boolean) => setOpen(open)}>
           <PopoverTrigger>{triggerButton()}</PopoverTrigger>
-          <PopoverContent align="start" className="rounded-2xl md:w-[412px]">
+          <PopoverContent className="rounded-2xl md:w-[412px]">
             {contentForm()}
           </PopoverContent>
         </Popover>

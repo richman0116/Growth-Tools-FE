@@ -127,3 +127,10 @@
   fill: white;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
