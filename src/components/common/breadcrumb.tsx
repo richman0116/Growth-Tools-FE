@@ -79,7 +79,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
               <BreadcrumbItem key={`link-${link}`}>
                 <BreadcrumbLink
                   className="font-bold text-base text-primary"
-                  href={link}
+                  href={link == "/tool" ? "/" : link}
                 >
                   {textPage(link)}
                 </BreadcrumbLink>
