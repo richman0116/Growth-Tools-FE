@@ -742,6 +742,56 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+                
+                <h3 className="mb-5 text-lg font-medium text-gray-900 dark:text-white">Choose subscriptions:</h3>
+                <ul className="grid w-3/6 gap-6 md:grid-rows-2">
+                    <li>
+                        <input type="radio" id="flowbite-option"  className="hidden sub" />
+                        <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">Early Bird Deal</p>
+                        <label htmlFor="flowbite-option-x" className="inline-flex 
+                        items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
+                        dark:hover:text-gray-300 dark:border-gray-700 border-[#a855f7] text-gray-600 
+                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <div className="block">
+                                <p className="dark:text-black">
+                                    <span className="dark:text-black">$1</span>
+                                    <span className="text-zinc-400 text line-through">$5.99</span>/month
+                                </p>
+                                <p className="text-sm text-zinc-400">* $1 first month, then $5.99/month.</p>
+                            </div>
+                            {/* <div className="h-[20px] w-[20px] bg-[#a855f7] rounded-full">
+                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" className="mr-2 p-[1px] text-white rounded-full" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M416 128 192 384l-96-96">
+                                    </path>
+                                </svg>
+                            </div> */}
+                        </label>
+                    </li>
+                   
+                    <li>
+                        <input type="radio" id="flowbite-option"  className="hidden peer" />
+                        <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">Early Bird Deal</p>
+                        <label htmlFor="flowbite-option" className="inline-flex 
+                        items-center justify-between w-full 
+                        p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
+                        dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#a855f7]
+                        hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 
+                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <div className="block">
+                                <p className="dark:text-black">
+                                    <span className="dark:text-black">$1</span>
+                                    <span className="text-zinc-400 text line-through">$5.99</span>/month
+                                </p>
+                                <p className="text-sm text-zinc-400">* $1 first month, then $5.99/month.</p>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+
+                <div>
+                
+            </div>
+
                 <div className="pt-9">
                   <Button
                     type="submit"
