@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Icons } from "../common/icon";
@@ -47,6 +47,10 @@ export function UserAuthLoginForm({
   className,
   ...props
 }: UserAuthLoginFormProps) {
+    const searchParams = useSearchParams()
+ 
+  const redirectUrl = searchParams.get('redirect') ?? '/'
+ 
   const { replace } = useRouter();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -65,7 +69,7 @@ export function UserAuthLoginForm({
       CookieHandler.set(TOKEN, data?.accessToken);
       LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
       LocalStorageHandler.set(USER, data?.user);
-      replace("/");
+      replace(redirectUrl);
     },
     onError: (error, variables, _context) => {
       form.reset({ ...variables });
@@ -80,7 +84,7 @@ export function UserAuthLoginForm({
       CookieHandler.set(TOKEN, data?.accessToken);
       LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
       LocalStorageHandler.set(USER, data?.user);
-      replace("/");
+      replace(redirectUrl);
     },
     onError: (error, variables, _context) => {
       toastError(

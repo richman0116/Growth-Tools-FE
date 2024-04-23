@@ -68,7 +68,7 @@ export function AuthHeader() {
               buttonVariants({ variant: "outline" }),
               "flex items-center gap-2"
             )}
-            href={isLoggedIn ? "/submit-tool" : "/sign-in"}
+            href={isLoggedIn ? "/submit-tool" : "/sign-in?redirect=/submit-tool"}
           >
             <Plus className="w-5" />
             Submit Tool
@@ -132,7 +132,7 @@ export function AuthHeader() {
                       buttonVariants({ variant: "outline" }),
                       "w-full flex items-center gap-2 border"
                     )}
-                    href={isLoggedIn ? "/submit-tool" : "/sign-in"}
+                    href={isLoggedIn ? "/submit-tool" : "/sign-in?redirect=/submit-tool"}
                   >
                     <Plus className="w-5" />
                     Submit Tool
