@@ -211,8 +211,7 @@ export default function SubmitToolPage() {
               {keyModal === "create" ? "Create deal" : "Update deal"}
             </DialogTitle>
             <DialogDescription className="pb-6">
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              Adding a tool&apos;s deal
             </DialogDescription>
             <div className="grid grid-cols-1 gap-4">
               <Input
@@ -226,7 +225,7 @@ export default function SubmitToolPage() {
                 }
               />
               <Input
-                prefix="USD"
+                prefix="Price"
                 className="h-12 px-6"
                 value={deal?.price}
                 onChange={(e) =>
@@ -239,7 +238,7 @@ export default function SubmitToolPage() {
                 }
               />
               <Input
-                prefix="USD"
+                prefix="Discount"
                 className="h-12 px-6"
                 value={deal?.salePrice}
                 onChange={(e) =>
