@@ -3,6 +3,7 @@
 import { ToolCard } from "@/components/cards/tool-card";
 import { AddDealCard } from "@/components/common/add-deal-card";
 import { DealCard } from "@/components/common/deal-card";
+import { Icons } from "@/components/common/icon";
 import { UploadIcon } from "@/components/icons/UploadIcon";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,6 +35,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,15 +52,61 @@ import { cn } from "@/lib/utils";
 import { getCategoriesList } from "@/services/category";
 import { getSubscriptions } from "@/services/subscription";
 import { SubmitToolRequest, submitTool } from "@/services/tool";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
-import { Icons } from "@/components/common/icon";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import { z } from "zod";
+
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(10, {
+      message: "Name must be at least 10 characters.",
+    })
+    .max(50),
+  shortDescription: z
+    .string()
+    .min(10, {
+      message: "Short description must be at least 10 characters.",
+    })
+    .max(150),
+  description: z
+    .string()
+    .min(10, {
+      message: "Description must be at least 10 characters.",
+    })
+    .max(300),
+  website: z.string().min(1, { message: "Please add your website" }),
+  deal: z
+    .object({
+      id: z.string(),
+      price: z.string(),
+      salePrice: z.string(),
+      title: z.string(),
+    })
+    .array(),
+  features: z
+    .object({
+      value: z.string(),
+    })
+    .array()
+    .min(1, { message: "Please add at least one key feature" }),
+  useCases: z
+    .object({
+      value: z.string(),
+    })
+    .array()
+    .min(1, { message: "Please add at least one use case" }),
+  price: z.string().optional(),
+  free: z.boolean().optional(),
+  category: z.string().min(1, { message: "Please select category" }),
+  subscription: z.string().min(1, { message: "Please select subscription" }),
+});
 
 export default function SubmitToolPage() {
   const { push } = useRouter();
@@ -83,47 +131,21 @@ export default function SubmitToolPage() {
     queryFn: getCategoriesList,
   });
 
-  const submitToolWithSubs = useMutation({
-    mutationFn: (data: SubmitToolRequest) => submitTool(data),
-    mutationKey: ["submit-tool"],
-    onSuccess(data, variables, context) {
-      push(data?.url);
-    },
-    onError: (error, variables, _context) => {
-      form.reset();
-      toastError(
-        error?.message ?? "Oop's! Something wrong when try to submit tool"
-      );
-    },
-  });
-
   const form = useForm<SubmitToolForm>({
     defaultValues: {
       name: "",
       shortDescription: "",
       description: "",
       website: "",
-      deal: [
-        {
-          id: uuidv4(),
-          price: "10",
-          salePrice: "4.99",
-          title: "Lifetime 50% off",
-        },
-      ],
-      features: [
-        { value: "https://shadcn.com" },
-        { value: "http://twitter.com/shadcn" },
-      ],
-      useCases: [
-        { value: "https://shadcn.com" },
-        { value: "http://twitter.com/shadcn" },
-      ],
+      deal: [],
+      features: [{ value: "http://twitter.com/shadcn" }],
+      useCases: [{ value: "http://twitter.com/shadcn" }],
       price: "0",
       free: false,
       category: "",
       subscription: "",
     },
+    resolver: zodResolver(formSchema),
   });
 
   const { fields, append } = useFieldArray({
@@ -147,7 +169,7 @@ export default function SubmitToolPage() {
       const fileArray = Array.from(files).map((file) => ({ value: file }));
       form.setValue("screenshots", fileArray);
     }
-    files && setThumbnailPreview(URL.createObjectURL(files[0]));
+    files?.length && setThumbnailPreview(URL.createObjectURL(files[0]));
   };
 
   const handleUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -287,7 +309,7 @@ export default function SubmitToolPage() {
       "useCases",
       JSON.stringify(data?.useCases.map((data) => data.value))
     );
-    formData.append("price", data?.price);
+    formData.append("price", !!data?.free ? "0" : data?.price);
     formData.append("categoryId", data?.category);
     formData.append("subscriptionId", data?.subscription);
     formData.append("logo", data.logo!);
@@ -300,10 +322,15 @@ export default function SubmitToolPage() {
         formData as unknown as SubmitToolRequest
       );
 
+      if (!response) {
+        toastError("Oop's! Something wrong when try to submit tool");
+        form.reset();
+      }
+
       push(response?.url);
     } catch (error) {
-      form.reset();
       toastError("Oop's! Something wrong when try to submit tool");
+      form.reset();
     }
   };
 
@@ -344,6 +371,7 @@ export default function SubmitToolPage() {
                           value={field.value as unknown as any}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -358,10 +386,12 @@ export default function SubmitToolPage() {
                       <FormControl>
                         <Input
                           className="h-14 px-6"
+                          maxLength={100}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -376,10 +406,12 @@ export default function SubmitToolPage() {
                       <FormControl>
                         <Input
                           className="h-14 px-6"
+                          maxLength={300}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, to "
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -398,6 +430,7 @@ export default function SubmitToolPage() {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                       <FormDescription>
                         {"(must include 'https://')"}
                       </FormDescription>
@@ -429,78 +462,88 @@ export default function SubmitToolPage() {
                           )}
                           <Button
                             className={cn(
-                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
+                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12 overflow-hidden relative"
                             )}
                             variant="outline"
                             size="lg"
                           >
                             Upload
                             <UploadIcon />
+                            <input
+                              type="file"
+                              className={
+                                "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                              }
+                              onChange={handleUploadImage}
+                            />
                           </Button>
-                          <input
-                            type="file"
-                            className={
-                              "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
-                            }
-                            onChange={handleUploadImage}
-                          />
                         </div>
                       </FormControl>
+                      <FormMessage />
                       <FormDescription>
                         png, svg formats. 5mb max
                       </FormDescription>
                     </FormItem>
                   )}
                 />
-                <div className="relative">
-                  <h4 className="font-semibold mb-4 text-[18px]">
-                    Screenshots
-                  </h4>
-                  <div className="grid grid-cols-1">
-                    <div className="flex gap-6">
-                      {fieldScreenshots?.map((item, i) => (
-                        <div
-                          key={`screenshot-${i}`}
-                          className=" relative w-max"
-                        >
-                          {item && (
-                            <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
-                              <Image
-                                id="upload-thumbnail"
-                                src={URL.createObjectURL(item.value)}
-                                width={160}
-                                height={160}
-                                alt="file-preview"
-                                className="overflow-hidden"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <Button
-                      className={cn(
-                        "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12"
-                      )}
-                      variant="outline"
-                      size="lg"
-                    >
-                      Upload
-                      <UploadIcon />
-                    </Button>
-                    <input
-                      type="file"
-                      multiple
-                      className={
-                        "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
-                      }
-                      onChange={handleUploadThumbnail}
-                    />
-                  </div>
-                  <p className="mt-6 text-[0.8rem] text-muted-foreground">
-                    png, svg formats. 5mb max
-                  </p>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="screenshots"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormLabel className="font-semibold text-[18px]">
+                        Screenshots
+                      </FormLabel>
+                      <FormControl>
+                        <>
+                          <div className="flex gap-6">
+                            {fieldScreenshots?.map((item, i) => (
+                              <div
+                                key={`screenshot-${i}`}
+                                className=" relative w-max"
+                              >
+                                {item && (
+                                  <div className="relative overflow-hidden mb-4 rounded-2xl shadow-md">
+                                    <Image
+                                      id="upload-thumbnail"
+                                      src={URL.createObjectURL(item.value)}
+                                      width={160}
+                                      height={160}
+                                      alt="file-preview"
+                                      className="overflow-hidden"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <Button
+                            className={cn(
+                              "flex gap-2 cursor-pointer rounded-full w-max text-base font-medium h-12 overflow-hidden relative"
+                            )}
+                            variant="outline"
+                            size="lg"
+                          >
+                            Upload
+                            <UploadIcon />
+                            <input
+                              type="file"
+                              multiple
+                              className={
+                                "cursor-pointer absolute top-0 left-0 h-full w-full opacity-0"
+                              }
+                              onChange={handleUploadThumbnail}
+                            />
+                          </Button>
+                        </>
+                      </FormControl>
+                      <FormMessage />
+                      <FormDescription>
+                        png, svg formats. 5mb max
+                      </FormDescription>
+                    </FormItem>
+                  )}
+                />
                 <div>
                   <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
@@ -521,80 +564,102 @@ export default function SubmitToolPage() {
                     />
                   </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold mb-4 text-[18px]">
-                    Key Features
-                  </h4>
-                  <p className="text-label3 text-base mb-4">
-                    Sed ut perspiciatis unde omnis iste natus{" "}
-                  </p>
-                  <div className="grid gap-4">
-                    {fields.map((field, index) => (
-                      <FormField
-                        control={form.control}
-                        key={field.id}
-                        name={`features.${index}.value`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder=""
-                                className="h-12 px-6"
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                    <Button
-                      variant="link"
-                      className="text-secondary p-0 h-max flex justify-start"
-                      onClick={() => append({ value: "" })}
-                    >
-                      Add Key Features +
-                    </Button>
-                    <p className="text-label3 text-base mb-4">
-                      Maximum 15 words per each
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-4 text-[18px]">Use Cases</h4>
-                  <p className="text-label3 text-base mb-4">
-                    Sed ut perspiciatis unde omnis iste natus{" "}
-                  </p>
-                  <div className="grid gap-4">
-                    {filedsUseCase.map((field, index) => (
-                      <FormField
-                        control={form.control}
-                        key={field.id}
-                        name={`features.${index}.value`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder=""
-                                className="h-12 px-6"
-                                {...field}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    ))}
-                    <Button
-                      variant="link"
-                      className="text-secondary p-0 h-max flex justify-start"
-                      onClick={() => appendUseCase({ value: "" })}
-                    >
-                      Add Use Case +
-                    </Button>
-                    <p className="text-label3 text-base mb-4">
-                      Maximum 25 words per each
-                    </p>
-                  </div>
-                </div>
+                <FormField
+                  control={form.control}
+                  name="features"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormLabel className="font-semibold text-[18px]">
+                        Key Features
+                      </FormLabel>
+                      <p className="text-label3 text-base mb-4">
+                        Sed ut perspiciatis unde omnis iste natus{" "}
+                      </p>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          {fields.map((field, index) => (
+                            <FormField
+                              control={form.control}
+                              key={field.id}
+                              name={`features.${index}.value`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      placeholder=""
+                                      className="h-12 px-6"
+                                      max={100}
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+
+                          <Button
+                            variant="link"
+                            className="text-secondary p-0 h-max flex justify-start"
+                            onClick={() => append({ value: "" })}
+                          >
+                            Add Key Features +
+                          </Button>
+                          <FormMessage />
+                          <p className="text-label3 text-base mb-4">
+                            Maximum 15 words per each
+                          </p>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="useCases"
+                  render={({ field }) => (
+                    <FormItem className="space-y-4">
+                      <FormLabel className="font-semibold text-[18px]">
+                        Use Cases
+                      </FormLabel>
+                      <p className="text-label3 text-base mb-4">
+                        Sed ut perspiciatis unde omnis iste natus{" "}
+                      </p>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          {filedsUseCase.map((field, index) => (
+                            <FormField
+                              control={form.control}
+                              key={field.id}
+                              name={`features.${index}.value`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      placeholder=""
+                                      className="h-12 px-6"
+                                      {...field}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                          <Button
+                            variant="link"
+                            className="text-secondary p-0 h-max flex justify-start"
+                            onClick={() => appendUseCase({ value: "" })}
+                          >
+                            Add Use Case +
+                          </Button>
+                          <FormMessage />
+                          <p className="text-label3 text-base mb-4">
+                            Maximum 25 words per each
+                          </p>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="price"
@@ -606,6 +671,7 @@ export default function SubmitToolPage() {
                       <FormControl>
                         <Input className="h-14 px-6" suffix="USD" {...field} />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -686,6 +752,7 @@ export default function SubmitToolPage() {
                           </Command>
                         </PopoverContent>
                       </Popover>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -739,58 +806,81 @@ export default function SubmitToolPage() {
                           </RadioGroup>
                         </CardContent>
                       </Card>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
-                
-                <h3 className="mb-5 text-lg font-medium text-gray-900 dark:text-white">Choose subscriptions:</h3>
+
+                <h3 className="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+                  Choose subscriptions:
+                </h3>
                 <ul className="grid w-3/6 gap-6 md:grid-rows-2">
-                    <li>
-                        <input type="radio" id="flowbite-option"  className="hidden sub" />
-                        <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">Early Bird Deal</p>
-                        <label htmlFor="flowbite-option-x" className="inline-flex 
+                  <li>
+                    <input
+                      type="radio"
+                      id="flowbite-option"
+                      className="hidden sub"
+                    />
+                    <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">
+                      Early Bird Deal
+                    </p>
+                    <label
+                      htmlFor="flowbite-option-x"
+                      className="inline-flex 
                         items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
                         dark:hover:text-gray-300 dark:border-gray-700 border-[#a855f7] text-gray-600 
-                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                            <div className="block">
-                                <p className="dark:text-black">
-                                    <span className="dark:text-black">$1</span>
-                                    <span className="text-zinc-400 text line-through">$5.99</span>/month
-                                </p>
-                                <p className="text-sm text-zinc-400">* $1 first month, then $5.99/month.</p>
-                            </div>
-                            {/* <div className="h-[20px] w-[20px] bg-[#a855f7] rounded-full">
-                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" className="mr-2 p-[1px] text-white rounded-full" height="20" width="20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M416 128 192 384l-96-96">
-                                    </path>
-                                </svg>
-                            </div> */}
-                        </label>
-                    </li>
-                   
-                    <li>
-                        <input type="radio" id="flowbite-option"  className="hidden peer" />
-                        <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">Early Bird Deal</p>
-                        <label htmlFor="flowbite-option" className="inline-flex 
+                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                    >
+                      <div className="block">
+                        <p className="dark:text-black">
+                          <span className="dark:text-black">$1</span>
+                          <span className="text-zinc-400 text line-through">
+                            $5.99
+                          </span>
+                          /month
+                        </p>
+                        <p className="text-sm text-zinc-400">
+                          * $1 first month, then $5.99/month.
+                        </p>
+                      </div>
+                    </label>
+                  </li>
+
+                  <li>
+                    <input
+                      type="radio"
+                      id="flowbite-option"
+                      className="hidden peer"
+                    />
+                    <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">
+                      Early Bird Deal
+                    </p>
+                    <label
+                      htmlFor="flowbite-option"
+                      className="inline-flex 
                         items-center justify-between w-full 
                         p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
                         dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#a855f7]
                         hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 
-                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                            <div className="block">
-                                <p className="dark:text-black">
-                                    <span className="dark:text-black">$1</span>
-                                    <span className="text-zinc-400 text line-through">$5.99</span>/month
-                                </p>
-                                <p className="text-sm text-zinc-400">* $1 first month, then $5.99/month.</p>
-                            </div>
-                        </label>
-                    </li>
+                        hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                    >
+                      <div className="block">
+                        <p className="dark:text-black">
+                          <span className="dark:text-black">$1</span>
+                          <span className="text-zinc-400 text line-through">
+                            $5.99
+                          </span>
+                          /month
+                        </p>
+                        <p className="text-sm text-zinc-400">
+                          * $1 first month, then $5.99/month.
+                        </p>
+                      </div>
+                    </label>
+                  </li>
                 </ul>
 
-                <div>
-                
-            </div>
+                <div></div>
 
                 <div className="pt-9">
                   <Button
@@ -812,7 +902,7 @@ export default function SubmitToolPage() {
             <h3 className="font-semibold text-[18px] mb-4">Card Preview</h3>
             <ToolCard
               variant="thumbnail"
-              id={"new-tool"}
+              id={"#"}
               title={form.watch("name")}
               description={form.watch("shortDescription")}
               thumbnail={thumbnailPreview as unknown as StaticImageData}

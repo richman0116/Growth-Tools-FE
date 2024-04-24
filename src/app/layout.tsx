@@ -1,17 +1,80 @@
 import { TanstackProvider } from "@/providers/TanstackProvider";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+// import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
+import { DashBoardTemplate } from "@/components/admin/dash-board-template";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { DashBoardTemplate } from "@/components/admin/dash-board-template";
-import { useRouter } from "next/router";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  adjustFontFallback: false,
+const classDisplay = localFont({
+  src: [
+    {
+      path: "../assets/fonts/ClashDisplay-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/ClashDisplay-Light.woff",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/ClashDisplay-Medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/ClashDisplay-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/ClashDisplay-Semibold.woff",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+  variable: "--font-clash",
 });
+
+const satoshi = localFont({
+  src: [
+    {
+      path: "../assets/fonts/Satoshi-Black.woff",
+      weight: "900",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/Satoshi-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/Satoshi-Light.woff",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/Satoshi-Medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../assets/fonts/Satoshi-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-satoshi",
+});
+
+// const inter = Inter({
+//   subsets: ["latin"],
+//   display: "swap",
+//   adjustFontFallback: false,
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,7 +88,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(classDisplay.className, satoshi.className)}>
         <TanstackProvider>
           <Toaster />
           <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>

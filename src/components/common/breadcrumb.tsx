@@ -7,11 +7,11 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 
 export function BreadcrumbDashboard(props: { displayName?: string }) {
   const { displayName } = props;
   const pathName = usePathname();
-  const keyPage = pathName.split("/")[1];
   const idPage = pathName.split("/")[2];
   const listPathName = pathName.split("/").map((item) => `/${item}`);
 
@@ -64,7 +64,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
 
           if (isLastItem) {
             return (
-              <BreadcrumbItem key={`last-item-${link}`}>
+              <BreadcrumbItem key={`last-item-${i}`}>
                 <BreadcrumbPage className="font-normal capitalize">
                   {displayName && idPage
                     ? displayName
@@ -75,8 +75,8 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
           }
 
           return (
-            <>
-              <BreadcrumbItem key={`link-${link}`}>
+            <Fragment key={`link-${i}`}>
+              <BreadcrumbItem>
                 <BreadcrumbLink
                   className="font-bold text-base text-primary"
                   href={link == "/tool" ? "/" : link}
@@ -85,7 +85,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-            </>
+            </Fragment>
           );
         })}
       </BreadcrumbList>

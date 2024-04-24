@@ -33,10 +33,9 @@ import Placeholder from "@/assets/images/placeholder.png";
 
 export default function ToolsDetailPage() {
   const pathName = usePathname();
-  const keyPage = pathName.split("/")[1];
   const name = pathName.split("/")[2];
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["tool"],
     queryFn: () => getToolByName(name),
   });

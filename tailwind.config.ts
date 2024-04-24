@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        clash: ["var(--font-clash)"],
+        satoshi: ["var(--font-satoshi)"],
+      },
       borderColor: {
         grGray: "#D9D9D9",
         grGray2: "#F1F1F1",

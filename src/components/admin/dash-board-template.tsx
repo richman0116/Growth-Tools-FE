@@ -4,7 +4,7 @@ import { NOT_DASHBOARD_URL } from "@/helpers/common";
 import { cn } from "@/lib/utils";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import { useMediaQuery } from "usehooks-ts";
 import { getCategoryList } from "../../services/tool";
@@ -86,16 +86,10 @@ export function DashBoardTemplate({
               <div className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
                 <div className="space-y-3">
                   {Array.from({ length: 10 }, (_, i) => (
-                    <>
-                      <Skeleton
-                        key={`skeleton-${i}`}
-                        className="h-6 w-[200px]"
-                      />
-                      <Skeleton
-                        key={`skeleton-${i}`}
-                        className="h-6 w-[130px]"
-                      />
-                    </>
+                    <Fragment key={`skeleton-${i}`}>
+                      <Skeleton className="h-6 w-[200px]" />
+                      <Skeleton className="h-6 w-[130px]" />
+                    </Fragment>
                   ))}
                 </div>
               </div>

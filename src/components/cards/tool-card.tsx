@@ -27,11 +27,11 @@ export const ToolCard = ({
         <Link href={id}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-              <div className="w-12 h-12 p-2 rounded-lg tagItem">
+              <div className="w-8 h-8 flex items-center rounded-lg tagItem">
                 <Image
                   src={logo ? logo : Placeholder}
-                  width={48}
-                  height={48}
+                  width={32}
+                  height={32}
                   alt="logo"
                 />
               </div>
@@ -69,8 +69,8 @@ export const ToolCard = ({
     <Link href={id}>
       <Card className="flex shadow-lg">
         <div className="p-3">
-          <div className="w-12 h-12 p-2 border-[1px] rounded-md shadow-md">
-            <Image width={48} height={48} src={logo} alt="logo" />
+          <div className="w-8 h-8 flex items-center border-[1px] rounded-md shadow-md">
+            <Image width={32} height={32} src={logo} alt="logo" />
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">

@@ -31,7 +31,7 @@ export function Sidebar({
         <nav className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
           {links.map((link) =>
             !isFullText && isCollapsed ? (
-              <Tooltip key={link.handle} delayDuration={0}>
+              <Tooltip key={link.id} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
                     href={link.handle}
@@ -64,7 +64,7 @@ export function Sidebar({
               </Tooltip>
             ) : (
               <Link
-                key={link.handle}
+                key={link.id}
                 href={link.handle}
                 className={cn(
                   buttonVariants({
@@ -76,9 +76,6 @@ export function Sidebar({
                   link.handle === pathname && "text-gray-700"
                 )}
               >
-                {/* <i className="mr-2 h-6 w-6">
-                  {link?.icon(link.href === pathname ? "#164CD9" : "#636363")}
-                </i> */}
                 <Image
                   className="mr-2 h-6 w-6"
                   src={link.icon}
