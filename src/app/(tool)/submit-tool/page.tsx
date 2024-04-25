@@ -148,7 +148,7 @@ export default function SubmitToolPage() {
         resolver: zodResolver(formSchema),
     });
 
-    const { fields, append: appendFeatures, remove: removeFeatures } = useFieldArray({
+    const { fields, append: appendFeatures } = useFieldArray({
         name: "features",
         control: form.control,
     });
@@ -288,7 +288,9 @@ export default function SubmitToolPage() {
     };
 
     const onSubmit = async (data: SubmitToolForm) => {
-       
+        console.log('====================================');
+        console.log('mapToolDealmapToolDealmapToolDeal', data);
+        console.log('====================================');
         const mapToolDeal = data?.deal.map((item) => ({
             name: item?.title,
             descriptions: item?.title,
@@ -301,7 +303,7 @@ export default function SubmitToolPage() {
         formData.append("shortDescription", data?.description);
         formData.append("description", data?.shortDescription);
         formData.append("website", data?.website);
-        formData.append("toolDeals", [] as any);
+        formData.append("toolDeals", JSON.stringify(mapToolDeal));
         formData.append(
             "keyFeatures",
             JSON.stringify(data?.features.map((data) => data.value))
@@ -313,34 +315,39 @@ export default function SubmitToolPage() {
         formData.append("price", !!data?.free ? "0" : data?.price);
         formData.append("categoryId", data?.category);
         formData.append("subscriptionId", data?.subscription);
-        formData.append("logo", data.logo!);
-        data.screenshots?.forEach((screenshot) => {
-            formData.append("screenshots", screenshot.value);
-        });
+        const logo = form.getValues('logo');
+        if (logo) {
+            formData.append("logo", logo);
+        }
+        const screenshots = form.getValues('screenshots');
+        if (screenshots?.length) {
+            screenshots?.forEach((screenshot) => {
+                formData.append("screenshots", screenshot.value);
+            });
+        }
+        // data.screenshots?.forEach((screenshot) => {
+        //     formData.append("screenshots", screenshot.value);
+        // });
 
         try {
+            console.log('====================================');
+            console.log('formDataformDataformData', formData);
+            console.log('====================================');
             const response = await submitTool(
                 formData as unknown as SubmitToolRequest
             );
 
-            if (!response) {
-                toastError("Oop's! Something wrong when try to submit tool");
-                form.reset();
-            }
+            // if (!response) {
+            //     toastError("Oop's! Something wrong when try to submit tool");
+            //     form.reset();
+            // }
 
-            push(response?.url);
+            // push(response?.url);
         } catch (error) {
             toastError("Oop's! Something wrong when try to submit tool");
-            form.reset();
+            // form.reset();
         }
     };
-
-    useEffect(() => {
-
-        console.log('====================================');
-        console.log('getFieldState', form.getFieldState('name'));
-        console.log('====================================');
-    }, [])
 
     return (
         <section>
@@ -505,7 +512,7 @@ export default function SubmitToolPage() {
                                             <FormControl>
                                                 <>
                                                     <div className="flex gap-6">
-                                                        {fieldScreenshots?.map((item, i) => (
+                                                        {form.getValues('screenshots')?.map((item, i) => (
                                                             <div
                                                                 key={`screenshot-${i}`}
                                                                 className=" relative w-max"
@@ -637,7 +644,7 @@ export default function SubmitToolPage() {
                                                         <FormField
                                                             control={form.control}
                                                             key={field.id}
-                                                            name={`features.${index}.value`}
+                                                            name={`useCases.${index}.value`}
                                                             render={({ field }) => (
                                                                 <FormItem>
                                                                     <FormControl>
@@ -825,14 +832,15 @@ export default function SubmitToolPage() {
                                 <div className="pt-9">
                                     <Button
                                         type="submit"
-                                        disabled={form.formState.isSubmitSuccessful}
+                                        // disabled={form.formState.isSubmitSuccessful}
                                         className="w-full h-14 text-[18px] font-bold"
                                     >
-                                        {form.formState.isSubmitSuccessful ? (
+                                        Run
+                                        {/* {form.formState.isSubmitSuccessful ? (
                                             <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
                                         ) : (
                                             "Publish"
-                                        )}
+                                        )} */}
                                     </Button>
                                 </div>
                             </form>
