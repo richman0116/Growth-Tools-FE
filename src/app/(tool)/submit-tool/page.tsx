@@ -612,14 +612,6 @@ export default function SubmitToolPage() {
                                                     >
                                                         Add Key Features +
                                                     </Button>
-                                                    {/* <Button
-                                                        variant="link"
-                                                        className="text-secondary p-0 h-max flex justify-start"
-                                                        onClick={() => removeFeatures(fields.length - 1)}
-                                                    >
-                                                        Delete last Key Features +
-                                                    </Button> */}
-                                                    <FormMessage />
                                                     <p className="text-label3 text-base mb-4">
                                                         Maximum 15 words per each
                                                     </p>
@@ -666,7 +658,7 @@ export default function SubmitToolPage() {
                                                     >
                                                         Add Use Case +
                                                     </Button>
-                                                    <FormMessage />
+                                                    {/* <FormMessage /> */}
                                                     <p className="text-label3 text-base mb-4">
                                                         Maximum 25 words per each
                                                     </p>
