@@ -7,6 +7,8 @@ export type Subcriptions = {
   interval: string;
   name: string;
   price: number;
+  discountPrice: number;
+  descriptions: string;
 };
 
 export type SubcriptionsResponse = {
