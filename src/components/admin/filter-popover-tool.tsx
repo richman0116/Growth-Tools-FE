@@ -1,74 +1,14 @@
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Overlay } from "../common/overlay";
 import { Filter } from "../icons/Filter";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogTrigger,
-} from "../ui/dialog";
-import { Overlay } from "../common/overlay";
-import { getCategoryList } from "../../services/tool";
-
-// const filter = [
-//   {
-//     label: "Deals",
-//     value: "Deals",
-//   },
-//   {
-//     label: "Trends",
-//     value: "Trends",
-//   },
-// ];
-
-// const categories = [
-//   {
-//     label: "Analytics",
-//     value: "Analytics",
-//   },
-//   {
-//     label: "Design",
-//     value: "Design",
-//   },
-//   {
-//     label: "Productivity",
-//     value: "Productivity",
-//   },
-//   {
-//     label: "Email Marketing",
-//     value: "Email Marketing",
-//   },
-//   {
-//     label: "Customer Support",
-//     value: "Customer Support",
-//   },
-//   {
-//     label: "File Management",
-//     value: "File Management",
-//   },
-//   {
-//     label: "Content",
-//     value: "Content",
-//   },
-//   {
-//     label: "Productivity",
-//     value: "Productivity",
-//   },
-//   {
-//     label: "SEO",
-//     value: "SEO",
-//   },
-//   {
-//     label: "Social Media",
-//     value: "Social Media",
-//   },
-// ];
 
 export const FilterPopoverTool = (props: {
   categories: Category[];
@@ -79,6 +19,7 @@ export const FilterPopoverTool = (props: {
   ) => void;
 }) => {
   const { categories, onSubmitFilter } = props;
+
   const [open, setOpen] = useState(false);
 
   const form = useForm<Filters>({
