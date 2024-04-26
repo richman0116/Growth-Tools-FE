@@ -5,6 +5,7 @@ import { AddDealCard } from "@/components/common/add-deal-card";
 import { DealCard } from "@/components/common/deal-card";
 import { UploadIcon } from "@/components/icons/UploadIcon";
 import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/common/icon";
 import {
   Card,
   CardContent,
@@ -314,9 +315,6 @@ export default function SubmitToolPage() {
   };
 
   const onSubmit = async (data: SubmitToolForm) => {
-    console.log("====================================");
-    console.log("mapToolDealmapToolDealmapToolDeal", data);
-    console.log("====================================");
     const mapToolDeal = data?.deal.map((item) => ({
       name: item?.title,
       descriptions: item?.title,
@@ -356,21 +354,18 @@ export default function SubmitToolPage() {
     // });
 
     try {
-      console.log("====================================");
-      console.log("formDataformDataformData", formData);
-      console.log("====================================");
       const response = await submitTool(
         formData as unknown as SubmitToolRequest
       );
 
-      // if (!response) {
-      //     toastError("Oop's! Something wrong when try to submit tool");
-      //     form.reset();
-      // }
+      if (!response) {
+          toastError("Oop's! Something wrong when try to submit tool");
+          form.reset();
+      }
 
-      // push(response?.url);
+      push(response?.url);
     } catch (error) {
-      toastError("Oop's! Something wrong when try to submit tool");
+      toastError((error as any)?.message ?? "Oop's! Something wrong when try to submit tool");
       // form.reset();
     }
   };
@@ -809,8 +804,8 @@ export default function SubmitToolPage() {
                             {dialogCategories(field)}
                           </DialogContent>
                         </Dialog>
-                        <FormMessage />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -878,15 +873,14 @@ export default function SubmitToolPage() {
                 <div className="pt-9">
                   <Button
                     type="submit"
-                    // disabled={form.formState.isSubmitSuccessful}
+                    disabled={form.formState.isSubmitting}
                     className="w-full h-14 text-[18px] font-bold"
                   >
-                    Run
-                    {/* {form.formState.isSubmitSuccessful ? (
+                    {form.formState.isSubmitting ? (
                                             <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
                                         ) : (
                                             "Publish"
-                                        )} */}
+                                        )}
                   </Button>
                 </div>
               </form>
