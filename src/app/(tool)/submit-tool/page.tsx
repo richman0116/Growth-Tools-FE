@@ -90,13 +90,13 @@ const formSchema = z.object({
     .array(),
   features: z
     .object({
-      value: z.string(),
+      value: z.string().max(100, 'Feature must be at most 100 characters.'),
     })
     .array()
     .min(1, { message: "Please add at least one key feature" }),
   useCases: z
     .object({
-      value: z.string(),
+      value: z.string().max(100, 'Use case must be at most 100 characters.'),
     })
     .array()
     .min(1, { message: "Please add at least one use case" }),
@@ -633,6 +633,7 @@ export default function SubmitToolPage() {
                                       {...field}
                                     />
                                   </FormControl>
+                                  <FormMessage />
                                 </FormItem>
                               )}
                             />
@@ -681,9 +682,11 @@ export default function SubmitToolPage() {
                                     <Input
                                       placeholder=""
                                       className="h-12 px-6"
+                                      max={100}
                                       {...field}
                                     />
                                   </FormControl>
+                                  <FormMessage />
                                 </FormItem>
                               )}
                             />
