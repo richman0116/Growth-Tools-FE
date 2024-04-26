@@ -100,9 +100,9 @@ export default function MarketingPage() {
       <div className="px-12 pt-16">
         <BreadcrumbDashboard />
 
-        <h3 className="font-bold text-[32px] mt-6 mb-8">
+        <h3 className="font-bold text-[32px] mt-6 mb-8 font-clash">
           {pagination.itemCount}{" "}
-          <span className="font-medium">{category?.name} tools</span>
+          <span className="font-medium font-clash">{category?.name} tools</span>
         </h3>
         <Separator />
       </div>

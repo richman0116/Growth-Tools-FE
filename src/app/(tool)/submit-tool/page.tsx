@@ -91,13 +91,13 @@ const formSchema = z.object({
     .array(),
   features: z
     .object({
-      value: z.string().max(100, 'Feature must be at most 100 characters.'),
+      value: z.string().max(100, "Feature must be at most 100 characters."),
     })
     .array()
     .min(1, { message: "Please add at least one key feature" }),
   useCases: z
     .object({
-      value: z.string().max(100, 'Use case must be at most 100 characters.'),
+      value: z.string().max(100, "Use case must be at most 100 characters."),
     })
     .array()
     .min(1, { message: "Please add at least one use case" }),
@@ -359,13 +359,16 @@ export default function SubmitToolPage() {
       );
 
       if (!response) {
-          toastError("Oop's! Something wrong when try to submit tool");
-          form.reset();
+        toastError("Oop's! Something wrong when try to submit tool");
+        form.reset();
       }
 
       push(response?.url);
     } catch (error) {
-      toastError((error as any)?.message ?? "Oop's! Something wrong when try to submit tool");
+      toastError(
+        (error as any)?.message ??
+          "Oop's! Something wrong when try to submit tool"
+      );
       // form.reset();
     }
   };
@@ -377,7 +380,7 @@ export default function SubmitToolPage() {
       <div className="container">
         <div className="grid grid-1 md:grid-cols-[minmax(0,_1fr)_400px] gap-2 md:gap-28 my-10">
           <div className="mb-6">
-            <h3 className="font-bold text-[32px] mb-6">
+            <h3 className="font-bold text-[32px] font-clash mb-6">
               Post your tool to a global audience
             </h3>
             <p className="font-medium text-description text-base">
@@ -396,7 +399,7 @@ export default function SubmitToolPage() {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Name
                       </FormLabel>
                       <FormControl>
@@ -416,7 +419,7 @@ export default function SubmitToolPage() {
                   name="shortDescription"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Short Description
                       </FormLabel>
                       <FormControl>
@@ -436,7 +439,7 @@ export default function SubmitToolPage() {
                   name="description"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Description
                       </FormLabel>
                       <FormControl>
@@ -456,7 +459,7 @@ export default function SubmitToolPage() {
                   name="website"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Website
                       </FormLabel>
                       <FormControl>
@@ -478,7 +481,7 @@ export default function SubmitToolPage() {
                   name="logo"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Logo
                       </FormLabel>
 
@@ -527,7 +530,7 @@ export default function SubmitToolPage() {
                   name="screenshots"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Screenshots
                       </FormLabel>
                       <FormControl>
@@ -581,7 +584,9 @@ export default function SubmitToolPage() {
                   )}
                 />
                 <div>
-                  <h4 className="font-semibold mb-4 text-[18px]">Deals</h4>
+                  <h4 className="font-semibold mb-4 text-[18px] font-clash">
+                    Deals
+                  </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
                     {form?.watch("deal").map((item) => (
                       <DealCard
@@ -605,7 +610,7 @@ export default function SubmitToolPage() {
                   name="features"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Key Features
                       </FormLabel>
                       <p className="text-label3 text-base mb-4">
@@ -658,7 +663,7 @@ export default function SubmitToolPage() {
                   name="useCases"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Use Cases
                       </FormLabel>
                       <p className="text-label3 text-base mb-4">
@@ -711,7 +716,7 @@ export default function SubmitToolPage() {
                   name="price"
                   render={({ field }) => (
                     <FormItem className="space-y-4">
-                      <FormLabel className="font-semibold text-[18px]">
+                      <FormLabel className="font-semibold text-[18px] font-clash">
                         Price
                       </FormLabel>
                       <FormControl>
@@ -744,7 +749,7 @@ export default function SubmitToolPage() {
                   name="category"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="font-semibold text-[18px] mb-3">
+                      <FormLabel className="font-semibold text-[18px] font-clash mb-3">
                         Category
                       </FormLabel>
                       <div className="hidden md:block">
@@ -816,7 +821,7 @@ export default function SubmitToolPage() {
                     <FormItem className="flex flex-col">
                       <Card>
                         <CardHeader>
-                          <CardTitle className="font-semibold text-[18px] mb-2">
+                          <CardTitle className="font-semibold text-[18px] font-clash mb-2">
                             Subscriptions
                           </CardTitle>
                           <CardDescription>
@@ -877,17 +882,19 @@ export default function SubmitToolPage() {
                     className="w-full h-14 text-[18px] font-bold"
                   >
                     {form.formState.isSubmitting ? (
-                                            <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
-                                        ) : (
-                                            "Publish"
-                                        )}
+                      <Icons.spinner className="mr-2 h-4 w-full animate-spin" />
+                    ) : (
+                      "Publish"
+                    )}
                   </Button>
                 </div>
               </form>
             </Form>
           </div>
           <div>
-            <h3 className="font-semibold text-[18px] mb-4">Card Preview</h3>
+            <h3 className="font-semibold text-[18px] font-clash mb-4">
+              Card Preview
+            </h3>
             <ToolCard
               variant="thumbnail"
               id={"#"}

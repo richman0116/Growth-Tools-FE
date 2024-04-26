@@ -88,7 +88,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(classDisplay.className, satoshi.className)}>
+      <body className={cn(classDisplay.variable, satoshi.variable)}>
         <TanstackProvider>
           <Toaster />
           <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
