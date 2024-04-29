@@ -59,7 +59,7 @@ export function AuthHeader() {
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />
           </Button>
-          <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-pink-500 hover:to-yellow-500">
+          <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-300 hover:to-blue-600">
             <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
             Try AI Search
           </Button>
@@ -121,7 +121,7 @@ export function AuthHeader() {
             <DropdownMenuContent className="w-auto border-none">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-pink-500 hover:to-yellow-500">
+                  <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-300 hover:to-blue-600">
                     <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
                     Try AI Search
                   </Button>
