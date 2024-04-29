@@ -193,9 +193,9 @@ export default function ToolsDetailPage() {
                                     />
                                 ))}
                             </div>
-                            <Button variant="link" className="text-secondary my-4 p-0 h-max">
+                            {/* <Button variant="link" className="text-secondary my-4 p-0 h-max">
                                 Browse 1 Ads Management tools
-                            </Button>
+                            </Button> */}
                         </div>
 
                         <div className="pb-12">
