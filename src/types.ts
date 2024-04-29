@@ -108,4 +108,5 @@ type ToolInfo = {
   price: number;
   author: Author;
   toolDeals: ToolDeal[];
+  category: Category;
 };
