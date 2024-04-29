@@ -140,7 +140,7 @@ export default function ToolsDetailPage() {
                                     </div>
                                 </Swiper>
                             </div>
-                            {toolData?.toolDeals ? <>
+                            {toolData?.toolDeals?.length ? <>
                                 <h4 className="text-[18px] font-semibold mb-4">Deals</h4><div className="grid grid-col-1 lg:grid-cols-2 gap-[30px]">
                                     {toolData?.toolDeals.map(
                                         (deal: {
