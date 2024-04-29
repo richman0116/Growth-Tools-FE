@@ -97,7 +97,7 @@ export default function MarketingPage() {
 
   return (
     <>
-      <div className="px-12 pt-16">
+      <div className="md:px-12 md:pt-16 pt-6 px-6">
         <BreadcrumbDashboard />
 
         <h3 className="font-bold text-[32px] mt-6 mb-8 font-clash">
@@ -107,7 +107,7 @@ export default function MarketingPage() {
         <Separator />
       </div>
 
-      <section className="h-svh flex flex-col gap-6 p-4 md:p-8">
+      <section className="h-vh flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopoverTool
             categories={categories}

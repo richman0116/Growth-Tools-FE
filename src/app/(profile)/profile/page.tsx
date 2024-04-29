@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
     <section>
       <div className="container">
-        <div className="h-svh flex-1 flex-col space-y-8 md:flex py-12">
+        <div className="h-vh flex-1 flex-col space-y-8 md:flex py-12">
           <div className="flex items-center justify-between space-y-2">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">Tools</h2>
