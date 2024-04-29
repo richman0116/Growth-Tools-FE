@@ -644,7 +644,7 @@ export default function SubmitToolPage() {
                             className="text-secondary p-0 h-max flex justify-start"
                             onClick={() =>
                               appendFeatures({
-                                value: "http://twitter.com/shadcn",
+                                value: "",
                               })
                             }
                           >
@@ -696,7 +696,7 @@ export default function SubmitToolPage() {
                             className="text-secondary p-0 h-max flex justify-start"
                             onClick={() =>
                               appendUseCase({
-                                value: "http://twitter.com/shadcn",
+                                value: "",
                               })
                             }
                           >

@@ -59,7 +59,7 @@ export function AuthHeader() {
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />
           </Button>
-          <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-300 hover:to-blue-600">
+          <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-800 hover:to-blue-600">
             <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
             Try AI Search
           </Button>
@@ -68,7 +68,9 @@ export function AuthHeader() {
               buttonVariants({ variant: "outline" }),
               "flex items-center gap-2"
             )}
-            href={isLoggedIn ? "/submit-tool" : "/sign-in?redirect=/submit-tool"}
+            href={
+              isLoggedIn ? "/submit-tool" : "/sign-in?redirect=/submit-tool"
+            }
           >
             <Plus className="w-5" />
             Submit Tool
@@ -121,7 +123,7 @@ export function AuthHeader() {
             <DropdownMenuContent className="w-auto border-none">
               <DropdownMenuGroup>
                 <DropdownMenuItem>
-                  <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-300 hover:to-blue-600">
+                  <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-800 hover:to-blue-600">
                     <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
                     Try AI Search
                   </Button>
@@ -132,7 +134,11 @@ export function AuthHeader() {
                       buttonVariants({ variant: "outline" }),
                       "w-full flex items-center gap-2 border"
                     )}
-                    href={isLoggedIn ? "/submit-tool" : "/sign-in?redirect=/submit-tool"}
+                    href={
+                      isLoggedIn
+                        ? "/submit-tool"
+                        : "/sign-in?redirect=/submit-tool"
+                    }
                   >
                     <Plus className="w-5" />
                     Submit Tool

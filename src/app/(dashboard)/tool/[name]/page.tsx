@@ -1,6 +1,7 @@
 "use client";
 
 import ADS_BANNER from "@/assets/images/ads-banner.png";
+import Placeholder from "@/assets/images/placeholder.png";
 import TOOL_LOGO_1 from "@/assets/images/tool-logo-1.png";
 import TOOL_LOGO_2 from "@/assets/images/tool-logo-2.png";
 import TOOL_THUMBNAIL_1 from "@/assets/images/tool-thumbnail-1.png";
@@ -17,23 +18,27 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useQuery } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getToolByName } from "../../../../services/tool";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
-import { Key } from "react";
 import {
-  ReactElement,
   JSXElementConstructor,
+  Key,
+  PromiseLikeOfReactNode,
+  ReactElement,
   ReactNode,
   ReactPortal,
-  PromiseLikeOfReactNode,
 } from "react";
-import Placeholder from "@/assets/images/placeholder.png";
+import "swiper/css";
+import { Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { getToolByName } from "../../../../services/tool";
 
 export default function ToolsDetailPage() {
   const pathName = usePathname();
   const name = pathName.split("/")[2];
+  const swiper = useSwiper();
 
   const { data } = useQuery({
     queryKey: ["tool"],
@@ -62,7 +67,7 @@ export default function ToolsDetailPage() {
               </div>
               <h3 className="font-bold text-[40px]">{toolData?.name}</h3>
               <div className="flex items-center gap-6">
-                <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-pink-500 hover:to-yellow-500">
+                <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600">
                   <Prize fill="white" />
                   Peer Reviewed
                 </Button>
@@ -83,21 +88,49 @@ export default function ToolsDetailPage() {
               <h4 className="text-[18px] font-semibold mb-4 mt-12">
                 Website Screenshot
               </h4>
-              <div className="mb-12">
-                {toolData?.screenshots &&
-                  toolData?.screenshots.map(
-                    (screenshot: string | StaticImport, i) => {
-                      return (
-                        <Image
-                          key={`screen-shot-${i}`}
-                          src={screenshot}
-                          width={1000}
-                          height={330}
-                          alt=""
-                        />
-                      );
-                    }
-                  )}
+              <div className="mb-12 relative">
+                <Swiper
+                  spaceBetween={50}
+                  slidesPerView={1}
+                  onSlideChange={() => console.log("slide change")}
+                  onSwiper={(swiper) => console.log(swiper)}
+                  modules={[Navigation]}
+                  centeredSlides
+                  loop
+                  navigation={{
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                  }}
+                >
+                  {toolData?.screenshots &&
+                    toolData?.screenshots.map(
+                      (screenshot: string | StaticImport, i) => {
+                        return (
+                          <SwiperSlide key={`screen-shot-${i}`}>
+                            <Image
+                              src={screenshot}
+                              width={1000}
+                              height={330}
+                              className="bg-cover h-full min-h-80"
+                              alt=""
+                            />
+                          </SwiperSlide>
+                        );
+                      }
+                    )}
+                  <div
+                    className="swiper-button-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 cursor-pointer p-2 rounded-full shadow-md bg-white"
+                    onClick={() => swiper?.slidePrev()}
+                  >
+                    <ChevronLeft />
+                  </div>
+                  <div
+                    className="swiper-button-next absolute right-2 top-1/2 -translate-y-1/2 z-10 cursor-pointer p-2 rounded-full shadow-md bg-white"
+                    onClick={() => swiper?.slideNext()}
+                  >
+                    <ChevronRight />
+                  </div>
+                </Swiper>
               </div>
               <h4 className="text-[18px] font-semibold mb-4">Deals</h4>
               <div className="grid grid-col-1 lg:grid-cols-2 gap-[30px]">
