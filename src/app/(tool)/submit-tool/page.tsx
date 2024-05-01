@@ -60,6 +60,7 @@ import { ChangeEvent, useCallback, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z
@@ -131,6 +132,8 @@ export default function SubmitToolPage() {
   });
 
   const form = useForm<SubmitToolForm>({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
     defaultValues: {
       name: "",
       shortDescription: "",
@@ -150,16 +153,19 @@ export default function SubmitToolPage() {
   const { fields, append: appendFeatures } = useFieldArray({
     name: "features",
     control: form.control,
+    rules: { minLength: 3 },
   });
 
   const { fields: filedsUseCase, append: appendUseCase } = useFieldArray({
     name: "useCases",
     control: form.control,
+    rules: { minLength: 3 },
   });
 
   const { fields: fieldScreenshots } = useFieldArray({
     name: "screenshots",
     control: form.control,
+    rules: { minLength: 3 },
   });
 
   const handleUploadThumbnail = (e: ChangeEvent<HTMLInputElement>) => {
@@ -423,8 +429,8 @@ export default function SubmitToolPage() {
                         Short Description
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className="h-14 px-6"
+                        <Textarea
+                          className="min-h-[120px] px-6"
                           maxLength={100}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
@@ -443,10 +449,10 @@ export default function SubmitToolPage() {
                         Description
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className="h-14 px-6"
-                          maxLength={300}
-                          placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, to "
+                        <Textarea
+                          className="min-h-[120px] px-6"
+                          maxLength={100}
+                          placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
                         />
                       </FormControl>
@@ -536,7 +542,7 @@ export default function SubmitToolPage() {
                       <FormControl>
                         <>
                           <div className="flex gap-6">
-                            {form.getValues("screenshots")?.map((item, i) => (
+                            {fieldScreenshots?.map((item, i) => (
                               <div
                                 key={`screenshot-${i}`}
                                 className=" relative w-max"
@@ -583,28 +589,30 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
-                <div>
-                  <h4 className="font-semibold mb-4 text-[18px] font-clash">
-                    Deals
-                  </h4>
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
-                    {form?.watch("deal").map((item) => (
-                      <DealCard
-                        key={item?.id}
-                        title={item.title}
-                        price={item.price}
-                        salePrice={item.salePrice}
-                        onEdit={() => handleEditDeal("update", item)}
-                        onRemove={() => handleDeleteDeal(item.id)}
-                      />
-                    ))}
+                {form?.watch("deal")?.length && (
+                  <div>
+                    <h4 className="font-semibold mb-4 text-[18px] font-clash">
+                      Deals
+                    </h4>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
+                      {form?.watch("deal").map((item) => (
+                        <DealCard
+                          key={item?.id}
+                          title={item.title}
+                          price={item.price}
+                          salePrice={item.salePrice}
+                          onEdit={() => handleEditDeal("update", item)}
+                          onRemove={() => handleDeleteDeal(item.id)}
+                        />
+                      ))}
 
-                    <AddDealCard
-                      title={"Create new"}
-                      onClick={() => handleEditDeal("create")}
-                    />
+                      <AddDealCard
+                        title={"Create new"}
+                        onClick={() => handleEditDeal("create")}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
                 <FormField
                   control={form.control}
                   name="features"
@@ -613,9 +621,6 @@ export default function SubmitToolPage() {
                       <FormLabel className="font-semibold text-[18px] font-clash">
                         Key Features
                       </FormLabel>
-                      <p className="text-label3 text-base mb-4">
-                        Sed ut perspiciatis unde omnis iste natus{" "}
-                      </p>
                       <FormControl>
                         <div className="grid gap-4">
                           {fields.map((field, index) => (
@@ -629,8 +634,16 @@ export default function SubmitToolPage() {
                                     <Input
                                       placeholder=""
                                       className="h-12 px-6"
-                                      max={100}
                                       {...field}
+                                      onChange={(e) => {
+                                        const wordCount = e.target.value
+                                          ?.split(/\s+/)
+                                          ?.filter(Boolean).length;
+
+                                        if (wordCount > 25) return;
+
+                                        field?.onChange(e);
+                                      }}
                                     />
                                   </FormControl>
                                   <FormMessage />
@@ -641,12 +654,14 @@ export default function SubmitToolPage() {
 
                           <Button
                             variant="link"
+                            type="button"
                             className="text-secondary p-0 h-max flex justify-start"
-                            onClick={() =>
+                            onClick={(e) => {
+                              e.stopPropagation();
                               appendFeatures({
                                 value: "",
-                              })
-                            }
+                              });
+                            }}
                           >
                             Add Key Features +
                           </Button>
@@ -666,9 +681,6 @@ export default function SubmitToolPage() {
                       <FormLabel className="font-semibold text-[18px] font-clash">
                         Use Cases
                       </FormLabel>
-                      <p className="text-label3 text-base mb-4">
-                        Sed ut perspiciatis unde omnis iste natus{" "}
-                      </p>
                       <FormControl>
                         <div className="grid gap-4">
                           {filedsUseCase.map((field, index) => (
@@ -682,8 +694,16 @@ export default function SubmitToolPage() {
                                     <Input
                                       placeholder=""
                                       className="h-12 px-6"
-                                      max={100}
                                       {...field}
+                                      onChange={(e) => {
+                                        const wordCount = e.target.value
+                                          ?.split(/\s+/)
+                                          ?.filter(Boolean).length;
+
+                                        if (wordCount > 25) return;
+
+                                        field?.onChange(e);
+                                      }}
                                     />
                                   </FormControl>
                                   <FormMessage />
@@ -693,12 +713,14 @@ export default function SubmitToolPage() {
                           ))}
                           <Button
                             variant="link"
+                            type="button"
                             className="text-secondary p-0 h-max flex justify-start"
-                            onClick={() =>
+                            onClick={(e) => {
+                              e.stopPropagation();
                               appendUseCase({
                                 value: "",
-                              })
-                            }
+                              });
+                            }}
                           >
                             Add Use Case +
                           </Button>

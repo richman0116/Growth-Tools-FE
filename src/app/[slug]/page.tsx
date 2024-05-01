@@ -143,7 +143,7 @@ export default function MarketingPage() {
             <p className="text-sm">We have no tool to show.</p>
           </div>
         )}
-        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {isLoading && (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />
