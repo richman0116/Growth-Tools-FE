@@ -30,7 +30,7 @@ export default function MarketingPage() {
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 0,
     take: 0,
@@ -69,16 +69,16 @@ export default function MarketingPage() {
   useEffect(() => {
     setToolsListLoading(true);
     const initFetchingData = async () => {
-        const [cateInfo, cateListInfo] = await Promise.all([
-            getCategoryByHandle(categoryHandle),
-            getCategoryList()
-        ])
-        setCategoryId(cateInfo?.id);
-        setCategory(cateInfo);
-        setCategories(cateListInfo);
-    }
+      const [cateInfo, cateListInfo] = await Promise.all([
+        getCategoryByHandle(categoryHandle),
+        getCategoryList(),
+      ]);
+      setCategoryId(cateInfo?.id);
+      setCategory(cateInfo);
+      setCategories(cateListInfo);
+    };
     initFetchingData().then(() => {
-        setToolsListLoading(false);
+      setToolsListLoading(false);
     });
     // getCategoryByHandle(categoryHandle).then((res) => {
     //   setCategoryId(res?.id);
@@ -87,12 +87,11 @@ export default function MarketingPage() {
     // getCategoryList().then((res) => {
     //   setCategories(res || []);
     // });
-  
   }, [categoryHandle, setToolsListLoading]);
 
   useEffect(() => {
     setToolsListLoading(true);
-    setIsLoading(true)
+    setIsLoading(true);
     if (!categoryId) return;
 
     filterTool({
@@ -121,7 +120,7 @@ export default function MarketingPage() {
         <Separator />
       </div>
 
-      <section className="h-vh flex flex-col gap-6 p-4 md:p-8">
+      <section className="h-[70vh] flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopoverTool
             categories={categories}
