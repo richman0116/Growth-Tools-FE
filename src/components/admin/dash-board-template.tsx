@@ -15,6 +15,7 @@ import { ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 import { Skeleton } from "../ui/skeleton";
 import { TooltipProvider } from "../ui/tooltip";
 import { Sidebar } from "./sidebar";
+import { GlobalStoreProvider, useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 
 interface DashboardBoardProps {
   navCollapsedSize: number;
@@ -28,6 +29,7 @@ export function DashBoardTemplate({
   children,
 }: Readonly<DashboardBoardProps>) {
   const pathName = usePathname();
+  const { setPageLoading } = useGlobalStoreContext()
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [dashboardNavigation, setDashboardNavigation] = useState<Category[]>(
     []
@@ -52,59 +54,61 @@ export function DashBoardTemplate({
 
     return (
       <TooltipProvider delayDuration={0}>
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="h-full min-h-screen items-stretch"
-        >
-          <ResizablePanel
-            ref={ref}
-            defaultSize={defaultLayout[0]}
-            collapsedSize={navCollapsedSize}
-            collapsible={true}
-            minSize={15}
-            maxSize={20}
-            onCollapse={() => {
-              if (isMobile) return;
-              setIsCollapsed(true);
-            }}
-            onExpand={() => {
-              if (isMobile) return;
-              setIsCollapsed(false);
-            }}
-            className={cn(
-              isCollapsed && "min-w-[50px]",
-              "relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
-            )}
-          >
-            {dashboardNavigation?.length ? (
-              <Sidebar
-                isCollapsed={isCollapsed}
-                links={dashboardNavigation}
-                onCollapse={collapsePanel}
-              />
-            ) : (
-              <div className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-                <div className="space-y-3">
-                  {Array.from({ length: 10 }, (_, i) => (
-                    <Fragment key={`skeleton-${i}`}>
-                      <Skeleton className="h-6 w-[200px]" />
-                      <Skeleton className="h-6 w-[130px]" />
-                    </Fragment>
-                  ))}
+        <GlobalStoreProvider>
+            <ResizablePanelGroup
+            direction="horizontal"
+            className="h-full min-h-screen items-stretch"
+            >
+            <ResizablePanel
+                ref={ref}
+                defaultSize={defaultLayout[0]}
+                collapsedSize={navCollapsedSize}
+                collapsible={true}
+                minSize={15}
+                maxSize={20}
+                onCollapse={() => {
+                if (isMobile) return;
+                setIsCollapsed(true);
+                }}
+                onExpand={() => {
+                if (isMobile) return;
+                setIsCollapsed(false);
+                }}
+                className={cn(
+                isCollapsed && "min-w-[50px]",
+                "relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
+                )}
+            >
+                {dashboardNavigation?.length ? (
+                <Sidebar
+                    isCollapsed={isCollapsed}
+                    links={dashboardNavigation}
+                    onCollapse={collapsePanel}
+                />
+                ) : (
+                <div className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+                    <div className="space-y-3">
+                    {Array.from({ length: 10 }, (_, i) => (
+                        <Fragment key={`skeleton-${i}`}>
+                        <Skeleton className="h-6 w-[200px]" />
+                        <Skeleton className="h-6 w-[130px]" />
+                        </Fragment>
+                    ))}
+                    </div>
                 </div>
-              </div>
-            )}
-          </ResizablePanel>
-          <ResizablePanel
-            defaultSize={defaultLayout[1]}
-            minSize={30}
-            className="relative"
-          >
-            <AuthHeader />
-            {children}
-            <Footer />
-          </ResizablePanel>
-        </ResizablePanelGroup>
+                )}
+            </ResizablePanel>
+            <ResizablePanel
+                defaultSize={defaultLayout[1]}
+                minSize={30}
+                className="relative"
+            >
+                <AuthHeader />
+                {children}
+                <Footer />
+            </ResizablePanel>
+            </ResizablePanelGroup>
+        </GlobalStoreProvider>
       </TooltipProvider>
     );
   };
@@ -128,8 +132,10 @@ export function DashBoardTemplate({
   }, [isMobile]);
 
   useEffect(() => {
+    setPageLoading(true);
     getCategoryList().then((res) => {
       setDashboardNavigation(res);
+      setPageLoading(false);
     });
   }, []);
 
