@@ -15,11 +15,13 @@ import {
 } from "@/services/tool";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 
 export default function MarketingPage() {
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
+  const { setToolsListLoading } = useGlobalStoreContext();
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [tools, setTools] = useState<ToolInfo[]>([]);
@@ -27,7 +29,8 @@ export default function MarketingPage() {
   const [take] = useState(10);
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 0,
     take: 0,
@@ -64,22 +67,32 @@ export default function MarketingPage() {
   };
 
   useEffect(() => {
-    getCategoryByHandle(categoryHandle).then((res) => {
-      setCategoryId(res?.id);
-      setCategory(res);
+    setToolsListLoading(true);
+    const initFetchingData = async () => {
+        const [cateInfo, cateListInfo] = await Promise.all([
+            getCategoryByHandle(categoryHandle),
+            getCategoryList()
+        ])
+        setCategoryId(cateInfo?.id);
+        setCategory(cateInfo);
+        setCategories(cateListInfo);
+    }
+    initFetchingData().then(() => {
+        setToolsListLoading(false);
     });
-    getCategoryList().then((res) => {
-      setCategories(res || []);
-    });
-    // if (!categoryId) {
-    //     const redirectedCategoryId = localStorage.getItem('categoryId');
-    //     if (!redirectedCategoryId) return;
-    //     setCategoryId(redirectedCategoryId);
-    // }
-  }, [categoryHandle]);
+    // getCategoryByHandle(categoryHandle).then((res) => {
+    //   setCategoryId(res?.id);
+    //   setCategory(res);
+    // });
+    // getCategoryList().then((res) => {
+    //   setCategories(res || []);
+    // });
+  
+  }, [categoryHandle, setToolsListLoading]);
 
   useEffect(() => {
-    setIsLoading(true);
+    setToolsListLoading(true);
+    setIsLoading(true)
     if (!categoryId) return;
 
     filterTool({
@@ -91,9 +104,10 @@ export default function MarketingPage() {
     }).then((res) => {
       setTools(res?.data);
       setPagination(res?.pagination);
+      setToolsListLoading(false);
       setIsLoading(false);
     });
-  }, [order, page, sort, take, categoryId]);
+  }, [order, page, sort, take, categoryId, setToolsListLoading]);
 
   return (
     <>

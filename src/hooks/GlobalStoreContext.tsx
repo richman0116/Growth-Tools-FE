@@ -1,13 +1,19 @@
+"use client";
+
 import React, { Dispatch, SetStateAction, createContext, useContext, useState } from 'react';
 
 type GlobalContextProps = {
-    isPageLoading: boolean,
-    setPageLoading: Dispatch<SetStateAction<boolean>>
+    isCategoryLoading: boolean,
+    setCategoryLoading: Dispatch<SetStateAction<boolean>>
+    isToolsListLoading: boolean,
+    setToolsListLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const initGlobalState: GlobalContextProps = {
-    isPageLoading: false,
-    setPageLoading: () => {},
+    isCategoryLoading: true,
+    setCategoryLoading: () => {},
+    isToolsListLoading: true,
+    setToolsListLoading: () => {},
 }
 
 const GlobalStoreContext = createContext<GlobalContextProps>(initGlobalState);
@@ -17,13 +23,16 @@ export const useGlobalStoreContext = () => useContext(GlobalStoreContext);
 
 // Provider component to wrap your app
 export const GlobalStoreProvider = ({ children }: {
-    children: React.ReactNode;
+    children: any;
 }) => {
-  const [isPageLoading, setPageLoading] = useState<boolean>(false);
+  const [isToolsListLoading, setToolsListLoading] = useState<boolean>(initGlobalState.isToolsListLoading);
+  const [isCategoryLoading, setCategoryLoading] = useState<boolean>(initGlobalState.isCategoryLoading);
 
   const contextValue: GlobalContextProps = {
-    isPageLoading,
-    setPageLoading
+    isToolsListLoading,
+    setToolsListLoading,
+    isCategoryLoading,
+    setCategoryLoading,
   };
 
   return <GlobalStoreContext.Provider value={contextValue}>{children}</GlobalStoreContext.Provider>;

@@ -117,7 +117,7 @@ export const publishTool = async (id: string) => {
     return errData;
   }
 };
-
+  
 export const getCategoryList = async (): Promise<Category[]> => {
   try {
     const response = await axiosClient.get<null, AxiosResponse<Category[]>>(

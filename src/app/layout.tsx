@@ -7,6 +7,7 @@ import { DashBoardTemplate } from "@/components/admin/dash-board-template";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { GlobalStoreProvider } from "../hooks/GlobalStoreContext";
 
 const classDisplay = localFont({
     src: [
@@ -96,7 +97,7 @@ export default function RootLayout({
             <meta property="og:title" content="Growth Tools - 500+ curated marketing tools for Marketers & Founders" />
             <meta name="twitter:title" content="Growth Tools - 500+ curated marketing tools for Marketers & Founders" />
             <meta property="og:site_name" content="Growth Tools" />
-            <meta name="twitter:site_name" content="Growth Tools" />4
+            <meta name="twitter:site_name" content="Growth Tools" />
             <meta property="og:description" content="Over 500+ of the best curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more.." />
             <meta name="twitter:description" content="Over 500+ of the best curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more.." />
             <link rel="image_src" href="https://d1muf25xaso8hp.cloudfront.net/https%3A%2F%2F2394e56ea77fb59b3a6d75e6fd94c644.cdn.bubble.io%2Ff1657661829561x267166805603615170%2FGrowth%2520Virality%2520Infrographic%2520Guide.png?w=&h=&auto=compress&dpr=1&fit=max" />
@@ -107,10 +108,12 @@ export default function RootLayout({
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="viewport" content="width=device-width,initial-scale=1.0" />
             <body className={cn(classDisplay.variable, satoshi.variable)}>
-                <TanstackProvider>
-                    <Toaster />
-                    <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
-                </TanstackProvider>
+                <GlobalStoreProvider>
+                    <TanstackProvider>
+                        <Toaster />
+                        <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
+                    </TanstackProvider>
+                </GlobalStoreProvider>
             </body>
         </html>
     );
