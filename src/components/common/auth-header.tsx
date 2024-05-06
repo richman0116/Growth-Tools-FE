@@ -7,7 +7,7 @@ import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler from "@/helpers/localStorage";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { AlignJustify, PencilRuler, Plus, Sun } from "lucide-react";
+import { AlignJustify, Layers3, PencilRuler, Plus, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback } from "react";
@@ -142,6 +142,18 @@ export function AuthHeader() {
                   >
                     <Plus className="w-5" />
                     Submit Tool
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="block">
+                  <Link
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "w-full flex items-center gap-2 border"
+                    )}
+                    href={"/categories"}
+                  >
+                    <Layers3 className="w-5" />
+                    Categories
                   </Link>
                 </DropdownMenuItem>
                 {isLoggedIn && (
