@@ -78,7 +78,7 @@ export function DashBoardTemplate({
                 fill="currentFill"
               />
             </svg>
-            <span classNNam="sr-only">Loading...</span>
+            <span className="sr-only">Loading...</span>
           </div>
         </div>
         <ResizablePanelGroup
