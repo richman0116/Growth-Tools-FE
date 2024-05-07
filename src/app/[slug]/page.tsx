@@ -120,7 +120,7 @@ export default function MarketingPage() {
         <Separator />
       </div>
 
-      <section className="h-[70vh] flex flex-col gap-6 p-4 md:p-8">
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
           <FilterPopoverTool
             categories={categories}
