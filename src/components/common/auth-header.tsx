@@ -21,8 +21,12 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+import { usePathname } from "next/navigation";
 
 export function AuthHeader() {
+  const pathName = usePathname();
+  const name = pathName.split("/")[1];
+
   const { isLoggedIn } = useAuth();
 
   const handleLogout = useCallback(() => {
@@ -98,7 +102,9 @@ export function AuthHeader() {
       </div>
 
       <div className="flex p-4 md:hidden items-center justify-end h-14">
-        <div className="block lg:hidden">
+        <div className={
+            cn("block lg:hidden", name === "categories" ? "hidden" : "")
+        }>
             <Link className="relative group" href={'/categories'}>
                 <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30">
                     <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">

@@ -25,20 +25,18 @@ export default function CategoryPage() {
                 <ul className='mt-2 mb-2'>
                     {
                         dashboardNavigation.map(cate => {
-                            return <>
-                                <li>
-                                    <a href={cate.handle} className="flex flex-row max-w-sm p-3 m-auto mb-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                                        <Image
-                                            className="mr-2 h-6 w-6"
-                                            src={cate.icon}
-                                            width={24}
-                                            height={24}
-                                            alt={cate.description}
-                                        />
-                                        {cate.name}
-                                    </a>
-                                </li>
-                            </>
+                            return <li key={cate.id}>
+                                <a href={cate.handle} className="flex flex-row max-w-sm p-3 m-auto mb-2 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                    <Image
+                                        className="mr-2 h-6 w-6"
+                                        src={cate.icon}
+                                        width={24}
+                                        height={24}
+                                        alt={cate.description}
+                                    />
+                                    {cate.name}
+                                </a>
+                            </li>
                         })
                     }
                 </ul>
