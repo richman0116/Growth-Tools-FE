@@ -98,6 +98,17 @@ export function AuthHeader() {
       </div>
 
       <div className="flex p-4 md:hidden items-center justify-end h-14">
+        <div className="block lg:hidden">
+            <Link className="relative group" href={'/categories'}>
+                <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30">
+                    <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
+                        <div className="bg-gray-900 h-[2px] w-7 origin-left" />
+                        <div className="bg-gray-900 h-[2px] w-7 rounded" />
+                        <div className="bg-gray-900 h-[2px] w-7 origin-left" />
+                    </div>
+                </div>
+            </Link>
+        </div>
         <Link href={"/"}>
           <Image
             width={LOGO.width}
