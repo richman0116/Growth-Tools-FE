@@ -123,7 +123,7 @@ export default function MarketingPage() {
               alt=""
             />
             <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
-              <h1 className="font-extrabold text-4xl lg:text-5xl mb-6">
+              <h1 className="font-extrabold text-4xl lg:text-5xl mb-6 font-clash">
                 Discover <span className="textGradient">marketing tools</span> that{" "}
                 <br />
                 supercharge your growth
@@ -189,7 +189,7 @@ export default function MarketingPage() {
             <p className="text-sm">We have no tool to show.</p>
           </div>
         )}
-        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {isLoading && (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />

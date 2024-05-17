@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import SEARCHICON from "@/assets/icons/seach.svg";
 import WHITE_BOT_ICON from "@/assets/icons/white-bot.svg";
 import LOGO from "@/assets/images/logo-growth-tools.png";
@@ -7,7 +7,7 @@ import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler from "@/helpers/localStorage";
 import useAuth from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-import { AlignJustify, Layers3, PencilRuler, Plus, Sun } from "lucide-react";
+import { AlignJustify, Layers3, Moon, PencilRuler, Plus, Sun } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback } from "react";
@@ -24,6 +24,7 @@ import { Separator } from "../ui/separator";
 import { usePathname } from "next/navigation";
 
 export function AuthHeader() {
+  const [theme, setTheme] = useState('light');
   const pathName = usePathname();
   const name = pathName.split("/")[1];
 
@@ -35,9 +36,26 @@ export function AuthHeader() {
     window.location.reload();
   }, []);
 
+  const onToggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.classList.remove(theme);
+    document.documentElement.classList.add(newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  useEffect(() => {
+    // Check for saved theme in local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.add(savedTheme);
+    }
+  }, []);
+
   return (
     <>
-      <div className="px-12 py-4 items-center justify-between h-[70px] md:flex hidden">
+      <div className="sticky top-0 z-50 px-12 py-4 items-center justify-between h-[70px] md:flex hidden">
         <Link href={"/"}>
           <Image
             width={LOGO.width}
@@ -60,9 +78,11 @@ export function AuthHeader() {
               <Image src={SEARCHICON} alt="search" className="w-5" />
             </Button>
           </div>
-          <Button size="icon" variant="ghost" className="mx-3">
-            <Sun className="w-6" />
-          </Button>
+          <div onClick={onToggleTheme}>
+            <Button size="icon" variant="ghost" className="mx-3">
+              { theme === 'light' ? <Sun className="w-6" /> : <Moon className="w-6"/>}
+            </Button>
+          </div>
           <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-800 hover:to-blue-600">
             <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
             Try AI Search

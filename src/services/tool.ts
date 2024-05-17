@@ -123,7 +123,8 @@ export const getCategoryList = async (): Promise<Category[]> => {
     const response = await axiosClient.get<null, AxiosResponse<Category[]>>(
       `/categories/list`
     );
-
+    console.log((response as any).result, "result");
+    
     return (response as any)?.result;
   } catch (error) {
     const err = error as AxiosError<any>;
