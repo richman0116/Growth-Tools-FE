@@ -16,6 +16,9 @@ import {
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
+import Image from "next/image";
+import ANNOUNCEMENT from "@/assets/images/announcement.png";
+
 
 export default function MarketingPage() {
   const pathName = usePathname();
@@ -110,15 +113,45 @@ export default function MarketingPage() {
 
   return (
     <>
-      <div className="md:px-12 md:pt-16 pt-6 px-6">
-        <BreadcrumbDashboard />
+      {
+        category?.name === "Trending Tools" ?
+          <section className="relative">
+            <Image
+              src={ANNOUNCEMENT}
+              width={427}
+              className="absolute right-0 hidden md:hidden lg:block"
+              alt=""
+            />
+            <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
+              <h1 className="font-extrabold text-4xl lg:text-5xl mb-6 font-clash">
+                Discover <span className="textGradient">marketing tools</span> that{" "}
+                <br />
+                supercharge your growth
+              </h1>
+              <p className="mb-6">
+                Browse through hundreds of unique tools to boost your marketing &
+                startup. Start by clicking Categories below to pick tools in
+                different marketing topics.
+              </p>
+              <div className="flex gap-2 md:gap-6">
+                <Button className="font-bold h-12">View Latest Tools</Button>
+                <Button variant="outline" className="h-12">
+                  Trending tools
+                </Button>
+              </div>
+            </div>
+          </section>
+          :
+          <div className="md:px-12 md:pt-16 pt-6 px-6">
+            <BreadcrumbDashboard />
 
-        <h3 className="font-bold text-[32px] mt-6 mb-8 font-clash">
-          {pagination.itemCount}{" "}
-          <span className="font-medium font-clash">{category?.name} tools</span>
-        </h3>
-        <Separator />
-      </div>
+            <h3 className="font-bold text-[32px] mt-6 mb-8 font-clash">
+              {pagination.itemCount}{" "}
+              <span className="font-medium font-clash">{category?.name} tools</span>
+            </h3>
+            <Separator />
+          </div>
+      }
 
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:p-8">
         <div className="flex gap-4 items-center">
@@ -156,7 +189,7 @@ export default function MarketingPage() {
             <p className="text-sm">We have no tool to show.</p>
           </div>
         )}
-        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {isLoading && (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />

@@ -15,10 +15,10 @@ export const ToolCardInfo = (props: {
     return (
       <div>
         <Link href={`/tool/${tool.name}`}>
-          <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
-            <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-              <div className="w-9 h-9 rounded-lg tagItem flex items-center justify-center">
-                <img src={tool.logo} alt="logo" />
+          <Card className="w-full flex flex-col items-center shadow-xl overflow-hidden border-none">
+            <div className="flex z-10 justify-between w-full p-3">
+              <div className="w-9 h-9 rounded-md tagItem items-center justify-center">
+                <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
               </div>
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg tagItem">
@@ -32,12 +32,13 @@ export const ToolCardInfo = (props: {
                 </div>
               </div>
             </div>
-            <div className="relative h-64 w-[70%] flex items-end justify-end">
+            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-20 xl:px-[100px] delay-150">
               <img
-                className="w-full cardImageItem rounded-t-lg"
+                className="w-full cardImageItem rounded-t-lg hover:shadow-lg"
                 src={tool.logo}
                 alt="thumbnail"
               />
+              <div className="radial-gradient-overlay"></div>
             </div>
           </Card>
         </Link>
@@ -51,10 +52,10 @@ export const ToolCardInfo = (props: {
 
   return (
     <Link href={`/tool/${tool.name}`}>
-      <Card className="flex shadow-lg">
+      <Card className="flex shadow-xl border-none">
         <div className="p-3">
-          <div className="w-9 h-9 border-[1px] flex items-center rounded-md shadow-md">
-            <img src={tool.logo} alt="logo" />
+          <div className="w-9 h-9 flex items-center rounded-md shadow-md">
+            <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">

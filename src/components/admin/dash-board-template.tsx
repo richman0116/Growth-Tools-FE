@@ -130,7 +130,7 @@ export function DashBoardTemplate({
           <ResizablePanel
             defaultSize={defaultLayout[1]}
             minSize={30}
-            className="relative"
+            className="relative overflow-x-auto"
           >
             <AuthHeader />
             {children}
@@ -162,6 +162,7 @@ export function DashBoardTemplate({
   useEffect(() => {
     setCategoryLoading(true);
     getCategoryList().then((res) => {
+      console.log(res, "klklklklkl");
       setDashboardNavigation(res);
       setCategoryLoading(false);
     });

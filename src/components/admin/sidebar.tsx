@@ -83,7 +83,7 @@ export function Sidebar({
                   height={24}
                   alt={link.description}
                 />
-                {link.name}
+                <p className="font-satoshi">{link.name}</p>
               </Link>
             )
           )}
