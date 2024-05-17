@@ -17,8 +17,8 @@ export const ToolCardInfo = (props: {
         <Link href={`/tool/${tool.name}`}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-              <div className="w-9 h-9 rounded-lg tagItem flex items-center justify-center">
-                <img src={tool.logo} alt="logo" />
+              <div className="w-9 h-9 rounded-sm tagItem flex items-center justify-center">
+                <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
               </div>
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-lg tagItem">
@@ -53,8 +53,8 @@ export const ToolCardInfo = (props: {
     <Link href={`/tool/${tool.name}`}>
       <Card className="flex shadow-lg">
         <div className="p-3">
-          <div className="w-9 h-9 border-[1px] flex items-center rounded-md shadow-md">
-            <img src={tool.logo} alt="logo" />
+          <div className="w-9 h-9 border-[1px] flex items-center rounded-sm shadow-md">
+            <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">
