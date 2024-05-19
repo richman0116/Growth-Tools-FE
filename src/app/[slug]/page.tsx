@@ -2,9 +2,7 @@
 
 import { FilterPopoverTool } from "@/components/admin/filter-popover-tool";
 import { ToolCardInfo } from "@/components/cards/tool-card-info";
-import { BreadcrumbDashboard } from "@/components/common/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
@@ -16,11 +14,10 @@ import {
 import { usePathname } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
-import Image from "next/image";
-import ANNOUNCEMENT from "@/assets/images/announcement.png";
+import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
+import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 
-
-export default function MarketingPage() {
+export default function Page() {
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
@@ -72,24 +69,17 @@ export default function MarketingPage() {
   useEffect(() => {
     setToolsListLoading(true);
     const initFetchingData = async () => {
-      const [cateInfo, cateListInfo] = await Promise.all([
-        getCategoryByHandle(categoryHandle),
+      const [cateListInfos] = await Promise.all([
         getCategoryList(),
       ]);
-      setCategoryId(cateInfo?.id);
-      setCategory(cateInfo);
-      setCategories(cateListInfo);
+      const cateInfo = cateListInfos.filter((cateListInfo) => cateListInfo.handle === "/"+categoryHandle)
+      setCategoryId(cateInfo[0]?.id);
+      setCategory(cateInfo[0]);
+      setCategories(cateListInfos);
     };
     initFetchingData().then(() => {
       setToolsListLoading(false);
     });
-    // getCategoryByHandle(categoryHandle).then((res) => {
-    //   setCategoryId(res?.id);
-    //   setCategory(res);
-    // });
-    // getCategoryList().then((res) => {
-    //   setCategories(res || []);
-    // });
   }, [categoryHandle, setToolsListLoading]);
 
   useEffect(() => {
@@ -115,42 +105,9 @@ export default function MarketingPage() {
     <>
       {
         category?.name === "Trending Tools" ?
-          <section className="relative">
-            <Image
-              src={ANNOUNCEMENT}
-              width={427}
-              className="absolute right-0 hidden md:hidden lg:block"
-              alt=""
-            />
-            <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
-              <h1 className="font-extrabold text-4xl lg:text-5xl mb-6 font-clash">
-                Discover <span className="textGradient">marketing tools</span> that{" "}
-                <br />
-                supercharge your growth
-              </h1>
-              <p className="mb-6">
-                Browse through hundreds of unique tools to boost your marketing &
-                startup. Start by clicking Categories below to pick tools in
-                different marketing topics.
-              </p>
-              <div className="flex gap-2 md:gap-6">
-                <Button className="font-bold h-12">View Latest Tools</Button>
-                <Button variant="outline" className="h-12">
-                  Trending tools
-                </Button>
-              </div>
-            </div>
-          </section>
+          <MarketingToolHero />
           :
-          <div className="md:px-12 md:pt-16 pt-6 px-6">
-            <BreadcrumbDashboard />
-
-            <h3 className="font-bold text-[32px] mt-6 mb-8 font-clash">
-              {pagination.itemCount}{" "}
-              <span className="font-medium font-clash">{category?.name} tools</span>
-            </h3>
-            <Separator />
-          </div>
+          <BreadCrumb pagination={pagination} category={category} />
       }
 
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:p-8">

@@ -71,12 +71,6 @@ const satoshi = localFont({
     variable: "--font-satoshi",
 });
 
-// const inter = Inter({
-//   subsets: ["latin"],
-//   display: "swap",
-//   adjustFontFallback: false,
-// });
-
 export const metadata: Metadata = {
     title: "Growth Tools - #1 Curated Marketing Tools List by Growth Virality",
     description: "Over 500+ of the best curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more..",
@@ -90,7 +84,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <title>Growth Tools - #1 Curated Marketing Tools List by Growth Virality</title>
-            <link rel="icon" type="image/svg+xml" href="//s3.amazonaws.com/appforest_uf/f1658467734108x989486572275380100/Untitled%20design%20%288%29.svg" />
+            <link rel="icon" type="image/svg+xml" href="https://s3.amazonaws.com/appforest_uf/f1658467734108x989486572275380100/Untitled%20design%20%288%29.svg" />
             <meta name="fragment" content="!" />
             <meta name="description" content="Over 500+ of the best curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more.." />
             <link rel="canonical" href="https://tools.growthvirality.com/" />
