@@ -162,7 +162,6 @@ export function DashBoardTemplate({
   useEffect(() => {
     setCategoryLoading(true);
     getCategoryList().then((res) => {
-      console.log(res, "klklklklkl");
       setDashboardNavigation(res);
       setCategoryLoading(false);
     });
