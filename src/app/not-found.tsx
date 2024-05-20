@@ -8,7 +8,7 @@ import NotFoundSvg from "./../../public/not-found.svg";
 export default function NotFound() {
   return (
     <div className="container h-screen flex flex-col justify-center items-center gap-4">
-      <Image src={NotFoundSvg} width={500} height={400} alt="not found" />
+      <Image src={NotFoundSvg} width={500} height={400} alt="not found" style={{width: 'auto', height:'auto'}}/>
       <p className="mt-6">Could not find requested resource</p>
       <Link
         href="/"

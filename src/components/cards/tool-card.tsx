@@ -70,7 +70,7 @@ export const ToolCard = ({
       <Card className="flex shadow-lg">
         <div className="p-3">
           <div className="w-8 h-8 flex items-center border-[1px] rounded-md shadow-md">
-            <Image width={32} height={32} src={logo} alt="logo" />
+            <Image width={32} height={32} src={logo} alt="logo" style={{width:'auto', height:'auto'}} />
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">

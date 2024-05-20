@@ -185,7 +185,7 @@ export function UserAuthLoginForm({
                         type="button"
                         className="w-full mt-9 h-14 py-3 px-4 font-bold border border-grGray flex items-center justify-center gap-2 text-base"
                     >
-                        <Image src={GOOGLE_ICON} width={26} height={26} alt="" />
+                        <Image src={GOOGLE_ICON} width={26} height={26} alt="" style={{width: 'auto', height:'auto'}} />
                         <span>Sign In with Google</span>
                     </Button>
 

@@ -223,7 +223,7 @@ export function UserAuthRegisterForm({
             onClick={onGoogleSignIn}
             type="button"
           >
-            <Image src={GOOGLE_ICON} width={26} height={26} alt="" />
+            <Image src={GOOGLE_ICON} width={26} height={26} alt="" style={{ width:'auto', height:'auto'}}/>
             <span>Sign In with Google</span>
           </Button>
 

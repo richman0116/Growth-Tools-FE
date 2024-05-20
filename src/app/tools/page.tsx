@@ -60,7 +60,7 @@ export default function MarketingPage() {
           width={427}
           className="absolute right-0 hidden md:hidden lg:block"
           alt="Announcement"
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: 'auto', height: 'auto' }}
           priority
         />
         <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
