@@ -71,6 +71,7 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
   };
 
   useEffect(() => {
+    setToolsListLoading(true);
     const initFetchingData = async () => {
       const cateListInfos = categoryLists;
       const cateInfo = cateListInfos.filter((cateListInfo) => cateListInfo.handle === "/"+categoryHandle)
@@ -79,6 +80,7 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
       setCategories(cateListInfos);
     };
     initFetchingData().then(() => {
+      setToolsListLoading(false);
     });
   }, [categoryHandle, categoryLists, setToolsListLoading]);
 
@@ -86,12 +88,26 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
     setToolsListLoading(true);
     setIsLoading(true);
     if (!categoryId) return;
-
-    setTools(filterTools?.data);
-    setPagination(filterTools?.pagination);
-    setToolsListLoading(false);
-    setIsLoading(false);
-  }, [setToolsListLoading, filterTools.data, filterTools?.pagination, categoryId, filterTools]);
+    if (page === 1) {
+      setTools(filterTools?.data);
+      setPagination(filterTools?.pagination);
+      setToolsListLoading(false);
+      setIsLoading(false);
+    } else {
+      filterTool({
+        order,
+        page,
+        take,
+        sort,
+        categoryId,
+      }).then((res) => {
+        setTools(res?.data);
+        setPagination(res?.pagination);
+        setToolsListLoading(false);
+        setIsLoading(false);
+      });
+    }
+  }, [setToolsListLoading, filterTools?.data, filterTools?.pagination, categoryId, filterTools, page, order, take, sort]);
 
   return (
     <>
