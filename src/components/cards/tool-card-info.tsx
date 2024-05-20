@@ -32,13 +32,12 @@ export const ToolCardInfo = (props: {
                 </div>
               </div>
             </div>
-            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-20 xl:px-[100px] delay-150">
+            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-20 xl:px-[100px]">
               <img
-                className="w-full cardImageItem rounded-t-lg hover:shadow-lg"
+                className="w-full rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom"
                 src={tool.logo}
                 alt="thumbnail"
               />
-              <div className="radial-gradient-overlay"></div>
             </div>
           </Card>
         </Link>

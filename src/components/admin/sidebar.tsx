@@ -89,7 +89,7 @@ export function Sidebar({
           )}
         </nav>
         <div className="relative w-full p-4 md:block hidden">
-          <Image src={AI_SEARCH} alt="" width={500} height={500} />
+          <Image src={AI_SEARCH} alt="" width={500} height={500} style={{width:'auto', height:'auto'}} />
         </div>
       </>
     );

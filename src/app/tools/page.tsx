@@ -59,7 +59,9 @@ export default function MarketingPage() {
           src={ANNOUNCEMENT}
           width={427}
           className="absolute right-0 hidden md:hidden lg:block"
-          alt=""
+          alt="Announcement"
+          style={{ width: 'auto', height: 'auto' }}
+          priority
         />
         <div className="py-[52px] md:px-12 md:max-w-4xl max-w-full px-4">
           <h1 className="font-extrabold text-4xl lg:text-5xl mb-6">

@@ -75,7 +75,7 @@ export function AuthHeader() {
               size="icon"
               className="p-[6px] w-8 h-8 absolute top-1/2 -translate-y-1/2 right-1"
             >
-              <Image src={SEARCHICON} alt="search" className="w-5" />
+              <Image src={SEARCHICON} alt="search" className="w-5" style={{width:'auto', height:'auto'}}/>
             </Button>
           </div>
           <div onClick={onToggleTheme}>
@@ -146,7 +146,7 @@ export function AuthHeader() {
         </Link>
         <div className="ml-auto">
           <Button size="icon" className="p-[6px] w-8 h-8 ">
-            <Image src={SEARCHICON} alt="search" className="w-5" />
+            <Image src={SEARCHICON} alt="search" className="w-5" style={{width:'auto', height:'auto'}} />
           </Button>
           <Button size="icon" variant="ghost" className="mx-3">
             <Sun className="w-6" />
@@ -161,7 +161,7 @@ export function AuthHeader() {
               <DropdownMenuGroup>
                 <DropdownMenuItem>
                   <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-400 hover:from-blue-800 hover:to-blue-600">
-                    <Image src={WHITE_BOT_ICON} alt="search" className="w-5" />
+                    <Image src={WHITE_BOT_ICON} alt="search" className="w-5" style={{width: 'auto', height: 'auto'}}/>
                     Try AI Search
                   </Button>
                 </DropdownMenuItem>

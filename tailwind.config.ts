@@ -28,6 +28,8 @@ const config = {
       },
       boxShadow: {
         grSoft: `box-shadow: 0px 6px 12px 0px #8490A91A`,
+        'custom': '0 -20px 18px 2px #285d4d17',
+        'hoverCustom': '0 22px 70px 4px rgba(0, 0, 0, 0.56)',
       },
       colors: {
         description: "#494949",

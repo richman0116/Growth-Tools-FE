@@ -36,7 +36,7 @@ const links: { title: string; href: string }[] = [
 export function Footer() {
   return (
     <div className="admin-footer grid grid-cols-1 md:flex items-start justify-between gap-4 md:gap-2 p-4 md:px-12 md:pt-9 md:pb-12">
-      <Image src={LOGO.src} width={100} height={30} alt="logo" />
+      <Image src={LOGO.src} width={100} height={30} alt="logo" style={{width: 'auto', height: 'auto'}} />
       <NavigationMenu className="block">
         <h4 className="text-base font-bold px-4 mb-2">Menu</h4>
         <NavigationMenuList className="flex-col gap-1">
