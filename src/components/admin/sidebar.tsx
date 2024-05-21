@@ -6,7 +6,7 @@ import Link from "next/link";
 import AI_SEARCH from "@/assets/images/ai-search.png";
 import { cn } from "@/lib/utils";
 import { NavProps } from "@/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, InspectionPanelIcon } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "../ui/button";
@@ -29,9 +29,9 @@ export function Sidebar({
     return (
       <>
         <nav className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-          {links.map((link) =>
+          {links.map((link, index) =>
             !isFullText && isCollapsed ? (
-              <Tooltip key={link.id} delayDuration={0}>
+              <Tooltip key={link.id + index} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
                     href={link.handle}
@@ -52,14 +52,14 @@ export function Sidebar({
                       height={24}
                       alt={link.description}
                     />
-                    <span className="sr-only">{link.name}</span>
+                    <p className="sr-only font-satoshi">{link.name}</p>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
                   className="flex items-center gap-4"
                 >
-                  {link.name}
+                  <p className="font-satoshi">{link.name}</p>
                 </TooltipContent>
               </Tooltip>
             ) : (

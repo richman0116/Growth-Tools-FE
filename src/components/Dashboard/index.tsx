@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
+import clsx from "clsx";
 
 interface IDashboard {
   categoryLists: Category[]
@@ -125,7 +126,7 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
             onSubmitFilter={onFilter}
           />
 
-          <span className="font-medium font-sm text-gray-500">Show as:</span>
+          <span className="font-medium font-sm font-satoshi">Show as:</span>
           <Button
             variant="ghost"
             size="icon"
@@ -133,7 +134,9 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
             onClick={() => setVariant("default")}
           >
             <TableProperties
-              color={variant === "default" ? "#164CD9" : "black"}
+              className={clsx(
+                variant === "default" ? "text-[#164CD9]" : "text-black dark:text-white"
+              )}
             />
           </Button>
           <Button
@@ -142,7 +145,11 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
             className="p-0 w-auto h-auto"
             onClick={() => setVariant("thumbnail")}
           >
-            <Grid3X3 color={variant === "thumbnail" ? "#164CD9" : "black"} />
+            <Grid3X3
+              className={clsx(
+                variant === "thumbnail" ? "text-[#164CD9]" : "text-black dark:text-white"
+              )}
+            />
           </Button>
         </div>
         {!tools?.length && !isLoading && (

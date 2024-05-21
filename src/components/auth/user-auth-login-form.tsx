@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Icons } from "../common/icon";
@@ -28,7 +28,8 @@ import {
 } from "../ui/form";
 import { toastError } from "@/helpers/toasts";
 import { useGoogleLogin } from "@react-oauth/google";
-import { Suspense, SyntheticEvent } from "react";
+import { SyntheticEvent, useState, useEffect } from "react";
+import { useAuthContext } from "@/hooks/AuthContext";
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -47,10 +48,17 @@ export function UserAuthLoginForm({
     className,
     ...props
 }: UserAuthLoginFormProps) {
-    const searchParams = useSearchParams()
+    const { setIsLoggedIn } = useAuthContext();
 
-    const redirectUrl = searchParams.get('redirect') ?? '/'
+    const [redirectUrl, setRedirectUrl] = useState('/');
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirect = searchParams.get('redirect') ?? '/';
+        setRedirectUrl(redirect);
+        }
+    }, []);
     const { replace } = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
@@ -66,6 +74,7 @@ export function UserAuthLoginForm({
             login(authData),
         mutationKey: ["login"],
         onSuccess(data, variables, context) {
+            setIsLoggedIn(true);
             CookieHandler.set(TOKEN, data?.accessToken);
             LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
             LocalStorageHandler.set(USER, data?.user);
@@ -73,7 +82,7 @@ export function UserAuthLoginForm({
         },
         onError: (error, variables, _context) => {
             form.reset({ ...variables });
-            toastError(error?.message ?? "Oop's! Something wrong");
+            toastError(error?.message ?? "Oop's! Something went wrong");
         },
     });
 
@@ -81,6 +90,7 @@ export function UserAuthLoginForm({
         mutationFn: (token: string) => googleSignIn(token),
         mutationKey: ["login-google"],
         onSuccess(data, variables, context) {
+            setIsLoggedIn(true);
             CookieHandler.set(TOKEN, data?.accessToken);
             LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
             LocalStorageHandler.set(USER, data?.user);
@@ -137,7 +147,7 @@ export function UserAuthLoginForm({
                                     <Input
                                         placeholder="Email address"
                                         type="email"
-                                        className="h-14 py-3 px-4"
+                                        className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                                         {...field}
                                     />
                                 </FormControl>
@@ -155,10 +165,10 @@ export function UserAuthLoginForm({
                                         <Input
                                             placeholder="Password"
                                             type="password"
-                                            className="h-14 py-3 px-4"
+                                            className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                                             {...field}
                                         />
-                                        <span className="absolute right-6 text-base text-secondary font-medium top-1/2 -translate-y-1/2 cursor-pointer">
+                                        <span className="absolute right-6 text-base text-secondary font-medium top-1/2 -translate-y-1/2 cursor-pointer font-satoshi">
                                             Forgot Password?
                                         </span>
                                     </div>
@@ -193,7 +203,7 @@ export function UserAuthLoginForm({
                         href="/sign-up"
                         className={cn(
                             buttonVariants({ variant: "ghost" }),
-                            "w-full mt-9 h-14 py-3 px-4 font-bold text-secondary text-base"
+                            "w-full mt-9 h-14 py-3 px-4 font-bold text-secondary text-base dark:text-white"
                         )}
                     >
                         Create new Account

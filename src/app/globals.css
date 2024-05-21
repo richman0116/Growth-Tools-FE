@@ -110,7 +110,7 @@
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.cardItem:hover .tagItem {
+.cardItem:hover {
   background: white;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -120,7 +120,7 @@
   scale: 1.25;
 }
 
-.defautlCard > .clapIcon {
+.clapIcon {
   visibility: visible;
   display: flex;
   transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);

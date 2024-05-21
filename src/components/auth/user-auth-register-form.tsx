@@ -147,7 +147,7 @@ export function UserAuthRegisterForm({
                   <Input
                     placeholder="Email address"
                     type="email"
-                    className="h-14 py-3 px-4"
+                    className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                     {...field}
                   />
                 </FormControl>
@@ -163,7 +163,7 @@ export function UserAuthRegisterForm({
                 <FormControl>
                   <Input
                     placeholder="Phone number"
-                    className="h-14 py-3 px-4"
+                    className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                     {...field}
                   />
                 </FormControl>
@@ -180,7 +180,7 @@ export function UserAuthRegisterForm({
                   <Input
                     placeholder="Password"
                     type="password"
-                    className="h-14 py-3 px-4"
+                    className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                     {...field}
                   />
                 </FormControl>
@@ -197,7 +197,7 @@ export function UserAuthRegisterForm({
                   <Input
                     placeholder="Confirm password"
                     type="password"
-                    className="h-14 py-3 px-4"
+                    className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
                     {...field}
                   />
                 </FormControl>
@@ -231,7 +231,7 @@ export function UserAuthRegisterForm({
             href="/sign-in"
             className={cn(
               buttonVariants({ variant: "ghost" }),
-              "w-full mt-9 h-14 py-3 px-4 font-bold text-secondary text-base"
+              "w-full mt-9 h-14 py-3 px-4 font-bold text-secondary text-base dark:text-white"
             )}
           >
             Already have an account?

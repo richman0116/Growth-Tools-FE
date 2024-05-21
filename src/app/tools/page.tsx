@@ -90,7 +90,7 @@ export default function MarketingPage() {
             onSubmitFilter={onFilter}
           />
 
-          <span className="font-medium font-sm text-gray-500">Show as:</span>
+          <span className="font-medium font-sm">Show as:</span>
           <Button
             variant="ghost"
             size="icon"
