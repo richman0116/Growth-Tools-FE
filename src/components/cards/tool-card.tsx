@@ -67,29 +67,35 @@ export const ToolCard = ({
 
   return (
     <Link href={id}>
-      <Card className="flex shadow-lg">
+      <Card className="flex shadow-lg border dark:border-white dark:shadow-gray-400">
         <div className="p-3">
-          <div className="w-8 h-8 flex items-center border-[1px] rounded-md shadow-md">
-            <Image width={32} height={32} src={logo} alt="logo" style={{width:'auto', height:'auto'}} />
+          <div className="w-9 h-9 flex items-center rounded-md shadow-md">
+             <Image
+              src={logo}
+              height={32}
+              width={32}
+              alt="logo"
+              className="w-full h-full rounded-sm"
+            />
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">
-          <h4 className="text-base font-bold mb-2">{title}</h4>
-          <p className="text-sm mb-3 line-clamp-3">{description}</p>
+          <h4 className="text-base font-semibold mb-2 font-clash">{title}</h4>
+          <p className="text-sm mb-3 line-clamp-3 font-satoshi">{description}</p>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border h-9">
+              <div className="flex items-center justify-center p-2 rounded-lg border h-9 hover:bg-orange-500 hover:text-white clapIcon dark:border-white">
                 <GasIcon />
               </div>
-              <div className="p-2 rounded-lg h-9">
-                <Prize />
+              <div className="flex items-center justify-center p-2 rounded-lg border h-9 hover:bg-orange-500 hover:text-white clapIcon dark:text-white dark:border-white">
+                <Prize className="fill-current dark:fill-white"/>
               </div>
-              <div className="p-2 rounded-lg h-9">
-                <span className="font-semibold text-secondary">Deal</span>
+              <div className="flex items-center justify-center p-2 rounded-lg border h-9 hover:bg-orange-500 hover:text-white clapIcon text-secondary dark:text-white dark:border-white">
+                <span className="font-semibold font-clash">Deal</span>
               </div>
             </div>
-            <div className="p-2 rounded-lg border flex gap-2 hover:bg-orange-500 hover:text-white clapIcon">
-              <span className="text-sm font-medium">52k</span>
+            <div className="p-2 rounded-lg border flex gap-2 hover:bg-orange-500 hover:text-white clapIcon dark:border-white">
+              <span className="text-sm font-medium font-satoshi">52k</span>
               <Clap className="fill-white" />
             </div>
           </div>

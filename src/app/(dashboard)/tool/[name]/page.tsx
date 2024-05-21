@@ -56,7 +56,7 @@ export default function ToolsDetailPage() {
   const toolData = data?.result;
 
   return (
-    <section className="relativ px-4 py-6 lg:px-12 lg:py-16">
+    <section className="px-4 py-6 lg:px-12 lg:py-16">
       {toolData && (
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_365px] gap-2 lg:gap-[140px]">
           <div>
@@ -73,18 +73,17 @@ export default function ToolsDetailPage() {
                   alt={toolData?.description ?? ""}
                 />
               </div>
-              <h3 className="font-bold text-[40px]">{toolData?.name}</h3>
+              <h3 className="font-bold text-[38px] font-clash">{toolData?.name}</h3>
               <div className="flex items-center gap-6">
-                <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600">
+                <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-blue-500 hover:from-blue-800 hover:to-blue-600 rounded-lg">
                   <Prize fill="white" />
-                  Peer Reviewed
+                  <p className="font-clash">Peer Reviewed</p>
                 </Button>
-
                 <GasIcon />
               </div>
             </div>
 
-            <p className="text-base text-description font-medium">
+            <p className="text-base font-medium font-satoshi">
               {toolData?.shortDescription}
             </p>
 
@@ -93,7 +92,7 @@ export default function ToolsDetailPage() {
             <Separator />
 
             <div>
-              <h4 className="text-[18px] font-semibold mb-4 mt-12">
+              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash">
                 Website Screenshot
               </h4>
               <div className="mb-12 relative">
@@ -166,10 +165,10 @@ export default function ToolsDetailPage() {
             </div>
 
             <div>
-              <h4 className="text-[18px] font-semibold mb-4 mt-12">
+              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash">
                 Description
               </h4>
-              <p className="text-base font-medium text-description">
+              <p className="text-base font-medium font-satoshi">
                 {toolData?.description}
               </p>
             </div>
@@ -179,14 +178,14 @@ export default function ToolsDetailPage() {
             </div>
 
             <div>
-              <h4 className="text-[18px] font-semibold mb-4 mt-12">
-                Discover <span className="text-secondary">more</span> Ads
+              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash">
+                Discover <span className="textGradient">more</span> Ads
                 Management tools
               </h4>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {relatedTools?.data?.map((props, index) => (
                   <ToolCard
-                    key={`tool-card-${props.id}`}
+                    key={`tool-card-${props.id}-${index}`}
                     id={props.name}
                     description={props.shortDescription as string}
                     logo={props.logo as unknown as StaticImageData}
@@ -196,9 +195,6 @@ export default function ToolsDetailPage() {
                   />
                 ))}
               </div>
-              {/* <Button variant="link" className="text-secondary my-4 p-0 h-max">
-                                Browse 1 Ads Management tools
-                            </Button> */}
             </div>
 
             <div className="pb-12">
@@ -209,18 +205,18 @@ export default function ToolsDetailPage() {
           {/* left sidebar */}
           <div className="">
             <div>
-              <h4 className="text-[18px] font-semibold mb-4">Key Features</h4>
-              <p className="text-base font-medium text-description">
+              <h4 className="text-[18px] font-semibold mb-4 font-clash">Key Features</h4>
+              <p className="text-base font-medium font-satoshi">
                 {toolData?.keyFeatures?.map((key: any) => {
                   return key;
                 })}
               </p>
             </div>
             <div>
-              <h4 className="text-[18px] font-semibold mb-4 mt-12">
+              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash">
                 Use cases
               </h4>
-              <ul className="grid grid-cols-1 gap-4">
+              <ul className="grid grid-cols-1 gap-4 font-satoshi">
                 {toolData?.useCases?.map(
                   (
                     data:
@@ -247,7 +243,7 @@ export default function ToolsDetailPage() {
               </ul>
             </div>
             <div className="mb-12">
-              <h4 className="text-[18px] font-semibold mb-4 mt-12">
+              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash">
                 Added by:
               </h4>
               <div className="flex justify-between items-center">
@@ -260,19 +256,19 @@ export default function ToolsDetailPage() {
                     />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <p className="font-medium text-base">{`${toolData?.author?.firstName} ${toolData?.author?.lastName}`}</p>
+                  <p className="font-medium text-base font-satoshi">{`${toolData?.author?.firstName} ${toolData?.author?.lastName}`}</p>
                 </div>
                 <Button
                   variant="link"
-                  className="text-secondary my-4 p-0 h-max"
+                  className="my-4 p-0 h-max font-clash"
                 >
-                  View profile
+                  <p className="text-secondary dark:text-white">View profile</p>
                 </Button>
               </div>
             </div>
 
-            <div className="rounded-xl border border-grGray shadow-lg p-5">
-              <h4 className="mb-2 font-semibold text-base gap-2 flex items-center">
+            <div className="rounded-xl border border-grGray shadow-lg p-5 dark:shadow-gray-400">
+              <h4 className="mb-2 font-semibold text-base gap-2 flex items-center font-clash">
                 <Image
                   width={32}
                   height={32}
@@ -282,12 +278,12 @@ export default function ToolsDetailPage() {
                 />
                 Advertisement
               </h4>
-              <p className="font-medium text-base text-description mb-6">
+              <p className="font-medium text-base mb-6 font-satoshi">
                 Promote your product or service to a vast audience of designers
                 and founders.
               </p>
 
-              <Button className="h-11 px-6">Fill out the form</Button>
+              <Button className="h-11 px-6 font-satoshi">Fill out the form</Button>
             </div>
           </div>
         </div>
