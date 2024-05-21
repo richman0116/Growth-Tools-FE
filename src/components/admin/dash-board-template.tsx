@@ -152,8 +152,10 @@ export function DashBoardTemplate({
     if (panel) {
       if (isCollapsed) {
         panel.expand();
+        setIsCollapsed(false);
       } else {
         panel.collapse();
+        setIsCollapsed(true);
       }
     }
   };
@@ -161,6 +163,8 @@ export function DashBoardTemplate({
   useEffect(() => {
     if (isMobile) {
       setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false)
     }
   }, [isMobile]);
 
