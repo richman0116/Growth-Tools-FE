@@ -27,7 +27,7 @@ export const ToolCard = ({
         <Link href={id}>
           <Card className="relative flex flex-col items-center shadow-lg overflow-hidden cardItem">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-              <div className="w-8 h-8 flex items-center rounded-lg tagItem">
+              <div className="w-8 h-8 flex items-center rounded-lg">
                 <Image
                   src={logo ? logo : Placeholder}
                   width={32}
@@ -36,13 +36,13 @@ export const ToolCard = ({
                 />
               </div>
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg tagItem">
+                <div className="p-2 rounded-lg">
                   <GasIcon />
                 </div>
-                <div className="p-2 rounded-lg tagItem">
+                <div className="p-2 rounded-lg">
                   <Prize />
                 </div>
-                <div className="p-2 rounded-lg tagItem">
+                <div className="p-2 rounded-lg">
                   <span className="font-semibold text-secondary">Deal</span>
                 </div>
               </div>
