@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Icons } from "../common/icon";
@@ -28,7 +28,7 @@ import {
 } from "../ui/form";
 import { toastError } from "@/helpers/toasts";
 import { useGoogleLogin } from "@react-oauth/google";
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useState, useEffect } from "react";
 import { useAuthContext } from "@/hooks/AuthContext";
 
 interface UserAuthLoginFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -48,12 +48,17 @@ export function UserAuthLoginForm({
     className,
     ...props
 }: UserAuthLoginFormProps) {
-    const searchParams = useSearchParams()
-
     const { setIsLoggedIn } = useAuthContext();
 
-    const redirectUrl = searchParams.get('redirect') ?? '/'
+    const [redirectUrl, setRedirectUrl] = useState('/');
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+        const searchParams = new URLSearchParams(window.location.search);
+        const redirect = searchParams.get('redirect') ?? '/';
+        setRedirectUrl(redirect);
+        }
+    }, []);
     const { replace } = useRouter();
 
     const form = useForm<z.infer<typeof FormSchema>>({
