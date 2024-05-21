@@ -16,6 +16,7 @@ import { Skeleton } from "../ui/skeleton";
 import { TooltipProvider } from "../ui/tooltip";
 import { Sidebar } from "./sidebar";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
+import { AuthContextProvider } from "@/hooks/AuthContext";
 import clsx from "clsx";
 
 interface DashboardBoardProps {
@@ -46,9 +47,11 @@ export function DashBoardTemplate({
     if (isNotDashBoardLayout) {
       return (
         <GoogleOAuthProvider clientId="583270569276-at80fs6dtu4p6a8m6v7ktv2gsv8d203c.apps.googleusercontent.com">
-          <Header />
-          {children}
-          <Footer />
+          <AuthContextProvider>
+            <Header />
+            {children}
+            <Footer />
+          </AuthContextProvider>
         </GoogleOAuthProvider>
       );
     }
@@ -132,9 +135,11 @@ export function DashBoardTemplate({
             minSize={30}
             className="relative overflow-x-auto"
           >
-            <AuthHeader />
-            {children}
-            <Footer />
+            <AuthContextProvider>
+              <AuthHeader />
+              {children}
+              <Footer />
+            </AuthContextProvider>
           </ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>

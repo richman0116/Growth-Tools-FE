@@ -2,22 +2,26 @@
 
 import LOGO from "@/assets/images/logo-growth-tools.png";
 import { cn } from "@/lib/utils";
-import { Sun } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
-import useAuth from "@/hooks/useAuth";
-import { useCallback } from "react";
+import { useAuthContext } from "@/hooks/AuthContext";
+import { useCallback, useEffect, useState } from "react";
 import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler from "@/helpers/localStorage";
 
 export function Header() {
   const patchName = usePathname();
-  const { isLoggedIn } = useAuth();
-
-  const isSignIn = patchName === "/sign-in";
+  const { isLoggedIn } = useAuthContext();
+  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const [theme, setTheme] = useState<string>('light');
+  useEffect(() => {
+    const isSignIn = patchName === "/sign-in";
+    setIsSignIn(isSignIn)
+  }, [isLoggedIn, patchName])
 
   const urlByStatus = isSignIn ? "/sign-up" : "/sign-in";
   const textByStatus = isLoggedIn ? "Logout" : isSignIn ? "Sign Up" : "Sign In";
@@ -26,6 +30,23 @@ export function Header() {
     CookieHandler.remove(TOKEN);
     LocalStorageHandler.clear();
     window.location.reload();
+  }, []);
+
+  const onToggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.classList.remove(theme);
+    document.documentElement.classList.add(newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  useEffect(() => {
+    // Check for saved theme in local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.add(savedTheme);
+    }
   }, []);
 
   return (
@@ -40,8 +61,8 @@ export function Header() {
           />
         </Link>
         <div className="flex items-center gap-2">
-          <Button size="icon" variant="ghost" className="mx-3">
-            <Sun className="w-6" />
+          <Button size="icon" variant="ghost" className="mx-3" onClick={onToggleTheme}>
+            { theme === 'light' ? <Sun className="w-6" /> : <Moon className="w-6"/>}
           </Button>
 
           {isLoggedIn ? (
@@ -63,8 +84,8 @@ export function Header() {
           src={LOGO.src}
         />
         <div className="ml-auto flex items-center">
-          <Button size="icon" variant="ghost" className="mx-3">
-            <Sun className="w-6" />
+          <Button size="icon" variant="ghost" className="mx-3" onClick={onToggleTheme}>
+            { theme === 'light' ? <Sun className="w-6" /> : <Moon className="w-6"/>}
           </Button>
           <Link className={cn(buttonVariants())} href={urlByStatus}>
             {textByStatus}

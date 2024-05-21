@@ -5,7 +5,7 @@ import WHITE_BOT_ICON from "@/assets/icons/white-bot.svg";
 import LOGO from "@/assets/images/logo-growth-tools.png";
 import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler from "@/helpers/localStorage";
-import useAuth from "@/hooks/useAuth";
+import { useAuthContext } from "@/hooks/AuthContext";
 import { cn } from "@/lib/utils";
 import { AlignJustify, Layers3, Moon, PencilRuler, Plus, Sun } from "lucide-react";
 import Image from "next/image";
@@ -28,7 +28,7 @@ export function AuthHeader() {
   const pathName = usePathname();
   const name = pathName.split("/")[1];
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuthContext();
 
   const handleLogout = useCallback(() => {
     CookieHandler.remove(TOKEN);
@@ -148,8 +148,8 @@ export function AuthHeader() {
           <Button size="icon" className="p-[6px] w-8 h-8 ">
             <Image src={SEARCHICON} alt="search" className="w-5" style={{width:'auto', height:'auto'}} />
           </Button>
-          <Button size="icon" variant="ghost" className="mx-3">
-            <Sun className="w-6" />
+          <Button size="icon" variant="ghost" className="mx-3" onClick={onToggleTheme}>
+            { theme === 'light' ? <Sun className="w-6" /> : <Moon className="w-6"/>}
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
