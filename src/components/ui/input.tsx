@@ -13,7 +13,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn("flex items-center relative", classNameContainer)}>
         {prefix && (
-          <span className="border-r left-0 absolute w-24 h-full flex items-center justify-center font-bold text-[#8C8C8C] text-base">
+          <span className="border-r left-0 absolute w-24 h-full flex items-center justify-center font-bold text-[#8C8C8C] text-base dark:text-white font-satoshi">
             {prefix}
           </span>
         )}
@@ -29,7 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {suffix && (
-          <span className="border-l right-0 absolute w-24 h-full flex items-center justify-center font-bold text-[#8C8C8C] text-base">
+          <span className="border-l right-0 absolute w-24 h-full flex items-center justify-center font-bold text-[#8C8C8C] text-base dark:text-white font-satoshi">
             {suffix}
           </span>
         )}

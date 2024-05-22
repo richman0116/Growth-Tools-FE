@@ -52,63 +52,16 @@ export const FilterPopoverTool = (props: {
     return (
       <div className={cn("grid gap-6")}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* <h4 className="font-semibold text-[16px] flex justify-between items-center">
-              Filter
-              <span
-                className="text-secondary font-bold cursor-pointer text-sm"
-                onClick={() => form.reset()}
-              >
-                Reset
-              </span>
-            </h4>
-            <div className="grid grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="filter.deals"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="data-[state=checked]:bg-secondary border-secondary w-5 h-5"
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none font-medium text-label2 text-sm">
-                      <FormLabel>Deals</FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="filter.trends"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="data-[state=checked]:bg-secondary border-secondary w-5 h-5"
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none font-medium text-label2 text-sm">
-                      <FormLabel>Trends</FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div> */}
-            <h4 className="font-semibold text-[16px]">Categories</h4>
-
-            <div className="grid grid-cols-2 gap-6">
-              {categories?.map((category) => {
-                return (
+          <form onSubmit={form.handleSubmit(onSubmit)} >
+            <div className="flex gap-2">
+              <div className="space-y-6">
+                <h4 className="font-semibold flex justify-between items-center font-clash text-base text-black dark:text-white">
+                  Filter
+                </h4>
+                <div className="grid grid-cols-2 gap-6">
                   <FormField
-                    key={category.name}
                     control={form.control}
-                    name={`categories.${category.name}`}
+                    name="filter.deals"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                         <FormControl>
@@ -118,57 +71,108 @@ export const FilterPopoverTool = (props: {
                             className="data-[state=checked]:bg-secondary border-secondary w-5 h-5"
                           />
                         </FormControl>
-                        <div className="space-y-1 leading-none font-medium text-label2 text-sm">
-                          <FormLabel>{category.name}</FormLabel>
+                        <div className="space-y-1 leading-none font-medium text-label2 text-sm dark:text-white">
+                          <FormLabel>Deals</FormLabel>
                         </div>
                       </FormItem>
                     )}
                   />
-                );
-              })}
-            </div>
-            <h4 className="font-semibold text-[16px]">Sort by:</h4>
-            <div className="grid grid-cols-1 gap-6">
-              <FormField
-                control={form.control}
-                name="sortBy"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="grid grid-cols-3 gap-3"
-                      >
-                        {/* <FormItem className="flex items-center space-x-3 space-y-0">
-                                                    <FormControl>
-                                                        <RadioGroupItem
-                                                            className="w-5 h-5"
-                                                            value="rating"
-                                                        />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal">Rating</FormLabel>
-                                                </FormItem> */}
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="name-DESC" />
-                          </FormControl>
-                          <FormLabel className="font-normal">A-Z</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="name-ASC" />
-                          </FormControl>
-                          <FormLabel className="font-normal">Z-A</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                  <FormField
+                    control={form.control}
+                    name="filter.trends"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="data-[state=checked]:bg-secondary border-secondary w-5 h-5"
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none font-medium text-label2 text-sm dark:text-white">
+                          <FormLabel>Trends</FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <h4 className="font-semibold text-base font-clash text-black dark:text-white">Categories</h4>
+
+                <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                  {categories?.map((category) => {
+                    return (
+                      <FormField
+                        key={category.name}
+                        control={form.control}
+                        name={`categories.${category.name}`}
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                className="data-[state=checked]:bg-secondary border-secondary w-5 h-5"
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none font-medium text-label2 text-sm font-satoshi dark:text-white">
+                              <FormLabel>{category.name}</FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    );
+                  })}
+                </div>
+                <h4 className="font-semibold text-base font-clash text-black dark:text-white">Sort by</h4>
+                <div className="grid grid-cols-1 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="sortBy"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="grid grid-cols-3 gap-3"
+                          >
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                  <RadioGroupItem
+                                      className="w-5 h-5 dark:text-white"
+                                      value="rating"
+                                  />
+                              </FormControl>
+                              <FormLabel className="font-medium text-label2 font-satoshi text-sm dark:text-white">Rating</FormLabel>
+                          </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="name-DESC" />
+                              </FormControl>
+                              <FormLabel className="font-medium text-label2 font-satoshi text-sm dark:text-white">A-Z</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="name-ASC" />
+                              </FormControl>
+                              <FormLabel className="font-medium text-label2 font-satoshi text-sm dark:text-white">Z-A</FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <span
+                  className="text-secondary font-bold cursor-pointer text-sm dark:text-white"
+                  onClick={() => form.reset()}
+                >
+                  Reset
+              </span>
             </div>
             <div className="pt-9">
-              <Button type="submit" className="w-full h-12 font-bold text-base">
+              <Button type="submit" className="w-full p-6 font-bold text-base font-clash">
                 Apply
               </Button>
             </div>
@@ -182,7 +186,7 @@ export const FilterPopoverTool = (props: {
     return (
       <div
         className={cn(
-          "cursor-pointer py-2 px-4 flex items-center gap-3 rounded-full",
+          "cursor-pointer py-2 px-4 flex items-center gap-3 rounded-full shadow-sm dark:bg-[#0c0a09] dark:shadow-gray-400",
           open
             ? "bg-gradient-to-r from-blue-700 to-blue-500 text-white"
             : "bg-gray-50"
@@ -191,8 +195,8 @@ export const FilterPopoverTool = (props: {
         <Filter fill={open ? "white" : "#1855D9"} />
         <span
           className={cn(
-            "text-sm text-secondary",
-            open ? "text-white" : "text-secondary"
+            "text-sm font-satoshi dark:text-[#1855D9]",
+            open ? "text-white dark:text-white" : "text-secondary"
           )}
         >
           Filter

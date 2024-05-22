@@ -65,7 +65,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
           if (isLastItem) {
             return (
               <BreadcrumbItem key={`last-item-${i}`}>
-                <BreadcrumbPage className="font-normal capitalize font-satoshi">
+                <BreadcrumbPage className="font-normal capitalize font-satoshi text-description dark:text-white">
                   {displayName && idPage
                     ? displayName
                     : textPage(`/${link.split("/")[1]}`)}
@@ -81,7 +81,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
                   className="font-bold text-base text-primary font-satoshi"
                   href={link == "/tool" ? "/" : link}
                 >
-                  {textPage(link)}
+                  <p className="dark:text-white font-satoshi">{textPage(link)}</p>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />

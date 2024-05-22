@@ -38,7 +38,7 @@ export function Footer() {
     <div className="admin-footer grid grid-cols-1 md:flex items-start justify-between gap-4 md:gap-2 p-4 md:px-12 md:pt-9 md:pb-12">
       <Image src={LOGO.src} width={100} height={30} alt="logo" style={{width: 'auto', height: 'auto'}} />
       <NavigationMenu className="block">
-        <h4 className="text-base font-bold px-4 mb-2">Menu</h4>
+        <h4 className="text-base px-4 mb-2 font-semibold font-clash text-black dark:text-white">Menu</h4>
         <NavigationMenuList className="flex-col gap-1">
           {links.map((link) => (
             <NavigationMenuItem className="w-full" key={link.href}>
@@ -46,7 +46,7 @@ export function Footer() {
                 <NavigationMenuLink
                   className={`${navigationMenuTriggerStyle()} w-full text-sm`}
                 >
-                  {link.title}
+                  <p className="font-medium font-satoshi text-black dark:text-white">{link.title}</p>
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -54,15 +54,18 @@ export function Footer() {
         </NavigationMenuList>
       </NavigationMenu>
       <div className="self-center">
-        <p className="px-4 mb-2">Get in touch</p>
+        <p className="px-4 mb-2 font-satoshi text-black dark:text-white font-medium text-sm">Get in touch</p>
         <Button variant="ghost" asChild>
           <Link href="/discord">
-            <DiscordIcon className="mr-2" /> Join our Discord community
+            <div className="flex gap-2">
+              <DiscordIcon className="mr-2e" />
+              <p className="font-satoshi text-black dark:text-white font-medium">Join our Discord community</p>
+            </div>
           </Link>
         </Button>
       </div>
       <NavigationMenu className="block">
-        <h4 className="text-base font-bold px-4 mb-2">Follow Us</h4>
+        <h4 className="text-base font-semibold px-4 mb-2 font-clash text-black dark:text-white">Follow Us</h4>
         <div className="flex gap-2 px-2">
           <Button variant="ghost" size="icon">
             <TiktokIcon className="h-6 w-6" />
@@ -75,7 +78,7 @@ export function Footer() {
           </Button>
         </div>
       </NavigationMenu>
-      <Button variant="outline">Contact Us</Button>
+      <Button variant="outline" className="text-base font-medium font-clash dark:text-white text-black py-6 px-6">Contact Us</Button>
     </div>
   );
 }

@@ -22,7 +22,7 @@ export const DealCard = ({
 }: DealCardProps) => {
   return (
     <div className="rounded-xl border border-grGray shadow-lg p-5">
-      <h4 className="mb-2 font-semibold text-[18px] flex justify-between">
+      <h4 className="mb-2 font-semibold text-[18px] flex justify-between font-clash">
         {title}
         <span className="flex cursor-pointer gap-2">
           {onEdit && (
@@ -38,14 +38,14 @@ export const DealCard = ({
         </span>
       </h4>
       <p className="font-medium text-sm mb-2">
-        ${salePrice} <span className="text-label">${price}</span> / monthly
+        ${salePrice} <span className="text-label font-satoshi">${price}</span> / monthly
       </p>
-      <p className="text-accentGreen font-medium p-2 rounded-lg border border-grGray2 w-max mb-2">
+      <p className="text-accentGreen font-medium p-2 rounded-lg border border-grGray2 w-max mb-2 font-clash">
         You save ${+price - +salePrice}
       </p>
       <Button
         variant="link"
-        className="text-secondary p-0 h-max"
+        className="text-secondary p-0 h-max font-clash dark:text-white"
         onClick={onClick}
       >
         Click to learn more

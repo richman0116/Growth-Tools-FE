@@ -119,14 +119,14 @@ export default function Dashboard({categoryLists, filterTools}: IDashboard) {
           <BreadCrumb pagination={pagination} category={category} />
       }
 
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:p-8">
-        <div className="flex gap-4 items-center">
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
+        <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
             categories={categories}
             onSubmitFilter={onFilter}
           />
 
-          <span className="font-medium font-sm font-satoshi">Show as:</span>
+          <span className="font-medium font-sm font-satoshi text-description dark:text-white text-sm">Show as:</span>
           <Button
             variant="ghost"
             size="icon"

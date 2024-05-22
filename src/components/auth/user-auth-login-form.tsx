@@ -140,23 +140,6 @@ export function UserAuthLoginForm({
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
                         control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        placeholder="Email address"
-                                        type="email"
-                                        className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
                         name="password"
                         render={({ field }) => (
                             <FormItem>
@@ -177,6 +160,25 @@ export function UserAuthLoginForm({
                             </FormItem>
                         )}
                     />
+                    
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Email address"
+                                        type="email"
+                                        className="h-14 py-3 px-4 font-satoshi dark:shadow-gray-400"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    
                     <Button
                         disabled={form.formState.isSubmitSuccessful}
                         type="submit"
