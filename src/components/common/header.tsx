@@ -10,8 +10,8 @@ import { Button, buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useAuthContext } from "@/hooks/AuthContext";
 import { useCallback, useEffect, useState } from "react";
-import CookieHandler, { TOKEN } from "@/helpers/cookie";
-import LocalStorageHandler from "@/helpers/localStorage";
+// import CookieHandler, { TOKEN } from "@/helpers/cookie";
+// import LocalStorageHandler from "@/helpers/localStorage";
 
 export function Header() {
   const patchName = usePathname();
@@ -26,11 +26,9 @@ export function Header() {
   const urlByStatus = isSignIn ? "/sign-up" : "/sign-in";
   const textByStatus = isLoggedIn ? "Logout" : isSignIn ? "Sign Up" : "Sign In";
 
-  const handleLogout = useCallback(() => {
-    CookieHandler.remove(TOKEN);
-    LocalStorageHandler.clear();
-    window.location.reload();
-  }, []);
+  const backToDashboard = () => {
+    window.history.back();
+  }
 
   const onToggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -66,7 +64,7 @@ export function Header() {
           </Button>
 
           {isLoggedIn ? (
-            <Button onClick={handleLogout}>Logout</Button>
+            <Button onClick={backToDashboard} className="font-clash font-medium p-5">Close/Discard Changes</Button>
           ) : (
             <Link className={cn(buttonVariants())} href={urlByStatus}>
               {textByStatus}

@@ -262,15 +262,15 @@ export default function SubmitToolPage() {
       <Dialog open={editModal} onOpenChange={(open) => setEditModal(open)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="font-semibold mb-4">
+            <DialogTitle className="font-semibold mb-4 font-clash dark:text-white">
               {keyModal === "create" ? "Create deal" : "Update deal"}
             </DialogTitle>
-            <DialogDescription className="pb-6">
+            <DialogDescription className="pb-6 font-satoshi dark:text-white">
               Adding a tool&apos;s deal
             </DialogDescription>
             <div className="grid grid-cols-1 gap-4">
               <Input
-                className="h-12 px-6"
+                className="h-12 px-6 shadow-md dark:shadow-gray-400 font-satoshi"
                 value={deal?.title}
                 onChange={(e) =>
                   setDeal((prv) => ({
@@ -281,7 +281,7 @@ export default function SubmitToolPage() {
               />
               <Input
                 prefix="Price"
-                className="h-12 px-6"
+                className="h-12 px-6 shadow-md dark:shadow-gray-400 font-satoshi"
                 value={deal?.price}
                 onChange={(e) =>
                   setDeal((prv) => ({
@@ -294,7 +294,7 @@ export default function SubmitToolPage() {
               />
               <Input
                 prefix="Discount"
-                className="h-12 px-6"
+                className="h-12 px-6 shadow-md dark:shadow-gray-400 font-satoshi"
                 value={deal?.salePrice}
                 onChange={(e) =>
                   setDeal((prv) => ({
@@ -309,7 +309,7 @@ export default function SubmitToolPage() {
                 onClick={
                   keyModal === "create" ? handleCreateDeal : handleUpdateDeal
                 }
-                className="h-12 px-6"
+                className="h-12 px-6 font-satoshi"
               >
                 {keyModal === "create" ? "Create" : "Update"}
               </Button>
@@ -389,7 +389,7 @@ export default function SubmitToolPage() {
             <h3 className="font-bold text-[32px] font-clash mb-6">
               Post your tool to a global audience
             </h3>
-            <p className="font-medium text-description text-base">
+            <p className="font-medium text-description text-base dark:text-white font-satoshi">
               We&apos;re always looking for the most innovative tools to share
               with our audiences. Use our form to submit yours today.
             </p>
@@ -410,7 +410,7 @@ export default function SubmitToolPage() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="h-14 px-6"
+                          className="h-14 px-6 dark:shadow-gray-400 font-satoshi dark:text-white"
                           placeholder="Name"
                           {...field}
                           value={field.value as unknown as any}
@@ -430,7 +430,7 @@ export default function SubmitToolPage() {
                       </FormLabel>
                       <FormControl>
                         <Textarea
-                          className="min-h-[120px] px-6"
+                          className="min-h-[120px] px-6 dark:shadow-gray-400 font-satoshi dark:text-white"
                           maxLength={100}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
@@ -450,7 +450,7 @@ export default function SubmitToolPage() {
                       </FormLabel>
                       <FormControl>
                         <Textarea
-                          className="min-h-[120px] px-6"
+                          className="min-h-[120px] px-6 dark:shadow-gray-400 font-satoshi dark:text-white"
                           maxLength={100}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
@@ -470,13 +470,13 @@ export default function SubmitToolPage() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="h-14 px-6"
+                          className="h-14 px-6 dark:shadow-gray-400 font-satoshi dark:text-white"
                           placeholder="https://"
                           {...field}
                         />
                       </FormControl>
                       <FormMessage />
-                      <FormDescription>
+                      <FormDescription className="font-satoshi text-base dark:text-white">
                         {"(must include 'https://')"}
                       </FormDescription>
                     </FormItem>
@@ -525,12 +525,13 @@ export default function SubmitToolPage() {
                         </div>
                       </FormControl>
                       <FormMessage />
-                      <FormDescription>
+                      <FormDescription className="font-satoshi dark:text-white">
                         png, svg formats. 5mb max
                       </FormDescription>
                     </FormItem>
                   )}
                 />
+                
                 <FormField
                   control={form.control}
                   name="screenshots"
@@ -570,7 +571,7 @@ export default function SubmitToolPage() {
                             size="lg"
                           >
                             Upload
-                            <UploadIcon />
+                            <UploadIcon className="fill-current" />
                             <input
                               type="file"
                               multiple
@@ -583,7 +584,7 @@ export default function SubmitToolPage() {
                         </>
                       </FormControl>
                       <FormMessage />
-                      <FormDescription>
+                      <FormDescription className="font-satoshi dark:text-white">
                         png, svg formats. 5mb max
                       </FormDescription>
                     </FormItem>
@@ -591,7 +592,7 @@ export default function SubmitToolPage() {
                 />
                 {form?.watch("deal")?.length && (
                   <div>
-                    <h4 className="font-semibold mb-4 text-[18px] font-clash">
+                    <h4 className="font-semibold mb-4 text-[18px] font-clash dark:text-white">
                       Deals
                     </h4>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-[30px]">
@@ -633,7 +634,7 @@ export default function SubmitToolPage() {
                                   <FormControl>
                                     <Input
                                       placeholder=""
-                                      className="h-12 px-6"
+                                      className="h-12 px-6 dark:shadow-gray-400  font-satoshi dark:text-white"
                                       {...field}
                                       onChange={(e) => {
                                         const wordCount = e.target.value
@@ -655,7 +656,7 @@ export default function SubmitToolPage() {
                           <Button
                             variant="link"
                             type="button"
-                            className="text-secondary p-0 h-max flex justify-start"
+                            className="text-secondary p-0 h-max flex justify-start dark:text-white font-clash"
                             onClick={(e) => {
                               e.stopPropagation();
                               appendFeatures({
@@ -665,8 +666,8 @@ export default function SubmitToolPage() {
                           >
                             Add Key Features +
                           </Button>
-                          <p className="text-label3 text-base mb-4">
-                            Maximum 15 words per each
+                          <p className="text-label3 text-base mb-4 font-satoshi dark:text-white">
+                            maximum 15 words per each
                           </p>
                         </div>
                       </FormControl>
@@ -693,7 +694,7 @@ export default function SubmitToolPage() {
                                   <FormControl>
                                     <Input
                                       placeholder=""
-                                      className="h-12 px-6"
+                                      className="h-12 px-6 dark:shadow-gray-400  font-satoshi dark:text-white"
                                       {...field}
                                       onChange={(e) => {
                                         const wordCount = e.target.value
@@ -714,7 +715,7 @@ export default function SubmitToolPage() {
                           <Button
                             variant="link"
                             type="button"
-                            className="text-secondary p-0 h-max flex justify-start"
+                            className="text-secondary p-0 h-max flex justify-start font-clash dark:text-white"
                             onClick={(e) => {
                               e.stopPropagation();
                               appendUseCase({
@@ -725,8 +726,8 @@ export default function SubmitToolPage() {
                             Add Use Case +
                           </Button>
                           {/* <FormMessage /> */}
-                          <p className="text-label3 text-base mb-4">
-                            Maximum 25 words per each
+                          <p className="text-label3 text-base mb-4 font-satoshi dark:text-white">
+                            maximum 25 words per each
                           </p>
                         </div>
                       </FormControl>
@@ -742,7 +743,7 @@ export default function SubmitToolPage() {
                         Price
                       </FormLabel>
                       <FormControl>
-                        <Input className="h-14 px-6" suffix="USD" {...field} />
+                        <Input className="h-14 px-6 dark:shadow-gray-400 font-satoshi dark:text-white" suffix="USD" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -761,7 +762,7 @@ export default function SubmitToolPage() {
                         />
                       </FormControl>
                       <div className="leading-none font-normal text-label2 text-sm">
-                        <FormLabel>Free</FormLabel>
+                        <FormLabel className="font-satoshi dark:text-white">Free</FormLabel>
                       </div>
                     </FormItem>
                   )}
@@ -782,7 +783,7 @@ export default function SubmitToolPage() {
                                 variant="outline"
                                 role="combobox"
                                 className={cn(
-                                  "w-full justify-between h-14 shadow-md border-input",
+                                  "w-full justify-between h-14 shadow-md border-input dark:shadow-gray-400 font-satoshi dark:text-white",
                                   !field.value && "text-muted-foreground"
                                 )}
                               >
@@ -841,12 +842,12 @@ export default function SubmitToolPage() {
                   name="subscription"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <Card>
+                      <Card className=" shadow-md dark:shadow-gray-400">
                         <CardHeader>
                           <CardTitle className="font-semibold text-[18px] font-clash mb-2">
                             Subscriptions
                           </CardTitle>
-                          <CardDescription>
+                          <CardDescription className="dark:text-white font-satoshi">
                             Please select Subscriptions
                           </CardDescription>
                         </CardHeader>
@@ -861,29 +862,28 @@ export default function SubmitToolPage() {
                                 value={sub.id}
                                 onChange={field.onChange}
                               />
-                              <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white">
+                              <p className="text-xs rounded-full bg-[#a855f7] relative top-3 left-4 w-fit p-1 text-white font-clash">
                                 {sub.name}
                               </p>
                               <label
                                 htmlFor={`subscription-${sub.id}`}
-                                className="inline-flex 
-                                                                items-center justify-between w-full 
-                                                                p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
-                                                                dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#a855f7]
-                                                                hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 
-                                                                hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
+                                className="inline-flex items-center justify-between w-full 
+                                p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-xl cursor-pointer 
+                                dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-[#a855f7]
+                                hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 
+                                hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
                               >
                                 <div className="block">
                                   <p className="dark:text-black">
-                                    <span className="dark:text-black">
+                                    <span className="dark:text-black font-satoshi">
                                       ${Number(sub.price)}{" "}
                                     </span>
-                                    <span className="text-zinc-400 text line-through">
+                                    <span className="text-zinc-400 text line-through font-satoshi">
                                       ${Number(sub.discountPrice)}
                                     </span>
                                     /{sub.interval}
                                   </p>
-                                  <p className="text-sm text-zinc-400">
+                                  <p className="text-sm text-zinc-400 font-satoshi mt-2">
                                     {sub.descriptions}
                                   </p>
                                 </div>
