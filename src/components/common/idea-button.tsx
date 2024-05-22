@@ -13,14 +13,14 @@ export const IdeaButton = () => {
           Do you have a better suggestion for Email Marketing?
         </h4>
       </div>
-      <Button
-        variant="ghost"
-        size="lg"
-        className="flex items-center gap-2 bg-gradient-to-r from-blue-700 to-green-500 rounded-full text-white text-base hover:text-white"
+      <button
+        // variant="ghost"
+        // size="lg"
+        className="flex items-center gap-2 bg-gradient-to-r from-[#2661FA] to-[#32DDB4] rounded-full text-white text-base hover:text-white px-6 py-3"
       >
-        <Plus className="w-5" />
-        <p className="font-clash">Submit Tool</p>
-      </Button>
+          <Plus className="w-5" />
+          <p className="font-clash">Submit Tool</p>
+      </button>
     </div>
   );
 };

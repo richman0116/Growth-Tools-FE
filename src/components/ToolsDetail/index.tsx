@@ -111,7 +111,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                               src={screenshot}
                               width={1000}
                               height={330}
-                              className="bg-cover h-full min-h-80 object-fill w-full"
+                              className="bg-cover h-full min-h-80 object-fill w-full border-2 border-[#F1F1F1] rounded-lg"
                               alt=""
                             />
                           </SwiperSlide>
@@ -134,7 +134,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               </div>
               {toolData?.toolDeals?.length ? (
                 <>
-                  <h4 className="text-[18px] font-semibold mb-4">Deals</h4>
+                  <h4 className="text-[18px] mb-4 font-clash font-semibold">Deals</h4>
                   <div className="grid grid-col-1 lg:grid-cols-2 gap-[30px]">
                     {toolData?.toolDeals.map(
                       (deal: {
@@ -159,8 +159,12 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               ) : null}
             </div>
 
-            <div>
-              <h4 className="text-[18px] font-semibold mb-4 mt-12 font-clash text-black dark:text-white">
+            <div className="lg:my-[78px]">
+              <IdeaButton />
+            </div>
+
+            <div className="my-14">
+              <h4 className="text-[18px] font-semibold mb-3 mt-12 font-clash text-black dark:text-white">
                 Description
               </h4>
               <p className="text-base font-medium font-satoshi text-description dark:text-white">
@@ -168,10 +172,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               </p>
             </div>
 
-            <div className="my-8 lg:my-[78px]">
-              <IdeaButton />
-            </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4">
               <div>
                 <h4 className="text-[18px] font-semibold mb-4 font-clash">
                   Discover <span className="text-secondary dark:text-white">more</span> Ads
