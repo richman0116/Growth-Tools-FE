@@ -69,7 +69,7 @@ export default function MarketingPage() {
             <br />
             supercharge your growth
           </h1>
-          <p className="mb-6">
+          <p className="mb-6 font-satoshi">
             Browse through hundreds of unique tools to boost your marketing &
             startup. Start by clicking Categories below to pick tools in
             different marketing topics.
@@ -89,7 +89,6 @@ export default function MarketingPage() {
             categories={categories}
             onSubmitFilter={onFilter}
           />
-
           <span className="font-medium font-sm">Show as:</span>
           <Button
             variant="ghost"

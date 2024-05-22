@@ -81,7 +81,7 @@ export function BreadcrumbDashboard(props: { displayName?: string }) {
                   className="font-bold text-base text-primary font-satoshi"
                   href={link == "/tool" ? "/" : link}
                 >
-                  {textPage(link)}
+                  <p className="dark:text-white font-satoshi">{textPage(link)}</p>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
