@@ -93,6 +93,7 @@ const config = {
       backgroundImage: (theme) => ({
         "blue-gradient":
           "background: linear-gradient(0deg, #000000, #000000),linear-gradient(93.25deg, #164CD9 -12.45%, #32AADD 205.53%)",
+        'custom-gradient': 'background: linear-gradient(90deg, #164cd9 95%, #32aadd 0%)'
       }),
     },
   },

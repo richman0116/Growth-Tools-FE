@@ -137,3 +137,9 @@
   -webkit-box-orient: vertical;  
   overflow: hidden;
 }
+
+.text-gradient {
+  background: linear-gradient(to right, #4163d6 76%, #4173d7 14%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

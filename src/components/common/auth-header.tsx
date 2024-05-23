@@ -55,7 +55,7 @@ export function AuthHeader() {
 
   return (
     <>
-      <div className="sticky top-0 z-50 px-12 py-4 items-center justify-between h-[70px] md:flex hidden">
+      <div className="z-50 px-12 py-4 items-center justify-between xl:flex hidden">
         <Link href={"/"}>
           <Image
             width={LOGO.width}
@@ -67,7 +67,7 @@ export function AuthHeader() {
         <div className="flex items-center gap-2">
           <div className="relative">
             <Input
-              className="ml-auto rounded-full min-w-[432px] w-full h-10"
+              className={cn("ml-auto rounded-full h-10", isLoggedIn ? "w-[290px]" : "w-[400px]")}
               type="search"
               placeholder="Search..."
             />
@@ -121,7 +121,7 @@ export function AuthHeader() {
         </div>
       </div>
 
-      <div className="flex p-4 md:hidden items-center justify-end h-14">
+      <div className="flex p-4 xl:hidden items-center justify-end h-14">
         <div className={
             cn("block lg:hidden", name === "categories" ? "hidden" : "")
         }>

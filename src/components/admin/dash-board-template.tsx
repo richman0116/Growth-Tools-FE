@@ -108,7 +108,7 @@ export function DashBoardTemplate({
             }}
             className={cn(
               isCollapsed && "min-w-[50px]",
-              "hidden md:block relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
+              "hidden lg:block relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
             )}
           >
             {dashboardNavigation?.length ? (
@@ -170,8 +170,14 @@ export function DashBoardTemplate({
 
   useEffect(() => {
     setCategoryLoading(true);
-    getCategoryList().then((res) => {
-      setDashboardNavigation(res);
+    getCategoryList().then((res: Category[]) => {
+      console.log(res,"ssssssssssss")
+      const elementsToMove = res.splice(12, 3);
+      const newArr = [...elementsToMove, ...res];
+      let temp = newArr[2];
+      newArr[2] = newArr[3];
+      newArr[3] = temp;
+      setDashboardNavigation(newArr);
       setCategoryLoading(false);
     });
   }, [setCategoryLoading]);

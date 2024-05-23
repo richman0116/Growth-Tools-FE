@@ -68,7 +68,7 @@ export const ToolCard = ({
           </div>
         </div>
         <div className="flex-1 py-3 pr-3">
-          <h4 className="text-base font-semibold mb-2 font-clash">{title}</h4>
+          <h4 className="text-base font-semibold mb-2 font-clash whitespace-nowrap">{title}</h4>
           <p className="text-sm mb-3 line-clamp-3 font-satoshi">{description}</p>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
@@ -79,10 +79,10 @@ export const ToolCard = ({
                 <span className="font-semibold font-clash">Deal</span>
               </div>
             </div>
-            <div className="p-2 rounded-lg border flex gap-2 hover:bg-orange-500 hover:text-white clapIcon dark:border-white">
+            {/* <div className="p-2 rounded-lg border flex gap-2 hover:bg-orange-500 hover:text-white clapIcon dark:border-white">
               <span className="text-sm font-medium font-satoshi">52k</span>
               <Clap className="fill-white" />
-            </div>
+            </div> */}
           </div>
         </div>
       </Card>
