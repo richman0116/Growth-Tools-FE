@@ -108,7 +108,7 @@ export function DashBoardTemplate({
             }}
             className={cn(
               isCollapsed && "min-w-[50px]",
-              "hidden md:block relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
+              "hidden lg:block relative transition-all duration-300 ease-in-out border-r-[1px] !overflow-visible max-w-60"
             )}
           >
             {dashboardNavigation?.length ? (
