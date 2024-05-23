@@ -15,8 +15,11 @@ export default function CategoryPage() {
     useEffect(() => {
         setCategoryLoading(true);
         getCategoryList().then((res: Category[]) => {
-            const elementsToMove = res.splice(13, 2);
+            const elementsToMove = res.splice(12, 3);
             const newArr = [...elementsToMove, ...res];
+            const temp = newArr[2];
+            newArr[2] = newArr[3];
+            newArr[3] = temp;
             setDashboardNavigation(newArr);
             setCategoryLoading(false);
         });

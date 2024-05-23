@@ -171,10 +171,13 @@ export function DashBoardTemplate({
   useEffect(() => {
     setCategoryLoading(true);
     getCategoryList().then((res: Category[]) => {
-      const elementsToMove = res.splice(13, 2);
+      console.log(res,"ssssssssssss")
+      const elementsToMove = res.splice(12, 3);
       const newArr = [...elementsToMove, ...res];
-      console.log(newArr);
-            setDashboardNavigation(newArr);
+      let temp = newArr[2];
+      newArr[2] = newArr[3];
+      newArr[3] = temp;
+      setDashboardNavigation(newArr);
       setCategoryLoading(false);
     });
   }, [setCategoryLoading]);
