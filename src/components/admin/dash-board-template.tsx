@@ -170,8 +170,11 @@ export function DashBoardTemplate({
 
   useEffect(() => {
     setCategoryLoading(true);
-    getCategoryList().then((res) => {
-      setDashboardNavigation(res);
+    getCategoryList().then((res: Category[]) => {
+      const elementsToMove = res.splice(13, 2);
+      const newArr = [...elementsToMove, ...res];
+      console.log(newArr);
+            setDashboardNavigation(newArr);
       setCategoryLoading(false);
     });
   }, [setCategoryLoading]);

@@ -63,6 +63,7 @@ type Category = {
   description: string;
   handle: string;
   icon: string;
+  order?: number;
 };
 
 type PaginationMeta = {

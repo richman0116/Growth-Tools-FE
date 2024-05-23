@@ -21,7 +21,7 @@ const MarketingToolHero = () => {
           <p className="mb-6 font-satoshi text-description font-medium text-base dark:text-white">clicking Categories below to pick tools in different marketing topics.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 md:gap-6">
-          <Button className="font-bold font-clash text-base p-6">View Latest Tools</Button>
+          <Button className="font-semibold font-clash text-base p-6">View Latest Tools</Button>
           <Button variant="outline" className="font-medium font-clash text-base p-6">
             Trending tools
           </Button>

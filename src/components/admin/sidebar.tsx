@@ -46,20 +46,31 @@ export function Sidebar({
                     )}
                   >
                     <Image
-                      className="h-6 w-6"
+                      className={cn(
+                        "mr-2 h-6 w-6",
+                        link.handle === "/trending-tools" && "h-6 w-6 flex justify-center items-center mr-3 px-1 py-[2px]"
+                      )}
                       src={link.icon}
                       width={24}
                       height={24}
                       alt={link.description}
                     />
-                    <p className="sr-only font-satoshi">{link.name}</p>
+                    <p
+                      className={cn(
+                        "sr-only font-satoshi",
+                        link.handle === "/trending-tools" && "text-gradient font-semibold"
+                    )}>{link.name}</p>
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
                   className="flex items-center gap-4"
                 >
-                  <p className="font-satoshi">{link.name}</p>
+                  <p
+                    className={cn(
+                      "font-satoshi",
+                      link.handle === "/trending-tools" && "text-gradient font-semibold"
+                  )}>{link.name}</p>
                 </TooltipContent>
               </Tooltip>
             ) : (
@@ -77,13 +88,20 @@ export function Sidebar({
                 )}
               >
                 <Image
-                  className="mr-2 h-6 w-6"
+                    className={cn(
+                      "mr-2 h-6 w-6",
+                      link.handle === "/trending-tools" && "h-6 w-6 flex justify-center items-center mr-2 px-1 py-[2px]"
+                  )}
                   src={link.icon}
                   width={24}
                   height={24}
                   alt={link.description}
                 />
-                <p className="font-satoshi">{link.name}</p>
+                <p
+                  className={cn(
+                    "font-satoshi",
+                    link.handle === "/trending-tools" && "text-gradient font-semibold"
+                )}>{link.name}</p>
               </Link>
             )
           )}
