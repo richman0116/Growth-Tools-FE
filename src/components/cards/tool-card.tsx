@@ -25,7 +25,7 @@ export const ToolCard = ({
     return (
       <div>
         <Link href={id}>
-          <Card className="relative flex flex-col items-center shadow-md overflow-hidden dark:shadow-gray-400">
+          <Card className="relative flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
                 <Image src={logo ? logo : Placeholder} alt="logo" className="w-full h-full rounded-sm"/>

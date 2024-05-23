@@ -15,7 +15,7 @@ export const ToolCardInfo = (props: {
     return (
       <div>
         <Link href={`/tool/${tool.name}`}>
-          <Card className="w-full flex flex-col items-center shadow-md overflow-hidden border-2 dark:shadow-gray-400 dark:border-none min-h-[260px]">
+          <Card className="w-full flex flex-col items-center overflow-hidden min-h-[260px] dark:shadow-md dark:shadow-gray-400">
             <div className="flex z-10 justify-between w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
                 <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>

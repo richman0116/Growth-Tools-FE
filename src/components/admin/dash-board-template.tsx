@@ -171,7 +171,6 @@ export function DashBoardTemplate({
   useEffect(() => {
     setCategoryLoading(true);
     getCategoryList().then((res: Category[]) => {
-      console.log(res,"ssssssssssss")
       const elementsToMove = res.splice(12, 3);
       const newArr = [...elementsToMove, ...res];
       let temp = newArr[2];
