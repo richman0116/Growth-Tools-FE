@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import GOOGLE_ICON from "@/assets/images/google.png";
 import CookieHandler, { TOKEN } from "@/helpers/cookie";
 import LocalStorageHandler, {
+    ADMIN,
     REFRESH_TOKEN,
     USER,
 } from "@/helpers/localStorage";
@@ -48,7 +49,7 @@ export function UserAuthLoginForm({
     className,
     ...props
 }: UserAuthLoginFormProps) {
-    const { setIsLoggedIn } = useAuthContext();
+    const { setIsLoggedIn, setIsAdmin } = useAuthContext();
 
     const [redirectUrl, setRedirectUrl] = useState('/');
 
@@ -75,6 +76,12 @@ export function UserAuthLoginForm({
         mutationKey: ["login"],
         onSuccess(data, variables, context) {
             setIsLoggedIn(true);
+            const userInfo: any = data;
+            const email = userInfo.user.email;
+            if (email && (email === "testaustin@test.com" || email === "admin@gmail.com")) {
+                setIsAdmin(true)
+                LocalStorageHandler.set(ADMIN, "admin");
+            }
             CookieHandler.set(TOKEN, data?.accessToken);
             LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
             LocalStorageHandler.set(USER, data?.user);

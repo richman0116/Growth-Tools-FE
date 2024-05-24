@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { GlobalStoreProvider } from "../hooks/GlobalStoreContext";
+import { AuthContextProvider } from "@/hooks/AuthContext";
 
 const classDisplay = localFont({
     src: [
@@ -106,10 +107,12 @@ export default function RootLayout({
             </Head>        
             <body className={cn(classDisplay.variable, satoshi.variable)}>
                 <GlobalStoreProvider>
-                    <TanstackProvider>
-                        <Toaster />
-                        <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
-                    </TanstackProvider>
+                    <AuthContextProvider>
+                        <TanstackProvider>
+                            <Toaster />
+                            <DashBoardTemplate navCollapsedSize={0}>{children}</DashBoardTemplate>
+                        </TanstackProvider>
+                    </AuthContextProvider>
                 </GlobalStoreProvider>
             </body>
         </html>

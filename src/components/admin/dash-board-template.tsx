@@ -16,7 +16,7 @@ import { Skeleton } from "../ui/skeleton";
 import { TooltipProvider } from "../ui/tooltip";
 import { Sidebar } from "./sidebar";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
-import { AuthContextProvider } from "@/hooks/AuthContext";
+import { useAuthContext, AuthContextProvider } from "@/hooks/AuthContext";
 import clsx from "clsx";
 
 interface DashboardBoardProps {
@@ -36,6 +36,7 @@ export function DashBoardTemplate({
   const [dashboardNavigation, setDashboardNavigation] = useState<Category[]>(
     []
   );
+  const { isAdmin } = useAuthContext();
   const ref = useRef<ImperativePanelHandle>(null);
   const isMobile = useMediaQuery("(max-width: 480px)");
 
@@ -47,11 +48,9 @@ export function DashBoardTemplate({
     if (isNotDashBoardLayout) {
       return (
         <GoogleOAuthProvider clientId="583270569276-at80fs6dtu4p6a8m6v7ktv2gsv8d203c.apps.googleusercontent.com">
-          <AuthContextProvider>
-            <Header />
-            {children}
-            <Footer />
-          </AuthContextProvider>
+          <Header />
+          {children}
+          <Footer />
         </GoogleOAuthProvider>
       );
     }
@@ -135,15 +134,13 @@ export function DashBoardTemplate({
             minSize={30}
             className="relative overflow-x-auto"
           >
-            <AuthContextProvider>
-              <AuthHeader />
-              {children}
-              <Footer />
-            </AuthContextProvider>
+            <AuthHeader />
+            {children}
+            <Footer />
           </ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>
-    );
+      );
   };
 
   const collapsePanel = () => {
@@ -179,7 +176,7 @@ export function DashBoardTemplate({
       setDashboardNavigation(newArr);
       setCategoryLoading(false);
     });
-  }, [setCategoryLoading]);
+  }, [isAdmin, setCategoryLoading]);
 
   return dynamicLayout();
 }

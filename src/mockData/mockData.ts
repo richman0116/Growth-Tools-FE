@@ -1,0 +1,14 @@
+import Placeholder from "@/assets/images/placeholder.png";
+
+export const ToolDatas = [
+  { id: "1", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "2", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Pending", useCases: "use cases", price: "100.87 $" },
+  { id: "3", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "4", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Pending", useCases: "use cases", price: "100.87 $" },
+  { id: "5", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "6", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "7", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "8", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "9", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+  { id: "10", logo: "", name: "Austin", shortDescription: "shortdescription", description: "description", website: "website", keyFeatures: "key features", screenshots: "screnShot", deals: "deals content", status: "Published", useCases: "use cases", price: "100.87 $" },
+]
