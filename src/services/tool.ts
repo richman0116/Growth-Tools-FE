@@ -95,7 +95,6 @@ export const submitTool = async (data: SubmitToolRequest) => {
 export const getTools = async () => {
   try {
     const res = await axiosClient.get<null, GetToolResponse>(`/tools/list`);
-
     return res.result;
   } catch (error) {
     const err = error as AxiosError<any>;

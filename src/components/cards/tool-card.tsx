@@ -28,7 +28,7 @@ export const ToolCard = ({
           <Card className="relative flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400">
             <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
-                <Image src={logo ? logo : Placeholder} alt="logo" className="w-full h-full rounded-sm"/>
+                <Image src={logo ? logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32} />
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center justify-center p-2 rounded-lg h-9 hover:bg-orange-500 hover:text-white clapIcon text-secondary dark:text-white dark:border-white dark:border-[1px]">
@@ -41,6 +41,8 @@ export const ToolCard = ({
                 className="w-full rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300"
                 src={thumbnail ? thumbnail : Placeholder}
                 alt="thumbnail"
+                width={300}
+                height={300}
               />
             </div>
           </Card>
@@ -59,10 +61,10 @@ export const ToolCard = ({
         <div className="p-3">
           <div className="w-9 h-9 flex items-center rounded-md shadow-md">
              <Image
-              src={logo}
-              height={32}
-              width={32}
+              src={logo ? logo : Placeholder}
               alt="logo"
+              width={32}
+              height={32}
               className="w-full h-full rounded-sm"
             />
           </div>

@@ -15,14 +15,15 @@ import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
-
 interface IDashboard {
   categoryLists: Category[]
   filterTools: any
 }
 
-export default function Dashboard({categoryLists, filterTools}: IDashboard) {
+export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
   
+  console.log(filterTools, "slugDashboard")
+
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
