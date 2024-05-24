@@ -913,18 +913,20 @@ export default function SubmitToolPage() {
               </form>
             </Form>
           </div>
-          <div>
-            <h3 className="font-semibold text-[18px] font-clash mb-4">
-              Card Preview
-            </h3>
-            <ToolCard
-              variant="thumbnail"
-              id={"#"}
-              title={form.watch("name")}
-              description={form.watch("shortDescription")}
-              thumbnail={thumbnailPreview as unknown as StaticImageData}
-              logo={logoPreview as unknown as StaticImageData}
-            />
+          <div className="relative">
+            <div className="sticky top-10">
+              <h3 className="font-semibold text-[18px] font-clash mb-4">
+                Card Preview
+              </h3>
+              <ToolCard
+                variant="thumbnail"
+                id={"#"}
+                title={form.watch("name")}
+                description={form.watch("shortDescription")}
+                thumbnail={thumbnailPreview as unknown as StaticImageData}
+                logo={logoPreview as unknown as StaticImageData}
+              />
+            </div>
           </div>
         </div>
       </div>

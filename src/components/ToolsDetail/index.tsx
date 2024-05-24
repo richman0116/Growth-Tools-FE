@@ -35,6 +35,7 @@ interface IToolsDetail {
 }
 
 const ToolsDetail = ({ toolData }: IToolsDetail) => {
+  console.log(toolData, "sssssssssssssssssssssss")
   
   const swiper = useSwiper();
 
@@ -106,22 +107,33 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                     prevEl: ".swiper-button-prev",
                   }}
                 >
-                  {toolData?.screenshots &&
-                    toolData?.screenshots.map(
-                      (screenshot: string | StaticImport, i) => {
-                        return (
-                          <SwiperSlide key={`screen-shot-${i}`}>
-                            <Image
-                              src={screenshot}
-                              width={1000}
-                              height={330}
-                              className="bg-cover h-full min-h-80 object-fill w-full border-2 border-[#F1F1F1] rounded-xl"
-                              alt=""
-                            />
-                          </SwiperSlide>
-                        );
-                      }
-                    )}
+                  {
+                    toolData?.screenshots ?
+                      toolData?.screenshots.map(
+                        (screenshot: string | StaticImport, i) => {
+                          return (
+                            <SwiperSlide key={`screen-shot-${i}`}>
+                              <Image
+                                src={screenshot}
+                                width={1000}
+                                height={330}
+                                className="bg-cover h-full min-h-80 object-fill w-full border-2 border-[#F1F1F1] rounded-xl"
+                                alt="Website Screenshot"
+                              />
+                            </SwiperSlide>
+                          );
+                        }
+                      ) : 
+                      <SwiperSlide>
+                        <Image
+                          src={Placeholder}
+                          width={1000}
+                          height={330}
+                          className="bg-cover h-full min-h-80 object-fill w-full border-2 border-[#F1F1F1] rounded-xl"
+                          alt="Website Screenshot"
+                        />
+                      </SwiperSlide>
+                  }
                   <div
                     className="swiper-button-prev absolute left-2 top-1/2 -translate-y-1/2 z-10 cursor-pointer p-2 rounded-full shadow-md bg-white dark:bg-black"
                     onClick={() => swiper?.slidePrev()}
@@ -160,7 +172,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                     )}
                   </div>
                 </>
-              ) : null}
+              ) : ''}
             </div>
 
             <div className="lg:my-[78px]">

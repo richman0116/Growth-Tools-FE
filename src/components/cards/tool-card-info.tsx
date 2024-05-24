@@ -4,6 +4,8 @@ import GasIcon from "../icons/gas";
 import { Clap } from "../icons/Clap";
 import { Prize } from "../icons/Prize";
 import { Card } from "../ui/card";
+import Placeholder from "@/assets/images/placeholder.png";
+import Image from "next/image";
 
 export const ToolCardInfo = (props: {
   tool: ToolInfo;
@@ -18,7 +20,7 @@ export const ToolCardInfo = (props: {
           <Card className="w-full flex flex-col items-center overflow-hidden min-h-[260px] dark:shadow-md dark:shadow-gray-400">
             <div className="flex z-10 justify-between w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
-                <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
+                <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center justify-center p-2 rounded-lg h-9 hover:bg-orange-500 hover:text-white clapIcon dark:border-white dark:border-[1px]">
@@ -33,10 +35,12 @@ export const ToolCardInfo = (props: {
               </div>
             </div>
             <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-20 xl:px-[100px]">
-              <img
+              <Image
                 className="w-full rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300"
-                src={tool.logo}
+                src={tool.logo ? tool.logo : Placeholder}
                 alt="thumbnail"
+                width={300}
+                height={300}
               />
             </div>
           </Card>
@@ -54,7 +58,7 @@ export const ToolCardInfo = (props: {
       <Card className="flex shadow-md border-2 dark:border-none dark:shadow-gray-400 hover:shadow-xl min-h-[166px]">
         <div className="p-3">
           <div className="w-9 h-9 flex items-center rounded-md shadow-md">
-            <img src={tool.logo} alt="logo" className="w-full h-full rounded-sm"/>
+            <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
           </div>
         </div>
         <div className="w-full flex flex-col py-3 pr-3 justify-between">

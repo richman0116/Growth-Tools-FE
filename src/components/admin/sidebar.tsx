@@ -17,19 +17,33 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useAuthContext } from "@/hooks/AuthContext";
+import { useEffect, useState } from "react";
 
 export function Sidebar({
   links,
   isCollapsed,
   onCollapse,
 }: Readonly<NavProps>) {
+  const { isLoggedIn, isAdmin } = useAuthContext();
+  const [sidebarLinks, setSidebarLinks] = useState<Category[]>([]);
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (isLoggedIn && isAdmin) {
+      setSidebarLinks(links);
+    } else {
+      const userLinks = [...links];
+      userLinks.pop();
+      setSidebarLinks(userLinks)
+    }
+  }, [isAdmin, isLoggedIn, links]);
 
   const navigation = (isFullText?: boolean) => {
     return (
       <>
         <nav className="grid gap-3 py-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-          {links.map((link, index) =>
+          {sidebarLinks.map((link, index) =>
             !isFullText && isCollapsed ? (
               <Tooltip key={link.id + index} delayDuration={0}>
                 <TooltipTrigger asChild>
@@ -105,6 +119,7 @@ export function Sidebar({
               </Link>
             )
           )}
+          
         </nav>
         <div className="relative w-full p-4 md:block hidden">
           <Image src={AI_SEARCH} alt="" width={500} height={500} style={{width:'auto', height:'auto'}} />
