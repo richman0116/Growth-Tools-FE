@@ -110,4 +110,5 @@ type ToolInfo = {
   author: Author;
   toolDeals: ToolDeal[];
   category: Category;
+  clapCount?: number;
 };
