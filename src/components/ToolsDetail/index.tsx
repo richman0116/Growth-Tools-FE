@@ -35,7 +35,6 @@ interface IToolsDetail {
 }
 
 const ToolsDetail = ({ toolData }: IToolsDetail) => {
-  console.log(toolData, "sssssssssssssssssssssss")
   
   const swiper = useSwiper();
 

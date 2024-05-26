@@ -64,7 +64,6 @@ const GenericPage = async ({ params: { slug } }: GenericPageProps) => {
 
   const cateInfo = categories.result.filter((category: Category) => category.handle === '/' + slug)?.[0]
   const filterTools = await fetchFilterTools(cateInfo.id);
-  console.log(filterTools.result.data, 'ssssssssss')
 
   return (
     <Dashboard categoryLists={categories.result} filterTools={filterTools.result} />

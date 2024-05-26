@@ -84,7 +84,7 @@ export function UserAuthLoginForm({
             }
             CookieHandler.set(TOKEN, data?.accessToken);
             LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
-            LocalStorageHandler.set(USER, data?.user);
+            LocalStorageHandler.set(USER, JSON.stringify(data?.user));
             replace(redirectUrl);
         },
         onError: (error, variables, _context) => {
@@ -98,9 +98,15 @@ export function UserAuthLoginForm({
         mutationKey: ["login-google"],
         onSuccess(data, variables, context) {
             setIsLoggedIn(true);
+            const userInfo: any = data;
+            const email = userInfo.user.email;
+            if (email && (email === "testaustin@test.com" || email === "admin@gmail.com")) {
+                setIsAdmin(true)
+                LocalStorageHandler.set(ADMIN, "admin");
+            }
             CookieHandler.set(TOKEN, data?.accessToken);
             LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
-            LocalStorageHandler.set(USER, data?.user);
+            LocalStorageHandler.set(USER, JSON.stringify(data?.user));
             replace(redirectUrl);
         },
         onError: (error, variables, _context) => {

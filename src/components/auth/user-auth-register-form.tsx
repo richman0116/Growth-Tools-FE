@@ -29,7 +29,9 @@ import { useRouter } from "next/navigation";
 import LocalStorageHandler, {
   REFRESH_TOKEN,
   USER,
+  ADMIN
 } from "@/helpers/localStorage";
+import { useAuthContext } from "@/hooks/AuthContext";
 
 interface UserAuthRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -61,6 +63,7 @@ export function UserAuthRegisterForm({
   ...props
 }: UserAuthRegisterFormProps) {
   const { replace } = useRouter();
+  const { setIsLoggedIn, setIsAdmin } = useAuthContext();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -92,6 +95,13 @@ export function UserAuthRegisterForm({
     mutationFn: (token: string) => googleSignIn(token),
     mutationKey: ["login-google"],
     onSuccess(data, variables, context) {
+      setIsLoggedIn(true);
+      const userInfo: any = data;
+      const email = userInfo.user.email;
+      if (email && (email === "testaustin@test.com" || email === "admin@gmail.com")) {
+          setIsAdmin(true)
+          LocalStorageHandler.set(ADMIN, "admin");
+      }
       CookieHandler.set(TOKEN, data?.accessToken);
       LocalStorageHandler.set(REFRESH_TOKEN, data?.refreshToken);
       LocalStorageHandler.set(USER, JSON.stringify(data?.user));
