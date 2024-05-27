@@ -61,6 +61,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
+import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
 
 const formSchema = z.object({
   name: z
@@ -109,6 +110,7 @@ const formSchema = z.object({
 });
 
 export default function SubmitToolPage() {
+  const { setIsFirstRender } = useGlobalStoreContext();
   const { push } = useRouter();
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
@@ -363,13 +365,14 @@ export default function SubmitToolPage() {
       const response = await submitTool(
         formData as unknown as SubmitToolRequest
       );
-
+      
       if (!response) {
         toastError("Oop's! Something wrong when try to submit tool");
         form.reset();
       }
-
-      push(response?.url);
+      
+      setIsFirstRender(false);
+      push("/latest-tools");
     } catch (error) {
       toastError(
         (error as any)?.message ??

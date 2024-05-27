@@ -21,6 +21,7 @@ interface IDashboard {
 }
 
 export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
+
   
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];

@@ -14,7 +14,7 @@ import { supabase } from "@/lib/supabaseClient";
 import LoadingSpinner from "../icons/LoadingSpinner";
 
 export const ToolCardInfo = (props: {
-  tool: ToolInfo;
+  tool: any;
   isLoading: boolean;
   variant: "default" | "thumbnail";
 }) => {
