@@ -56,6 +56,14 @@ export const ToolCardInfo = (props: {
     setClapCount(props.clapCountProp)
   }, [props.clapCountProp]);
 
+  const handleToolDetail = useCallback(async (name: string, toolId: string) => {
+    router.push(`/tool/${name}`)
+    const { data } = await supabase.from('tools').select('tool_view_count').eq('id', toolId);
+    if (data) {
+      const tool_view_count = data[0].tool_view_count + 1;
+      await supabase.from('tools').update({ tool_view_count }).eq('id', toolId)
+    }
+  },[router])
 
   const handleClap = useCallback(async (tool: ToolInfo) => {
     if (isLoggedIn) {
@@ -93,7 +101,7 @@ export const ToolCardInfo = (props: {
   if (variant === "thumbnail") {
     return (
       <div>
-        <Link href={`/tool/${tool.name}`}>
+        <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer">
           <Card className="w-full flex flex-col items-center overflow-hidden min-h-[260px] dark:shadow-md dark:shadow-gray-400">
             <div className="flex z-10 justify-between w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
@@ -121,7 +129,7 @@ export const ToolCardInfo = (props: {
               />
             </div>
           </Card>
-        </Link>
+        </div>
         <div className="mt-4">
           <h4 className="text-base font-semibold mb-2 font-clash">{tool.name}</h4>
           <p className="text-sm mb-3 line-clamp-3 font-satoshi text-description dark:text-white">{tool.description}</p>
@@ -131,7 +139,7 @@ export const ToolCardInfo = (props: {
   }
 
   return (
-    <Link href={`/tool/${tool.name}`}>
+    <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer">
       <Card className="flex shadow-md border-2 dark:border-none dark:shadow-gray-400 hover:shadow-xl min-h-[166px]">
         <div className="p-3">
           <div className="w-9 h-9 flex items-center rounded-md shadow-md">
@@ -166,6 +174,6 @@ export const ToolCardInfo = (props: {
           </div>
         </div>
       </Card>
-    </Link>
+    </div>
   );
 };

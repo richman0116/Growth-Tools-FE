@@ -97,7 +97,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               {toolData?.shortDescription}
             </p>
 
-            <VisitButtonList url={toolData?.website} clapCountProp={clapCount} />
+            <VisitButtonList url={toolData?.website} clapCountProp={clapCount} toolId={toolData.id} />
 
             <Separator />
 
@@ -292,7 +292,8 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                   {relatedTools?.data?.map((props, index) => (
                     <ToolCard
                       key={`tool-card-${props.id}-${index}`}
-                      id={props.name}
+                      name={props.name}
+                      id={props.id}
                       description={props.shortDescription as string}
                       logo={props.logo as unknown as StaticImageData}
                       thumbnail={props.logo as unknown as StaticImageData}
@@ -308,7 +309,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               </h4>
             </div>
             <div className="pb-0 xl:pb-12">
-              <VisitButtonList url={toolData?.website} clapCountProp={clapCount} />
+              <VisitButtonList url={toolData?.website} clapCountProp={clapCount} toolId={toolData.id} />
             </div>
           </div>
 
