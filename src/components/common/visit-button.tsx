@@ -5,6 +5,7 @@ import { LinkIcon } from "../icons/LinkIcon";
 
 export const VisitButtonList = (props: {
     url?: string
+    clapCountProp: number
 }) => {
     const onVisitWebsite = () => {
         window.open(props.url, "_blank");
@@ -15,7 +16,7 @@ export const VisitButtonList = (props: {
                 Visit Website <LinkIcon fill="currentColor" />
             </Button>
             <div className="w-full xl:w-[120px] py-4 px-6 border flex items-center justify-center rounded-full gap-2 bg-orange-500 text-white">
-                <span className="text-base font-bold">52k</span>
+                <span className="text-base font-bold">{props.clapCountProp}</span>
                 <Clap fill="white" />
             </div>
         </div>

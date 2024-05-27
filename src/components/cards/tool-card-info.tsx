@@ -11,21 +11,20 @@ import { useCallback, useEffect, useState } from "react";
 import LocalStorageHandler, { USER } from "@/helpers/localStorage";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import LoadingSpinner from "../icons/LoadingSpinner";
+import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
 
 export const ToolCardInfo = (props: {
   tool: any;
   isLoading: boolean;
   variant: "default" | "thumbnail";
+  clapCountProp?: any;
 }) => {
-
   const { isLoggedIn } = useAuthContext();
+  const { clapToolIds, setClapToolIds } = useGlobalStoreContext();
   const { tool, variant } = props;
   const router = useRouter();
   const [clapCount, setClapCount] = useState<number>(0)
-  const [clapToolIds, setClapToolIds] = useState<string[]>([])
   const [isClapping, setIsClapping] = useState<boolean>(false);
-
   const fetchClapCount = async (toolId: string) => {
     const { data, error } = await supabase
       .from('tools')
@@ -39,7 +38,6 @@ export const ToolCardInfo = (props: {
 
     return data[0]?.clap_count || 0;
   };
-
   const fetchClapToolIds = async (userId: string) => {
     const { data, error } = await supabase
       .from('users')
@@ -53,29 +51,10 @@ export const ToolCardInfo = (props: {
 
     return data[0]?.clap_tool_ids || [];
   };
-
+  
   useEffect(() => {
-    (async () => {
-      const userInfoStringify = LocalStorageHandler.get(USER);
-      const userInfo = userInfoStringify && JSON.parse(userInfoStringify);
-      const userId = userInfo?.id;
-
-      if (!userId) {
-        console.error('User ID not found in local storage.');
-        return;
-      }
-
-      const clapToolIds = await fetchClapToolIds(userId);
-      setClapToolIds(clapToolIds);
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const clapCount = await fetchClapCount(tool.id);
-      setClapCount(clapCount);
-    })();
-  }, [tool.id]);
+    setClapCount(props.clapCountProp)
+  }, [props.clapCountProp]);
 
 
   const handleClap = useCallback(async (tool: ToolInfo) => {
@@ -85,27 +64,31 @@ export const ToolCardInfo = (props: {
       const userId = userInfo && userInfo.id;
       if (!clapToolIds.includes(tool.id)) {
         setIsClapping(true);
-        const clap_count = await fetchClapCount(tool.id);
+        let clap_count = props.clapCountProp + 1;
+        setClapCount(clap_count);
         const { error: updateClapCountError } = await supabase
           .from('tools')
-          .update({ clap_count: clap_count + 1 })
+          .update({ clap_count })
           .eq('id', tool.id);
-        const new_clap_count = await fetchClapCount(tool.id);
-        setClapCount(new_clap_count);
-        const clap_tool_ids = await fetchClapToolIds(userId);
-        clap_tool_ids.push(tool.id);
-        const { error: updateClapToolIds } = await supabase
-          .from('users')
-          .update({ clap_tool_ids: clap_tool_ids })
-          .eq('id', userId)
-        const new_clap_tool_ids = await fetchClapToolIds(userId);
-        setClapToolIds(new_clap_tool_ids);
-        setIsClapping(false);
+        if (!updateClapCountError) {
+          const clap_tool_ids = await fetchClapToolIds(userId);
+          clap_tool_ids.push(tool.id);
+          const { error: updateClapToolIds } = await supabase
+            .from('users')
+            .update({ clap_tool_ids: clap_tool_ids })
+            .eq('id', userId)
+          const new_clap_tool_ids = await fetchClapToolIds(userId);
+          setClapToolIds(new_clap_tool_ids);
+          setIsClapping(false);
+        } else {
+          clap_count -= 1;
+          setClapCount(clap_count);
+        }
       }
     } else {
       router.push('/sign-in')
     }
-  },[clapToolIds, isLoggedIn, router])
+  },[clapToolIds, isLoggedIn, props.clapCountProp, router, setClapToolIds])
 
   if (variant === "thumbnail") {
     return (

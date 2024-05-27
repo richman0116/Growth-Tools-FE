@@ -3,12 +3,14 @@
 import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState, MutableRefObject } from 'react';
 
 type GlobalContextProps = {
-  isCategoryLoading: boolean,
+  isCategoryLoading: boolean
   setCategoryLoading: Dispatch<SetStateAction<boolean>>
-  isToolsListLoading: boolean,
+  isToolsListLoading: boolean
   setToolsListLoading: Dispatch<SetStateAction<boolean>>
-  isFirstRender: boolean,
+  isFirstRender: boolean
   setIsFirstRender: Dispatch<SetStateAction<boolean>> 
+  clapToolIds: any[]
+  setClapToolIds: Dispatch<SetStateAction<any[]>>
 }
 
 const initGlobalState: GlobalContextProps = {
@@ -18,6 +20,8 @@ const initGlobalState: GlobalContextProps = {
   setToolsListLoading: () => { },
   isFirstRender: true,
   setIsFirstRender: () => { },
+  clapToolIds: [],
+  setClapToolIds: () => { },
 }
 
 const GlobalStoreContext = createContext<GlobalContextProps>(initGlobalState);
@@ -32,6 +36,7 @@ export const GlobalStoreProvider = ({ children }: {
   const [isToolsListLoading, setToolsListLoading] = useState<boolean>(initGlobalState.isToolsListLoading);
   const [isCategoryLoading, setCategoryLoading] = useState<boolean>(initGlobalState.isCategoryLoading);
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
+  const [clapToolIds, setClapToolIds] = useState<any[]>([]);
 
   const contextValue: GlobalContextProps = {
     isToolsListLoading,
@@ -40,6 +45,8 @@ export const GlobalStoreProvider = ({ children }: {
     setCategoryLoading,
     isFirstRender,
     setIsFirstRender,
+    clapToolIds,
+    setClapToolIds
   };
 
   return <GlobalStoreContext.Provider value={contextValue}>{children}</GlobalStoreContext.Provider>;

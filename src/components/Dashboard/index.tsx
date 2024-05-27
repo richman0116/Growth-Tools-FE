@@ -15,6 +15,8 @@ import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
+import { supabase } from "@/lib/supabaseClient";
+import LocalStorageHandler, { USER } from "@/helpers/localStorage";
 interface IDashboard {
   categoryLists: Category[]
   filterTools: any
@@ -22,19 +24,20 @@ interface IDashboard {
 
 export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
 
-  
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
-  const { setToolsListLoading } = useGlobalStoreContext();
+  const { setToolsListLoading, clapToolIds, setClapToolIds } = useGlobalStoreContext();
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [tools, setTools] = useState<ToolInfo[]>([]);
+  const [tools, setTools] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [take] = useState(10);
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
   const [isLoading, setIsLoading] = useState(false);
+  const [toolsData, setToolsData] = useState<any[]>([]);
+  const [toolsInfoData, setToolsInfoData] = useState<any[]>([]);
 
   const [pagination, setPagination] = useState<PaginationMeta>({
     page: 0,
@@ -70,6 +73,37 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
       setOrder(order);
     }
   };
+
+  useEffect(() => {
+    const userInfoStringify = LocalStorageHandler.get(USER);
+    if (userInfoStringify) {
+      const userInfo: any = userInfoStringify && JSON.parse(userInfoStringify);
+      const userId = userInfo && userInfo.id;
+      (async () => {
+        const { data, error } = await supabase
+          .from('users')
+          .select('clap_tool_ids')
+          .eq('id', userId);
+        if (error) {
+          console.error('Error fetching user clap tool IDs:', error.message);
+          setClapToolIds([]);
+        }
+  
+        const clap_tool_ids = data ? data[0]?.clap_tool_ids : [];
+        setClapToolIds(clap_tool_ids)
+      })();
+    } else {
+      setClapToolIds([]);
+    }
+  },[setClapToolIds])
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from('tools').select('*')
+      const toolsAllData = data ? data : [];
+      setToolsData(toolsAllData)
+    })();
+  }, [filterTools?.data?.id])
 
   useEffect(() => {
     setToolsListLoading(true);
@@ -109,6 +143,11 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
       });
     }
   }, [setToolsListLoading, filterTools?.data, filterTools?.pagination, categoryId, filterTools, page, order, take, sort]);
+
+  useEffect(() => {
+    const tools_info_data = toolsData.filter(toolData => tools.some((tool: { id: any; }) => tool.id === toolData.id))
+    setToolsInfoData(tools_info_data)
+  },[tools, toolsData])
 
   return (
     <>
@@ -152,7 +191,7 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
             />
           </Button>
         </div>
-        {!tools?.length && !isLoading && (
+        {!toolsInfoData?.length && !isLoading && (
           <div
             className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
             role="alert"
@@ -171,14 +210,15 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
               </div>
             </div>
           )}
-          {!!tools?.length &&
+          {!!toolsInfoData?.length &&
             !isLoading &&
-            tools.map((tool) => (
+            toolsInfoData.map((tool: { id: any; clap_count?:any }) => (
               <ToolCardInfo
                 key={`tool-card-${tool.id}`}
                 variant={variant}
                 tool={tool}
                 isLoading={false}
+                clapCountProp={tool.clap_count}
               />
             ))}
         </div>

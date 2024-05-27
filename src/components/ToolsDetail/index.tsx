@@ -17,7 +17,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image, { StaticImageData } from "next/image";
 import { filterTool, getToolByName } from "../../services/tool";
-import { Key } from "react";
+import { Key, useEffect, useState } from "react";
 import Placeholder from "@/assets/images/placeholder.png";
 import {
   ReactElement,
@@ -29,6 +29,7 @@ import {
 import "swiper/css";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { supabase } from "@/lib/supabaseClient";
 
 interface IToolsDetail {
   toolData: ToolInfo
@@ -36,6 +37,8 @@ interface IToolsDetail {
 
 const ToolsDetail = ({ toolData }: IToolsDetail) => {
   
+  const [clapCount, setClapCount] = useState<number>(0);
+
   const swiper = useSwiper();
 
   const { data: relatedTools } = useQuery({
@@ -49,6 +52,14 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
       }),
     enabled: !!toolData?.category?.id,
   });
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.from('tools').select('clap_count').eq('id', toolData.id)
+      const clap_count: number = data ? data[0]?.clap_count : 0;
+      setClapCount(clap_count)
+    })()
+  })
 
   return (
     <section className="px-4 py-6 lg:px-12 lg:py-18">
@@ -86,7 +97,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               {toolData?.shortDescription}
             </p>
 
-            <VisitButtonList url={toolData?.website} />
+            <VisitButtonList url={toolData?.website} clapCountProp={clapCount} />
 
             <Separator />
 
@@ -297,7 +308,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               </h4>
             </div>
             <div className="pb-0 xl:pb-12">
-              <VisitButtonList url={toolData?.website} />
+              <VisitButtonList url={toolData?.website} clapCountProp={clapCount} />
             </div>
           </div>
 
