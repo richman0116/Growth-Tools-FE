@@ -102,7 +102,7 @@ export const ToolCardInfo = (props: {
     return (
       <div>
         <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer">
-          <Card className="w-full flex flex-col items-center overflow-hidden min-h-[260px] dark:shadow-md dark:shadow-gray-400">
+          <Card className="w-full flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400 h-70"> {/* Add fixed height */}
             <div className="flex z-10 justify-between w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center">
                 <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
@@ -119,13 +119,14 @@ export const ToolCardInfo = (props: {
                 </div>
               </div>
             </div>
-            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-20 xl:px-[100px]">
+            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-[120px] xl:px-[100px] 2xl:px-[100px] h-56 mb-[-20px] pt-[45px] overflow-hidden"> {/* Add overflow-hidden */}
               <Image
-                className="w-full rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300"
+                className="rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300 h-full object-cover object-top" // Add object-cover and object-top
                 src={tool.logo ? tool.logo : Placeholder}
                 alt="thumbnail"
                 width={300}
-                height={300}
+                height={200}
+                style={{ zIndex: 20 }} // Ensure the image is above other elements
               />
             </div>
           </Card>
