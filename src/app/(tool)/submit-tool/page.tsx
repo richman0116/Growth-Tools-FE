@@ -923,7 +923,8 @@ export default function SubmitToolPage() {
               </h3>
               <ToolCard
                 variant="thumbnail"
-                id={"#"}
+                name="name"
+                id={'#'}
                 title={form.watch("name")}
                 description={form.watch("shortDescription")}
                 thumbnail={thumbnailPreview as unknown as StaticImageData}

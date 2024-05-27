@@ -15,8 +15,8 @@ import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
+import LocalStorageHandler, {USER} from "@/helpers/localStorage";
 import { supabase } from "@/lib/supabaseClient";
-
 
 interface ILatestTools {
   categoryLists: Category[]
@@ -31,29 +31,48 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [tools, setTools] = useState([]);
-  const { isFirstRender } = useGlobalStoreContext();
+  const { isFirstRender, setClapToolIds } = useGlobalStoreContext();
+
 
   useEffect(() => {
-    if (isFirstRender) {
-      setTools(filterTools);
-      setCategories(categoryLists)
-    } else {
+    const userInfoStringify = LocalStorageHandler.get(USER);
+    if (userInfoStringify) {
+      const userInfo: any = userInfoStringify && JSON.parse(userInfoStringify);
+      const userId = userInfo && userInfo.id;
       (async () => {
         const { data, error } = await supabase
-          .from('tools')
-          .select('*')
-          .order('updated_at', { ascending: false });
+          .from('users')
+          .select('clap_tool_ids')
+          .eq('id', userId);
         if (error) {
-          console.error('Error fetching data:', error.message);
-          setTools([]);
+          console.error('Error fetching user clap tool IDs:', error.message);
+          setClapToolIds([]);
         }
-        const toolsData: any = data;
-        const latestToolsData = toolsData.slice(0, 10);
-        console.log(latestToolsData)
-        setTools(latestToolsData);
+  
+        const clap_tool_ids = data ? data[0]?.clap_tool_ids : [];
+        setClapToolIds(clap_tool_ids)
       })();
+    } else {
+      setClapToolIds([]);
     }
-  }, [categoryLists, filterTools, isFirstRender, setCategories])
+  },[setClapToolIds])
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from('tools')
+        .select('*')
+        .order('updated_at', { ascending: false });
+      if (error) {
+        console.error('Error fetching data:', error.message);
+        setTools([]);
+      }
+      const toolsData: any = data;
+      const latestToolsData = toolsData.slice(0, 10);
+      setTools(latestToolsData);
+      setCategories(categoryLists)
+    })();
+  }, [categoryLists])
 
   const onFilter = (
     category?: Category,
@@ -119,12 +138,13 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
         )}
         <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
           {tools?.length &&
-            tools.map((tool: { id: any; }) => (
+            tools.map((tool: { id: any; clap_count?:any }) => (
               <ToolCardInfo
-                key={`tool-card-${tool.id}`}
+                key={`tool-card-${tool?.id}`}
                 variant={variant}
                 tool={tool}
                 isLoading={false}
+                clapCountProp={tool?.clap_count}
               />
             ))}
         </div>
