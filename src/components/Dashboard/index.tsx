@@ -218,7 +218,6 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
                 variant={variant}
                 tool={tool}
                 isLoading={false}
-                clapCountProp={tool.clap_count}
               />
             ))}
         </div>
