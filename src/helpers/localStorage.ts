@@ -1,6 +1,8 @@
 export const REFRESH_TOKEN = "REFRESH_TOKEN";
 export const USER = "USER";
 export const ADMIN = "ADMIN"
+export const LATEST_TOOLS = "LATEST_TOOLS";
+export const ALL_TOOLS = "ALL_TOOLS";
 
 interface LocalStorageHandler {
   get: (key: string) => string | null;

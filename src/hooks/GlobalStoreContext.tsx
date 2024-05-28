@@ -11,6 +11,10 @@ type GlobalContextProps = {
   setIsFirstRender: Dispatch<SetStateAction<boolean>> 
   clapToolIds: any[]
   setClapToolIds: Dispatch<SetStateAction<any[]>>
+  isPublishedTool: boolean
+  setIsPublishedTool: Dispatch<SetStateAction<boolean>>
+  isSlugFirstRender: boolean
+  setIsSlugFirstRender: Dispatch<SetStateAction<boolean>>
 }
 
 const initGlobalState: GlobalContextProps = {
@@ -22,6 +26,10 @@ const initGlobalState: GlobalContextProps = {
   setIsFirstRender: () => { },
   clapToolIds: [],
   setClapToolIds: () => { },
+  isPublishedTool: false,
+  setIsPublishedTool: () => { },
+  isSlugFirstRender: true,
+  setIsSlugFirstRender: () => { },
 }
 
 const GlobalStoreContext = createContext<GlobalContextProps>(initGlobalState);
@@ -37,6 +45,8 @@ export const GlobalStoreProvider = ({ children }: {
   const [isCategoryLoading, setCategoryLoading] = useState<boolean>(initGlobalState.isCategoryLoading);
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
   const [clapToolIds, setClapToolIds] = useState<any[]>([]);
+  const [isPublishedTool, setIsPublishedTool] = useState<boolean>(false);
+  const [isSlugFirstRender, setIsSlugFirstRender] = useState<boolean>(true);
 
   const contextValue: GlobalContextProps = {
     isToolsListLoading,
@@ -46,7 +56,11 @@ export const GlobalStoreProvider = ({ children }: {
     isFirstRender,
     setIsFirstRender,
     clapToolIds,
-    setClapToolIds
+    setClapToolIds,
+    isPublishedTool,
+    setIsPublishedTool,
+    isSlugFirstRender,
+    setIsSlugFirstRender
   };
 
   return <GlobalStoreContext.Provider value={contextValue}>{children}</GlobalStoreContext.Provider>;

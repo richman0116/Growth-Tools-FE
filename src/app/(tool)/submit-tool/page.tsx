@@ -62,6 +62,8 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
+import LocalStorageHandler, { LATEST_TOOLS } from "@/helpers/localStorage";
+import { supabase } from "@/lib/supabaseClient";
 
 const formSchema = z.object({
   name: z
@@ -110,7 +112,7 @@ const formSchema = z.object({
 });
 
 export default function SubmitToolPage() {
-  const { setIsFirstRender } = useGlobalStoreContext();
+  const { setIsPublishedTool } = useGlobalStoreContext();
   const { push } = useRouter();
   const [editModal, setEditModal] = useState(false);
   const [keyModal, setKeyModal] = useState("");
@@ -370,9 +372,21 @@ export default function SubmitToolPage() {
         toastError("Oop's! Something wrong when try to submit tool");
         form.reset();
       }
-      
-      setIsFirstRender(false);
+
+      const { data, error } = await supabase
+        .from('tools')
+        .select('*')
+        .order('updated_at', { ascending: false });
+      if (error) {
+        console.error('Error fetching data:', error.message);
+      }
+      const toolsData: any = data;
+      const latestToolsData = toolsData.slice(0, 10);
+      LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(latestToolsData));
+
       push("/latest-tools");
+      setIsPublishedTool(true);
+
     } catch (error) {
       toastError(
         (error as any)?.message ??

@@ -1,4 +1,3 @@
-import MarketingToolHero from "@/components/marketingTools/MarketingToolHero"
 import LatestTools from "@/components/LatestTools"
 import { supabase } from "@/lib/supabaseClient";
 
@@ -32,7 +31,6 @@ const LatestToolsPage = async () => {
   const filterTools = tools?.slice(0, 10);
   return (
     <div>
-      <MarketingToolHero />
       <LatestTools categoryLists={categories.result} filterTools={filterTools} />
     </div>
   )
