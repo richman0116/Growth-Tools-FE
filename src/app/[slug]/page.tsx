@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next';
 import Dashboard from "@/components/Dashboard"
+import { supabase } from '@/lib/supabaseClient';
 
 interface GenericPageProps {
   params: { slug: string };
@@ -25,6 +26,12 @@ const fetchFilterTools = async (id: any) => {
 
   return res.json()
 }
+
+const fetchAllTools =  async () => {
+  const { data } = await supabase.from('tools').select('*')
+  const toolsAllData = data ? data : [];
+  return toolsAllData;
+};
 
 export async function generateMetadata(
   { params }: GenericPageProps,
@@ -64,9 +71,9 @@ const GenericPage = async ({ params: { slug } }: GenericPageProps) => {
 
   const cateInfo = categories.result.filter((category: Category) => category.handle === '/' + slug)?.[0]
   const filterTools = await fetchFilterTools(cateInfo.id);
-
+  const toolsAllData = await fetchAllTools();
   return (
-    <Dashboard categoryLists={categories.result} filterTools={filterTools.result} />
+    <Dashboard categoryLists={categories.result} filterTools={filterTools.result} toolsAllData={toolsAllData} />
   )
 }
 

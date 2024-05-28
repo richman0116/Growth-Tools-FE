@@ -112,10 +112,10 @@ export const ToolCardInfo = (props: {
   if (variant === "thumbnail") {
     return (
       <div>
-        <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer">
-          <Card className="w-full flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400 h-70"> {/* Add fixed height */}
-            <div className="flex z-10 justify-between w-full p-3">
-              <div className="w-9 h-9 rounded-md items-center justify-center">
+        <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer rounded-2xl border-[1px] shadow-2xl">
+          <Card className="w-full flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400 h-96"> {/* Add fixed height */}
+            <div className="flex justify-between w-full p-3">
+              <div className="w-9 h-9 rounded-md items-center justify-center border border-gray-300 dark:border-gray-50">
                 <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
               </div>
               <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ export const ToolCardInfo = (props: {
                 </div>
               </div>
             </div>
-            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-[120px] xl:px-[100px] 2xl:px-[100px] h-56 mb-[-20px] pt-[45px] overflow-hidden"> {/* Add overflow-hidden */}
+            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-[120px] xl:px-[50px] 2xl:px-[100px] h-[340px] mb-[-20px] pt-[40px] overflow-hidden"> {/* Add overflow-hidden */}
               <Image
                 className="rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300 h-full object-cover object-top" // Add object-cover and object-top
                 src={tool.logo ? tool.logo : Placeholder}
@@ -142,7 +142,7 @@ export const ToolCardInfo = (props: {
             </div>
           </Card>
         </div>
-        <div className="mt-4">
+        <div className="mt-6">
           <h4 className="text-base font-semibold mb-2 font-clash">{tool.name}</h4>
           <p className="text-sm mb-3 line-clamp-3 font-satoshi text-description dark:text-white">{tool.description}</p>
         </div>
@@ -154,7 +154,7 @@ export const ToolCardInfo = (props: {
     <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer">
       <Card className="flex shadow-md border-2 dark:border-none dark:shadow-gray-400 hover:shadow-xl min-h-[166px]">
         <div className="p-3">
-          <div className="w-9 h-9 flex items-center rounded-md shadow-md">
+          <div className="w-9 h-9 flex items-center rounded-md shadow-md border border-gray-300 dark:border-gray-50">
             <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
           </div>
         </div>

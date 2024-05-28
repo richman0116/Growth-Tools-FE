@@ -42,7 +42,7 @@ export const ToolCard = ({
       <div>
         <Card className="relative flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400">
           <div className="absolute top-0 left-0 z-10 flex justify-between items-start w-full p-3">
-            <div className="w-9 h-9 rounded-md items-center justify-center">
+            <div className="w-9 h-9 rounded-md items-center justify-center border border-gray-300 dark:border-gray-50">
               <Image src={logo ? logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32} />
             </div>
             <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ export const ToolCard = ({
     <div onClick={() => handleToolDetail(name, id)} className="hover:cursor-pointer">
       <Card className="flex shadow-md dark:shadow-gray-400 hover:shadow-xl">
         <div className="p-3">
-          <div className="w-9 h-9 flex items-center rounded-md shadow-md">
+          <div className="w-9 h-9 flex items-center rounded-md shadow-md border border-gray-300 dark:border-gray-50">
              <Image
               src={logo ? logo : Placeholder}
               alt="logo"

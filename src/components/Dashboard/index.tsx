@@ -20,14 +20,15 @@ import LocalStorageHandler, { USER } from "@/helpers/localStorage";
 interface IDashboard {
   categoryLists: Category[]
   filterTools: any
+  toolsAllData: any
 }
 
-export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
+export default function Dashboard({ categoryLists, filterTools, toolsAllData }: IDashboard) {
 
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
-  const { setToolsListLoading, clapToolIds, setClapToolIds } = useGlobalStoreContext();
+  const { setToolsListLoading, clapToolIds, setClapToolIds, isSlugFirstRender, setIsSlugFirstRender } = useGlobalStoreContext();
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [tools, setTools] = useState<any[]>([]);
@@ -98,12 +99,8 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
   },[setClapToolIds])
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from('tools').select('*')
-      const toolsAllData = data ? data : [];
-      setToolsData(toolsAllData)
-    })();
-  }, [filterTools?.data?.id])
+    setToolsData(toolsAllData)
+  }, [toolsAllData])
 
   useEffect(() => {
     setToolsListLoading(true);
@@ -142,7 +139,7 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
         setIsLoading(false);
       });
     }
-  }, [setToolsListLoading, filterTools?.data, filterTools?.pagination, categoryId, filterTools, page, order, take, sort]);
+  }, [categoryId, filterTools?.data, filterTools?.pagination, order, page, setToolsListLoading, sort, take]);
 
   useEffect(() => {
     const tools_info_data = toolsData.filter(toolData => tools.some((tool: { id: any; }) => tool.id === toolData.id))
@@ -200,7 +197,7 @@ export default function Dashboard({ categoryLists, filterTools }: IDashboard) {
             <p className="text-sm">We have no tool to show.</p>
           </div>
         )}
-        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
           {isLoading && (
             <div className="flex items-center space-x-4">
               <Skeleton className="h-12 w-12 rounded-full" />
