@@ -17,8 +17,8 @@ export const getCategoriesList = async () => {
     const res = await axiosClient.get<null, CategoriesResponse>(
       `/categories/list`
     );
-
-    return res.result;
+    const categories = res.result.filter(item => item.name !== 'Admin');
+    return categories;
   } catch (error) {
     const err = error as AxiosError<any>;
     const errData = err.response?.data;

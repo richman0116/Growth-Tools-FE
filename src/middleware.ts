@@ -27,16 +27,16 @@ export async function middleware(request: NextRequest, response: NextResponse) {
   // }
 
   // Redirect to dashboard if user try access "/"
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/trending-tools", request.url));
-  }
+  // if (request.nextUrl.pathname === "/") {
+  //   return NextResponse.redirect(new URL("/trending-tools", request.url));
+  // }
 
   if (
     (request.nextUrl.pathname === "/submit-tool" ||
       request.nextUrl.pathname === "/profile") &&
     !session?.value
   ) {
-    return NextResponse.redirect(new URL("/trending-tools", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (
@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest, response: NextResponse) {
     (request.nextUrl.pathname === "/sign-in" ||
       request.nextUrl.pathname === "/sign-up")
   ) {
-    return NextResponse.redirect(new URL("/trending-tools", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Check protected route by route

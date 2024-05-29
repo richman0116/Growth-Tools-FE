@@ -1,24 +1,26 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import Image from "next/image"
 import Placeholder from "@/assets/images/placeholder.png";
-import { EyeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import ToolStatsModal from '../ToolStatsModal';
-
+import { Prize } from '../icons/Prize';
+import GasIcon from '../icons/gas';
+import { BadgeDollarSign } from "lucide-react";
+import { SkeletonTable } from "../common/skeleton-table";
+import ToolStatsModal from "../ToolStatsModal";
 
 const SuperAdminDashboard = () => {
 
   const [toolInfos, setToolInfos] = useState([])
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedValue, setSelectedValue] = useState("10");
-  const [pageViewButtonCount, setPageViewButtonCount] = useState(0);
+  const [pageViewButtonCount, setPageViewButtonCount] = useState(1);
   const [toolInfosPerPage, setToolInfosPerPage] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [tierCategories, setTierCategories] = useState([]);
+  const [activeToolData, setActiveToolData] = useState<any>(null);
 
-  const [activeToolInfo, setActiveToolInfo] = useState<any>(null)
   const [isHorizontalDropdownOpen, setIsHorizontalDropdownOpen] = useState("");
 
   const truncateText = (text: string, maxLength: number) => {
@@ -48,11 +50,22 @@ const SuperAdminDashboard = () => {
     }
     const fetched_categories: any = data ? data : [];
     setCategories(fetched_categories);
-  
   }
+
+  const fetchTierCategories = async () => {
+    const { data, error } = await supabase.from('tier_categories').select('*');
+    if (error) {
+      setTierCategories([]);
+      return;
+    }
+    const fetched_tier_categories: any = data ? data : [];
+    setTierCategories(fetched_tier_categories);
+  }
+
   useEffect(() => {
     fetchToolInfos();
     fetchCategories();
+    fetchTierCategories();
   }, [])
 
   useEffect(() => {
@@ -84,8 +97,18 @@ const SuperAdminDashboard = () => {
   }
 
   const getCategoryName = (categoryId: string) => {
-    const { name } = categories.filter((category: any) => category?.id === categoryId)?.[0];
+    const categoryInfo: any = categories.filter((category: any) => category?.id === categoryId)?.[0];
+    const name = categoryInfo ? categoryInfo.name : "";
     return name;
+  }
+
+  const getTierCategoryName = (tierCategoryId: string) => {
+    if (tierCategoryId === null) return "";
+    else {
+      const tierCategoryInfo: any = tierCategories.filter((tierCategory: any) => tierCategory?.id === tierCategoryId)?.[0];
+      const name = tierCategoryInfo ? tierCategoryInfo.name : "";
+      return name;
+    }
   }
 
   const handleToolAction = (toolId: string) => {
@@ -115,6 +138,18 @@ const SuperAdminDashboard = () => {
     await supabase.from('tools').update({ trending_status: false }).eq('id', toolId);
     fetchToolInfos();
   }
+
+  const addDeal = async (toolId: string) => {
+    setIsHorizontalDropdownOpen("");
+    await supabase.from('tools').update({ deal_status: true }).eq('id', toolId);
+    fetchToolInfos();
+  }
+
+  const removeDeal = async (toolId: string) => {
+    setIsHorizontalDropdownOpen("");
+    await supabase.from('tools').update({ deal_status: false }).eq('id', toolId);
+    fetchToolInfos();
+  }
   
   const addPublish = async (toolId: string) => {
     setIsHorizontalDropdownOpen("");
@@ -128,79 +163,74 @@ const SuperAdminDashboard = () => {
     fetchToolInfos();
   }
 
+  const editTool = (toolData: any) => {
+    setActiveToolData(toolData);
+  }
+
   const handleSaveToolStats = async (toolStats: any) => {
-    if (activeToolInfo) {
-      console.log(activeToolInfo, 'sssssssssssssssss')
-      await supabase.from('tools').update({ clap_count: toolStats.clap_count }).eq('id', activeToolInfo.id);
-      setActiveToolInfo(null)
+    if (activeToolData) {
+      await supabase.from('tools').update({ clap_count: toolStats.clap_count, average_rating: toolStats.average_rating, order: toolStats.order }).eq('id', activeToolData.id);
+      setActiveToolData(null);
       setToolInfos((prevToolInfos: any) =>
         prevToolInfos.map((item: any) =>
-          item.id === activeToolInfo.id ? { ...item, ...toolStats } : item
+          item.id === activeToolData.id ? { ...item, ...toolStats } : item
         )
       );
     }
   }
 
-  // const peerReviewedStatusFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('peer_reviewed_status').eq('id', toolId);
-  //   const status = data ? data[0].peer_reviewed_status : false
-  //   setPeerReviewedStatus(status);
-  //   return status;
-  // }
-
-
-  // const trendingStatusFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('trending_status').eq('id', toolId);
-  //   const status = data ? data[0].trending_status : false
-  //   setTrendingStatus(status);
-  //   return status;
-  // }
-
-  // const publishedFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('status').eq('id', toolId);
-  //   const status = data ? data[0].status : "";
-  //   const isPublished = (status === 'published') ? true : false
-  //   setIsPublished(isPublished);
-  //   return isPublished;
-  // }
-  
+  const createAt = (originalDate: string) => {
+    const date = new Date(originalDate);
+    const formattedDate = date.toISOString().split('T')[0];
+    return formattedDate;
+  }
 
   return (
     <>
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:px-8 md:py-8 overflow-x-scroll" onClick={() => {setIsHorizontalDropdownOpen("")}}>
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:px-8 md:py-8" onClick={() => {setIsHorizontalDropdownOpen("")}}>
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium font-satoshi">Show</p>
             <select value={selectedValue} onChange={handleChange}  className="border-2 rounded-md font-satoshi">
-              {[10, 20, 30, 40, 50].map((value, index) => (
+              {[10, 20, 30, 40, 50, 100, 200].map((value, index) => (
                 <option key={index}>{value}</option>
               ))}
             </select>  
           </div>
           {/* <button className="font-clash text-sm bg-[#743cde] text-white rounded-md px-4 py-2 flex items-center gap-3"><Plus size={17} /><p className="mt-[2px]">Add Tool</p></button> */}
         </div>
-        <table className="">
-          <thead className="dark:bg-[#211b41]">
-            <tr className="font-clash text-sm">
-              <th>Name</th>
-              <th>Logo</th>
-              <th className="whitespace-nowrap">Short Description</th>
-              <th>Description</th>
-              <th>Website</th>
-              <th className="whitespace-nowrap">Key Features</th>
-              <th>Screenshots</th>
-              <th>Deals</th>
-              <th>Usecases</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th className="whitespace-nowrap">Tool Stats</th>
-              <th>Category</th>
-              <th className="whitespace-nowrap">Tier Category</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody className="">
+        <div className='w-full overflow-auto border'>
+          <table className="">
+            <thead className="dark:bg-[#211b41]">
+              <tr className="font-clash text-sm">
+                <th className='px-5 py-4'>Name</th>
+                <th className='px-5 py-4'>Logo</th>
+                <th className="whitespace-nowrap px-5 py-4">Short Description</th>
+                <th className='px-5 py-4'>Description</th>
+                <th className='px-5 py-4'>Website</th>
+                <th className="whitespace-nowrap px-5 py-4">Key Features</th>
+                <th className='px-5 py-4'>Screenshots</th>
+                <th className='px-5 py-4'>Usecases</th>
+                <th className='px-5 py-4'>Price</th>
+                <th className='px-5 py-4'>Status</th>
+                <th className='px-5 py-4'>Category</th>
+                <th className="whitespace-nowrap px-5 py-4">Tier Category</th>
+                <th className='whitespace-nowrap px-5 py-4'>Total Views</th>
+                <th className='whitespace-nowrap px-5 py-4'>Monthly Views</th>
+                <th className='whitespace-nowrap px-5 py-4'>Total Claps</th>
+                <th className='whitespace-nowrap px-5 py-4'>Peer Review Status</th>
+                <th className='whitespace-nowrap px-5 py-4'>Trending Status</th>
+                <th className="whitespace-nowrap px-5 py-4">Deal Status</th>
+                <th className='px-5 py-4'>Order</th>
+                <th className="whitespace-nowrap px-5 py-4">Average Rating</th>
+                <th className="whitespace-nowrap px-5 py-4">Create At</th>
+                <th className='px-5 py-4'>Action</th>
+              </tr>
+            </thead>
+            <tbody className="">
             {
+              toolInfosPerPage.length === 0 ? <tr><td colSpan={22} className="px-5"><SkeletonTable /></td></tr>
+                :
               toolInfosPerPage.map((toolData: any, index) => (
                 <React.Fragment key={index}>
                   <tr className="text-center font-satoshi odd:bg-gray-200 even:bg-white text-xs odd:dark:bg-[#2b234d] even:dark:bg-[#211b41]">
@@ -211,13 +241,20 @@ const SuperAdminDashboard = () => {
                     <td>{truncateText(toolData.website, 13)}</td>
                     <td>{truncateText(toolData.key_features, 13)}</td>
                     <td>{truncateText(toolData.screenshots,13)}</td>
-                    <td>{""}</td>
                     <td>{truncateText(toolData.use_cases, 13)}</td>
                     <td>{toolData.price}</td>
                     <td><div className={cn("w-[85px] py-1.5 rounded-full m-auto", toolData.status === "published" ? "bg-green-200 text-green-500" : "bg-red-200 text-red-500")}>{toolData.status}</div></td>
-                    <td><button><EyeIcon className="w-5 mt-1 text-green-600" onClick={() => setActiveToolInfo(toolData)} /></button></td>
                     <td>{getCategoryName(toolData.category_id)}</td>
-                    <td>{""}</td>
+                    <td>{getTierCategoryName(toolData.tier_category_id)}</td>
+                    <td className='whitespace-nowrap'>{toolData.tool_view_count}</td>
+                    <td className='whitespace-nowrap'>{toolData.monthly_view_count[0]}</td>
+                    <td className='whitespace-nowrap'>{toolData.clap_count}</td>
+                    <td>{!toolData.peer_reviewed_status ? '' : <div className='flex justify-center items-center'><Prize /></div> }</td>
+                    <td>{!toolData.trending_status ? '' : <div className='flex justify-center items-center'><GasIcon /></div>}</td>
+                    <td>{!toolData.deal_status ? '' : <div className='flex justify-center items-center'><BadgeDollarSign className="w-5" /></div>}</td>
+                    <td>{toolData.order}</td>
+                    <td>{toolData.average_rating}</td>
+                    <td>{createAt(toolData.created_at)}</td>
                     <td>
                       <button
                         id="dropdownMenuIconHorizontalButton"
@@ -234,48 +271,62 @@ const SuperAdminDashboard = () => {
                           <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconHorizontalButton">
                             <li className='hover:bg-gray-400'>
                               {
-                                !toolData.peer_reviewed_status ? <button className="block px-4 p-2" onClick={() => addPeerReview(toolData.id)}>Add Peer Review</button>
+                                !toolData.peer_reviewed_status ? <button className="block px-4 p-2 w-full text-left" onClick={() => addPeerReview(toolData.id)}>Add Peer Review</button>
                                   :
-                                <button className="block px-4 py-2" onClick={() => removePeerReview(toolData.id)}>Remove Peer Review</button>
+                                <button className="block px-4 py-2 w-full text-left" onClick={() => removePeerReview(toolData.id)}>Remove Peer Review</button>
                               }
                             </li>
                             <li className='hover:bg-gray-400'>
                               {
-                                !toolData.trending_status ? <button className="block px-4 py-2" onClick={() => addTrending(toolData.id)}>Add Trending</button>
+                                !toolData.trending_status ? <button className="block px-4 py-2 w-full text-left" onClick={() => addTrending(toolData.id)}>Add Trending</button>
                                   :
-                                  <button className="block px-4 py-2" onClick={() => removeTrending(toolData.id)}>Remove Trending</button>
+                                  <button className="block px-4 py-2 w-full text-left" onClick={() => removeTrending(toolData.id)}>Remove Trending</button>
                               }
                             </li>
                             <li className='hover:bg-gray-400'>
                               {
-                                toolData.status !== "published" ? <button className="block px-4 py-2" onClick={() => addPublish(toolData.id)}>Add Publish</button>
+                                !toolData.deal_status ? <button className="block px-4 py-2 w-full text-left" onClick={() => addDeal(toolData.id)}>Add Deal</button>
                                   :
-                                <button className="block px-4 py-2" onClick={() => removePublish(toolData.id)}>Remove Publish</button>
+                                  <button className="block px-4 py-2 w-full text-left" onClick={() => removeDeal(toolData.id)}>Remove Deal</button>
                               }
+                            </li>
+                            <li className='hover:bg-gray-400'>
+                              {
+                                toolData.status !== "published" ? <button className="block px-4 py-2 w-full text-left" onClick={() => addPublish(toolData.id)}>Add Publish</button>
+                                  :
+                                <button className="block px-4 py-2 w-full text-left" onClick={() => removePublish(toolData.id)}>Remove Publish</button>
+                              }
+                            </li>
+                            <li className='hover:bg-gray-400'>
+                              <button className="block px-4 py-2 w-full text-left" onClick={() => editTool(toolData)}>Edit Tool</button>
                             </li>
                           </ul>
                         </div>
                       )}
                     </td>
                   </tr>
-                   
+
                 </React.Fragment>
               ))
             }
-          </tbody>
-        </table>
-        <div className="flex items-center justify-center gap-2">
-          <button onClick={handlePrevious} className="font-satoshi">Previous</button>
-          <div className="flex gap-2">
-            {Array.from({ length: pageViewButtonCount }, (_, index) => (
-              <button key={index} className={cn(" py-1 px-3 rounded-sm font-clash text-black dark:text-black", index + 1 === pageNumber ? "bg-[#743cde]" : "bg-[#e0e0e0]")} onClick={() => {setPageNumber(index + 1)}}>{index + 1}</button>
-            ))}
-          </div>
-          <button onClick={handleNext} className="font-satoshi">Next</button>
+            </tbody>
+          </table>
         </div>
+        {
+          pageViewButtonCount === 1 ? ''
+          :
+          <div className="flex items-center justify-center gap-2">
+            <button onClick={handlePrevious} className="font-satoshi">Previous</button>
+            <div className="flex gap-2">
+              {Array.from({ length: pageViewButtonCount }, (_, index) => (
+                <button key={index} className={cn(" py-1 px-3 rounded-sm font-clash text-black dark:text-black", index + 1 === pageNumber ? "bg-[#743cde]" : "bg-[#e0e0e0]")} onClick={() => {setPageNumber(index + 1)}}>{index + 1}</button>
+              ))}
+            </div>
+            <button onClick={handleNext} className="font-satoshi">Next</button>
+          </div>
+        }
       </section>
-
-      {activeToolInfo && <ToolStatsModal initialToolStats={activeToolInfo} onHide={() => setActiveToolInfo(null)} onSave={handleSaveToolStats} />}
+      {activeToolData && <ToolStatsModal initialToolStats={activeToolData} onHide={() => setActiveToolData(null)} onSave={handleSaveToolStats}/>}
     </>
   )
 }

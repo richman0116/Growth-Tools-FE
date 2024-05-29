@@ -32,6 +32,7 @@ import LocalStorageHandler, {
   ADMIN
 } from "@/helpers/localStorage";
 import { useAuthContext } from "@/hooks/AuthContext";
+import { Router } from "lucide-react";
 
 interface UserAuthRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -62,6 +63,7 @@ export function UserAuthRegisterForm({
   className,
   ...props
 }: UserAuthRegisterFormProps) {
+  const router = useRouter();
   const { replace } = useRouter();
   const { setIsLoggedIn, setIsAdmin } = useAuthContext();
 
@@ -111,6 +113,7 @@ export function UserAuthRegisterForm({
       }
 
       toastSuccess("Create user successfully!, you can login now");
+      router.push('sign-in')
       form.reset();
     },
     onError(data) {

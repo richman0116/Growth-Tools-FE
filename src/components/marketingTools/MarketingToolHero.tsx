@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import ANNOUNCEMENT from "@/assets/images/announcement.png";
 import Link from "next/link";
 
-const MarketingToolHero = () => {
+interface IMarketingToolHero {
+  toolName?: string
+}
+
+const MarketingToolHero = ({toolName}: IMarketingToolHero) => {
   return (
     <section className="relative">
       <Image
@@ -14,7 +18,7 @@ const MarketingToolHero = () => {
       />
       <div className="py-[52px] md:px-12 px-4">
         <div>
-          <p className="font-extrabold text-4xl lg:text-[40px] font-clash">Discover <span className="textGradient">marketing tools</span> that{" "}</p>
+          <p className="font-extrabold text-4xl lg:text-[40px] font-clash">Discover <span className="textGradient">{toolName}marketing tools</span> that{" "}</p>
           <p className="font-extrabold text-4xl lg:text-[40px] mb-6 font-clash">supercharge your growth</p>
         </div>
         <div>

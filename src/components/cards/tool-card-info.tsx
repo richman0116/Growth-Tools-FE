@@ -1,5 +1,4 @@
 'use client'
-import Link from "next/link";
 import GasIcon from "../icons/gas";
 import { Clap } from "../icons/Clap";
 import { Prize } from "../icons/Prize";
@@ -8,7 +7,7 @@ import Placeholder from "@/assets/images/placeholder.png";
 import Image from "next/image";
 import { useAuthContext } from "@/hooks/AuthContext";
 import { useCallback, useEffect, useState } from "react";
-import LocalStorageHandler, { USER, LATEST_TOOLS } from "@/helpers/localStorage";
+import LocalStorageHandler, { USER, LATEST_TOOLS, ORDER_TOOLS } from "@/helpers/localStorage";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
@@ -65,29 +64,41 @@ export const ToolCardInfo = (props: {
   },[router])
 
   const handleClap = useCallback(async (tool: any) => {
+
     if (isLoggedIn) {
+
       const userInfoStringify = LocalStorageHandler.get(USER);
       const userInfo: any = userInfoStringify && JSON.parse(userInfoStringify);
       const userId = userInfo && userInfo.id;
+
       if (!clapToolIds.includes(tool.id)) {
+
         setIsClapping(true);
+
         let clap_count = tool.clap_count + 1;
         setClapCount(clap_count);
+
         const { error: updateClapCountError } = await supabase
           .from('tools')
           .update({ clap_count })
           .eq('id', tool.id);
+        
         if (!updateClapCountError) {
+
           const clap_tool_ids = await fetchClapToolIds(userId);
           clap_tool_ids.push(tool.id);
+
           const { error: updateClapToolIds } = await supabase
             .from('users')
             .update({ clap_tool_ids: clap_tool_ids })
             .eq('id', userId)
+          
           const new_clap_tool_ids = await fetchClapToolIds(userId);
           setClapToolIds(new_clap_tool_ids);
+          
           const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
           if (latestToolsStringify) {
+
             const latestTools: any = JSON.parse(latestToolsStringify);
             const latest_tools = latestTools.map((latestTool: any) => {
               if (latestTool.id === tool.id) {
@@ -96,8 +107,25 @@ export const ToolCardInfo = (props: {
                 return latestTool;
               }
             });
+
             LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(latest_tools));
           }
+          
+          const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
+          if (orderToolsStringify) {
+
+            const orderTools: any = JSON.parse(orderToolsStringify);
+            const order_tools = orderTools.map((orderTool: any) => {
+              if (orderTool.id === tool.id) {
+                return { ...orderTool, clap_count: orderTool.clap_count + 1 };
+              } else {
+                return orderTool;
+              }
+            });
+            
+            LocalStorageHandler.set(ORDER_TOOLS, JSON.stringify(order_tools));
+          }
+
           setIsClapping(false);
         } else {
           clap_count -= 1;
@@ -112,8 +140,8 @@ export const ToolCardInfo = (props: {
   if (variant === "thumbnail") {
     return (
       <div>
-        <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer rounded-2xl border-[1px] shadow-2xl">
-          <Card className="w-full flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400 h-96"> {/* Add fixed height */}
+        <div onClick={() => handleToolDetail(tool.name, tool.id)} className="hover:cursor-pointer rounded-2xl shadow-xl">
+          <Card className="w-full flex flex-col items-center overflow-hidden dark:shadow-md dark:shadow-gray-400 h-90"> {/* Add fixed height */}
             <div className="flex justify-between w-full p-3">
               <div className="w-9 h-9 rounded-md items-center justify-center border border-gray-300 dark:border-gray-50">
                 <Image src={tool.logo ? tool.logo : Placeholder} alt="logo" className="w-full h-full rounded-sm" width={32} height={32}/>
@@ -125,14 +153,14 @@ export const ToolCardInfo = (props: {
                 <div className="flex items-center justify-center p-2 rounded-lg h-9 hover:bg-orange-500 hover:text-white clapIcon dark:border-white dark:border-[1px]">
                   <Prize className="fill-current dark:fill-white"/>
                 </div>
-                <div className="flex items-center justify-center p-2 rounded-lg h-9 hover:bg-orange-500 hover:text-white clapIcon text-secondary dark:text-white dark:border-white dark:border-[1px]">
+                <div className="flex items-center justify-center p-2 rounded-lg h-9 clapIcon text-secondary dark:text-white dark:border-white dark:border-[1px]">
                   <span className="font-semibold font-clash">Deal</span>
                 </div>
               </div>
             </div>
-            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-[120px] xl:px-[50px] 2xl:px-[100px] h-[340px] mb-[-20px] pt-[40px] overflow-hidden"> {/* Add overflow-hidden */}
+            <div className="relative flex px-10 sm:px-15 md:px-15 lg:px-[120px] xl:px-[50px] 2xl:px-[100px] h-[350px] mb-[-100px] pt-[40px] overflow-hidden"> {/* Add overflow-hidden */}
               <Image
-                className="rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300 h-full object-cover object-top" // Add object-cover and object-top
+                className="rounded-lg transition-transform ease-in-out duration-200 delay-150 hover:scale-125 shadow-custom hover:shadow-hoverCustom dark:hover:shadow-gray-300 h-full object-top" // Add object-cover and object-top
                 src={tool.logo ? tool.logo : Placeholder}
                 alt="thumbnail"
                 width={300}
@@ -168,7 +196,7 @@ export const ToolCardInfo = (props: {
               <div className="flex items-center justify-center p-2 rounded-lg border h-9 hover:bg-orange-500 hover:text-white clapIcon dark:border-white">
                 <GasIcon />
               </div>
-              <div className="flex items-center justify-center p-2 rounded-lg h-9 hover:bg-orange-500 hover:text-white clapIcon text-secondary dark:text-white dark:border-white dark:border-[1px]">
+              <div className="flex items-center justify-center p-2 rounded-lg h-9 clapIcon text-secondary dark:text-white dark:border-white dark:border-[1px]">
                 <span className="font-semibold font-clash">Deal</span>
               </div>
             </div>

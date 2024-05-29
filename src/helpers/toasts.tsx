@@ -27,7 +27,7 @@ export const toastSuccess = (message: string) => {
   toast.success(message, {
     duration: 6000,
     style: {
-      background: "##22c55e",
+      background: "#22c55e",
       color: "white",
       border: 1,
       display: "flex",
