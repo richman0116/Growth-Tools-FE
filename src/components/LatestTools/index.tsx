@@ -103,7 +103,7 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   return (
 
     <>
-      <MarketingToolHero />
+      <MarketingToolHero toolName="latest" />
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool

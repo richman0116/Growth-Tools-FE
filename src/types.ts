@@ -54,6 +54,7 @@ type SubmitToolForm = {
   price: string;
   free: boolean;
   category: string;
+  tierCategory: string;
   subscription: string;
 };
 
@@ -110,5 +111,6 @@ type ToolInfo = {
   author: Author;
   toolDeals: ToolDeal[];
   category: Category;
+  tierCategory: any,
   clapCount?: number;
 };

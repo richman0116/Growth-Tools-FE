@@ -56,7 +56,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
 import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
@@ -68,22 +68,21 @@ import { supabase } from "@/lib/supabaseClient";
 const formSchema = z.object({
   name: z
     .string()
-    .min(10, {
-      message: "Name must be at least 10 characters.",
-    })
-    .max(50),
+    .min(1, {
+      message: "Please input the name.",
+    }),
   shortDescription: z
     .string()
     .min(10, {
       message: "Short description must be at least 10 characters.",
     })
-    .max(150),
+    .max(100),
   description: z
     .string()
     .min(10, {
       message: "Description must be at least 10 characters.",
     })
-    .max(300),
+    .max(1000),
   website: z.string().min(1, { message: "Please add your website" }),
   deal: z
     .object({
@@ -95,19 +94,20 @@ const formSchema = z.object({
     .array(),
   features: z
     .object({
-      value: z.string().max(100, "Feature must be at most 100 characters."),
+      value: z.string().max(100, "Feature must be at most 100 characters.").min(1, "Please input the key features."),
     })
     .array()
     .min(1, { message: "Please add at least one key feature" }),
   useCases: z
     .object({
-      value: z.string().max(100, "Use case must be at most 100 characters."),
+      value: z.string().max(100, "Use case must be at most 100 characters.").min(1, "Please input the useCases."),
     })
     .array()
     .min(1, { message: "Please add at least one use case" }),
   price: z.string().optional(),
   free: z.boolean().optional(),
   category: z.string().min(1, { message: "Please select category" }),
+  tierCategory: z.string().min(1, { message: "Please select tier category" }),
   subscription: z.string().min(1, { message: "Please select subscription" }),
 });
 
@@ -124,6 +124,7 @@ export default function SubmitToolPage() {
     salePrice: "",
     title: "",
   });
+  const [tierCategories, setTierCategories] = useState<any[]>([]);
 
   const { data: subscriptions } = useQuery({
     queryKey: ["subscription"],
@@ -135,6 +136,16 @@ export default function SubmitToolPage() {
     queryFn: getCategoriesList,
   });
 
+
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.from('tier_categories').select('*');
+      const tier_cateogries: any[] = data ? data : [];
+      setTierCategories(tier_cateogries)
+    })();
+  }, [])
+
   const form = useForm<SubmitToolForm>({
     mode: "onSubmit",
     reValidateMode: "onSubmit",
@@ -144,11 +155,12 @@ export default function SubmitToolPage() {
       description: "",
       website: "",
       deal: [],
-      features: [{ value: "http://twitter.com/shadcn" }],
-      useCases: [{ value: "http://twitter.com/shadcn" }],
+      features: [{ value: "" }],
+      useCases: [{ value: "" }],
       price: "0",
       free: false,
       category: "",
+      tierCategory: "",
       subscription: "",
     },
     resolver: zodResolver(formSchema),
@@ -233,6 +245,34 @@ export default function SubmitToolPage() {
     [currentDeals, form]
   );
 
+  const dialogTierCategories = (field: any) => {
+    return (
+      <Command>
+        <CommandInput placeholder="Search language..." />
+        <CommandEmpty>No language found.</CommandEmpty>
+        <CommandGroup>
+          {tierCategories.map((tierCategory: any) => (
+            <CommandItem
+              value={tierCategory.id}
+              key={tierCategory.id}
+              onSelect={() => {
+                form.setValue("tierCategory", tierCategory.id);
+              }}
+            >
+              <Check
+                className={cn(
+                  "mr-2 h-4 w-4",
+                  tierCategory.id === field.value ? "opacity-100" : "opacity-0"
+                )}
+              />
+              {tierCategory.name}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </Command>
+    );
+  };
+
   const dialogCategories = (field: any) => {
     return (
       <Command>
@@ -258,8 +298,8 @@ export default function SubmitToolPage() {
           ))}
         </CommandGroup>
       </Command>
-    );
-  };
+    )
+  }
 
   const editModalComp = () => {
     return (
@@ -325,6 +365,8 @@ export default function SubmitToolPage() {
   };
 
   const onSubmit = async (data: SubmitToolForm) => {
+    const tierCategoryId: any = data?.tierCategory;
+    const toolName: any = data?.name;
     const mapToolDeal = data?.deal.map((item) => ({
       name: item?.title,
       descriptions: item?.title,
@@ -350,19 +392,27 @@ export default function SubmitToolPage() {
     formData.append("categoryId", data?.category);
     formData.append("subscriptionId", data?.subscription);
     const logo = form.getValues("logo");
+      if (!logo) {
+      toastError("Please upload a logo.");
+      return;
+    }
+
+    
     if (logo) {
       formData.append("logo", logo);
     }
     const screenshots = form.getValues("screenshots");
+    
+    if (!screenshots || screenshots.length === 0) {
+      toastError("Please upload at least one screenshot.");
+      return;
+    }
+
     if (screenshots?.length) {
       screenshots?.forEach((screenshot) => {
         formData.append("screenshots", screenshot.value);
       });
     }
-    // data.screenshots?.forEach((screenshot) => {
-    //     formData.append("screenshots", screenshot.value);
-    // });
-
     try {
       const response = await submitTool(
         formData as unknown as SubmitToolRequest
@@ -372,6 +422,9 @@ export default function SubmitToolPage() {
         toastError("Oop's! Something wrong when try to submit tool");
         form.reset();
       }
+
+      await supabase.from('tools').update({tier_category_id: tierCategoryId}).eq('name', toolName);
+
 
       const { data, error } = await supabase
         .from('tools')
@@ -384,7 +437,7 @@ export default function SubmitToolPage() {
       const latestToolsData = toolsData.slice(0, 10);
       LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(latestToolsData));
 
-      push("/latest-tools");
+      push("/");
       setIsPublishedTool(true);
 
     } catch (error) {
@@ -468,7 +521,7 @@ export default function SubmitToolPage() {
                       <FormControl>
                         <Textarea
                           className="min-h-[120px] px-6 dark:shadow-gray-400 font-satoshi dark:text-white"
-                          maxLength={100}
+                          maxLength={1000}
                           placeholder="e.g. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium"
                           {...field}
                         />
@@ -650,7 +703,7 @@ export default function SubmitToolPage() {
                                 <FormItem>
                                   <FormControl>
                                     <Input
-                                      placeholder=""
+                                      placeholder="Key Features"
                                       className="h-12 px-6 dark:shadow-gray-400  font-satoshi dark:text-white"
                                       {...field}
                                       onChange={(e) => {
@@ -710,7 +763,7 @@ export default function SubmitToolPage() {
                                 <FormItem>
                                   <FormControl>
                                     <Input
-                                      placeholder=""
+                                      placeholder="Use Cases"
                                       className="h-12 px-6 dark:shadow-gray-400  font-satoshi dark:text-white"
                                       {...field}
                                       onChange={(e) => {
@@ -808,7 +861,7 @@ export default function SubmitToolPage() {
                                   ? categories?.find(
                                       (category) => category.id === field.value
                                     )?.name
-                                  : "Select category"}
+                                  : "Select Category"}
                                 <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </FormControl>
@@ -854,6 +907,78 @@ export default function SubmitToolPage() {
                     </FormItem>
                   )}
                 />
+
+                <FormField
+                  control={form.control}
+                  name="tierCategory"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="font-semibold text-[18px] font-clash mb-3">
+                        Tier Category
+                      </FormLabel>
+                      <div className="hidden md:block">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between h-14 shadow-md border-input dark:shadow-gray-400 font-satoshi dark:text-white",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                  ? tierCategories?.find(
+                                      (tierCategory) => tierCategory.id === field.value
+                                    )?.name
+                                  : "Select Tier Category"}
+                                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            align="start"
+                            className="w-full min-w-96 p-0"
+                          >
+                            {dialogTierCategories(field)}
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      <div className="block md:hidden">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between h-14 shadow-md border-input",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value
+                                  ? tierCategories?.find(
+                                      (tierCategory) => tierCategory.id === field.value
+                                    )?.name
+                                  : "Select Tier Category"}
+                                <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </DialogTrigger>
+                          <DialogContent
+                            className="p-4 w-[90%] rounded-2xl"
+                            hideIconClose
+                          >
+                            {dialogTierCategories(field)}
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="subscription"
