@@ -1,24 +1,23 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import Image from "next/image"
 import Placeholder from "@/assets/images/placeholder.png";
-import { EyeIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import ToolStatsModal from '../ToolStatsModal';
-
+import { Prize } from '../icons/Prize';
+import GasIcon from '../icons/gas';
+import { BadgeDollarSign } from "lucide-react";
+import { SkeletonTable } from "../common/skeleton-table";
 
 const SuperAdminDashboard = () => {
 
   const [toolInfos, setToolInfos] = useState([])
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedValue, setSelectedValue] = useState("10");
-  const [pageViewButtonCount, setPageViewButtonCount] = useState(0);
+  const [pageViewButtonCount, setPageViewButtonCount] = useState(1);
   const [toolInfosPerPage, setToolInfosPerPage] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  const [activeToolInfo, setActiveToolInfo] = useState<any>(null)
   const [isHorizontalDropdownOpen, setIsHorizontalDropdownOpen] = useState("");
 
   const truncateText = (text: string, maxLength: number) => {
@@ -84,7 +83,8 @@ const SuperAdminDashboard = () => {
   }
 
   const getCategoryName = (categoryId: string) => {
-    const { name } = categories.filter((category: any) => category?.id === categoryId)?.[0];
+    const categoryInfo: any = categories.filter((category: any) => category?.id === categoryId)?.[0];
+    const name = categoryInfo ? categoryInfo.name : "";
     return name;
   }
 
@@ -128,79 +128,52 @@ const SuperAdminDashboard = () => {
     fetchToolInfos();
   }
 
-  const handleSaveToolStats = async (toolStats: any) => {
-    if (activeToolInfo) {
-      console.log(activeToolInfo, 'sssssssssssssssss')
-      await supabase.from('tools').update({ clap_count: toolStats.clap_count }).eq('id', activeToolInfo.id);
-      setActiveToolInfo(null)
-      setToolInfos((prevToolInfos: any) =>
-        prevToolInfos.map((item: any) =>
-          item.id === activeToolInfo.id ? { ...item, ...toolStats } : item
-        )
-      );
-    }
-  }
-
-  // const peerReviewedStatusFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('peer_reviewed_status').eq('id', toolId);
-  //   const status = data ? data[0].peer_reviewed_status : false
-  //   setPeerReviewedStatus(status);
-  //   return status;
-  // }
-
-
-  // const trendingStatusFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('trending_status').eq('id', toolId);
-  //   const status = data ? data[0].trending_status : false
-  //   setTrendingStatus(status);
-  //   return status;
-  // }
-
-  // const publishedFn = async (toolId: string) => {
-  //   const { data, error } = await supabase.from('tools').select('status').eq('id', toolId);
-  //   const status = data ? data[0].status : "";
-  //   const isPublished = (status === 'published') ? true : false
-  //   setIsPublished(isPublished);
-  //   return isPublished;
-  // }
-  
-
   return (
     <>
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:px-8 md:py-8 overflow-x-scroll" onClick={() => {setIsHorizontalDropdownOpen("")}}>
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 p-4 md:px-8 md:py-8" onClick={() => {setIsHorizontalDropdownOpen("")}}>
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <p className="text-sm font-medium font-satoshi">Show</p>
             <select value={selectedValue} onChange={handleChange}  className="border-2 rounded-md font-satoshi">
-              {[10, 20, 30, 40, 50].map((value, index) => (
+              {[10, 20, 30, 40, 50, 100, 200].map((value, index) => (
                 <option key={index}>{value}</option>
               ))}
             </select>  
           </div>
           {/* <button className="font-clash text-sm bg-[#743cde] text-white rounded-md px-4 py-2 flex items-center gap-3"><Plus size={17} /><p className="mt-[2px]">Add Tool</p></button> */}
         </div>
-        <table className="">
-          <thead className="dark:bg-[#211b41]">
-            <tr className="font-clash text-sm">
-              <th>Name</th>
-              <th>Logo</th>
-              <th className="whitespace-nowrap">Short Description</th>
-              <th>Description</th>
-              <th>Website</th>
-              <th className="whitespace-nowrap">Key Features</th>
-              <th>Screenshots</th>
-              <th>Deals</th>
-              <th>Usecases</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th className="whitespace-nowrap">Tool Stats</th>
-              <th>Category</th>
-              <th className="whitespace-nowrap">Tier Category</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody className="">
+        <div className='w-full overflow-auto border'>
+          <table className="">
+            <thead className="dark:bg-[#211b41]">
+              <tr className="font-clash text-sm">
+                <th className='px-5 py-4'>Name</th>
+                <th className='px-5 py-4'>Logo</th>
+                <th className="whitespace-nowrap px-5 py-4">Short Description</th>
+                <th className='px-5 py-4'>Description</th>
+                <th className='px-5 py-4'>Website</th>
+                <th className="whitespace-nowrap px-5 py-4">Key Features</th>
+                <th className='px-5 py-4'>Screenshots</th>
+                <th className='px-5 py-4'>Deals</th>
+                <th className='px-5 py-4'>Usecases</th>
+                <th className='px-5 py-4'>Price</th>
+                <th className='px-5 py-4'>Status</th>
+                <th className='px-5 py-4'>Category</th>
+                <th className="whitespace-nowrap px-5 py-4">Tier Category</th>
+                <th className='whitespace-nowrap px-5 py-4'>Total Views</th>
+                <th className='whitespace-nowrap px-5 py-4'>Monthly Views</th>
+                <th className='whitespace-nowrap px-5 py-4'>Total Claps</th>
+                <th className='whitespace-nowrap px-5 py-4'>Total Deals</th>
+                <th className='whitespace-nowrap px-5 py-4'>Peer Review Status</th>
+                <th className='whitespace-nowrap px-5 py-4'>Trending Status</th>
+                <th className="whitespace-nowrap px-5 py-4">Deal Status</th>
+                <th className='px-5 py-4'>Order</th>
+                <th className='px-5 py-4'>Action</th>
+              </tr>
+            </thead>
+            <tbody className="">
             {
+              toolInfosPerPage.length === 0 ? <tr><td colSpan={22} className="px-5"><SkeletonTable /></td></tr>
+                :
               toolInfosPerPage.map((toolData: any, index) => (
                 <React.Fragment key={index}>
                   <tr className="text-center font-satoshi odd:bg-gray-200 even:bg-white text-xs odd:dark:bg-[#2b234d] even:dark:bg-[#211b41]">
@@ -215,9 +188,16 @@ const SuperAdminDashboard = () => {
                     <td>{truncateText(toolData.use_cases, 13)}</td>
                     <td>{toolData.price}</td>
                     <td><div className={cn("w-[85px] py-1.5 rounded-full m-auto", toolData.status === "published" ? "bg-green-200 text-green-500" : "bg-red-200 text-red-500")}>{toolData.status}</div></td>
-                    <td><button><EyeIcon className="w-5 mt-1 text-green-600" onClick={() => setActiveToolInfo(toolData)} /></button></td>
                     <td>{getCategoryName(toolData.category_id)}</td>
-                    <td>{""}</td>
+                    <td>{toolData.tier_category}</td>
+                    <td className='whitespace-nowrap'>{toolData.tool_view_count}</td>
+                    <td className='whitespace-nowrap'>{toolData.monthly_view_count[0]}</td>
+                    <td className='whitespace-nowrap'>{toolData.clap_count}</td>
+                    <td className='whitespace-nowrap'>{toolData.deal_count}</td>
+                    <td>{!toolData.peer_reviewed_status ? '' : <div className='flex justify-center items-center'><Prize /></div> }</td>
+                    <td>{!toolData.trending_status ? '' : <div className='flex justify-center items-center'><GasIcon /></div>}</td>
+                    <td>{!toolData.trending_status ? '' : <div className='flex justify-center items-center'><BadgeDollarSign className="w-5" /></div>}</td>
+                    <td>{toolData.order}</td>
                     <td>
                       <button
                         id="dropdownMenuIconHorizontalButton"
@@ -258,24 +238,27 @@ const SuperAdminDashboard = () => {
                       )}
                     </td>
                   </tr>
-                   
+                  
                 </React.Fragment>
               ))
             }
-          </tbody>
-        </table>
-        <div className="flex items-center justify-center gap-2">
-          <button onClick={handlePrevious} className="font-satoshi">Previous</button>
-          <div className="flex gap-2">
-            {Array.from({ length: pageViewButtonCount }, (_, index) => (
-              <button key={index} className={cn(" py-1 px-3 rounded-sm font-clash text-black dark:text-black", index + 1 === pageNumber ? "bg-[#743cde]" : "bg-[#e0e0e0]")} onClick={() => {setPageNumber(index + 1)}}>{index + 1}</button>
-            ))}
-          </div>
-          <button onClick={handleNext} className="font-satoshi">Next</button>
+            </tbody>
+          </table>
         </div>
+        {
+          pageViewButtonCount === 1 ? ''
+            :
+          <div className="flex items-center justify-center gap-2">
+            <button onClick={handlePrevious} className="font-satoshi">Previous</button>
+            <div className="flex gap-2">
+              {Array.from({ length: pageViewButtonCount }, (_, index) => (
+                <button key={index} className={cn(" py-1 px-3 rounded-sm font-clash text-black dark:text-black", index + 1 === pageNumber ? "bg-[#743cde]" : "bg-[#e0e0e0]")} onClick={() => {setPageNumber(index + 1)}}>{index + 1}</button>
+              ))}
+            </div>
+            <button onClick={handleNext} className="font-satoshi">Next</button>
+          </div>
+        }
       </section>
-
-      {activeToolInfo && <ToolStatsModal initialToolStats={activeToolInfo} onHide={() => setActiveToolInfo(null)} onSave={handleSaveToolStats} />}
     </>
   )
 }
