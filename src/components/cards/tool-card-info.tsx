@@ -7,7 +7,7 @@ import Placeholder from "@/assets/images/placeholder.png";
 import Image from "next/image";
 import { useAuthContext } from "@/hooks/AuthContext";
 import { useCallback, useEffect, useState } from "react";
-import LocalStorageHandler, { USER, LATEST_TOOLS } from "@/helpers/localStorage";
+import LocalStorageHandler, { USER, LATEST_TOOLS, ORDER_TOOLS } from "@/helpers/localStorage";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
@@ -64,29 +64,41 @@ export const ToolCardInfo = (props: {
   },[router])
 
   const handleClap = useCallback(async (tool: any) => {
+
     if (isLoggedIn) {
+
       const userInfoStringify = LocalStorageHandler.get(USER);
       const userInfo: any = userInfoStringify && JSON.parse(userInfoStringify);
       const userId = userInfo && userInfo.id;
+
       if (!clapToolIds.includes(tool.id)) {
+
         setIsClapping(true);
+
         let clap_count = tool.clap_count + 1;
         setClapCount(clap_count);
+
         const { error: updateClapCountError } = await supabase
           .from('tools')
           .update({ clap_count })
           .eq('id', tool.id);
+        
         if (!updateClapCountError) {
+
           const clap_tool_ids = await fetchClapToolIds(userId);
           clap_tool_ids.push(tool.id);
+
           const { error: updateClapToolIds } = await supabase
             .from('users')
             .update({ clap_tool_ids: clap_tool_ids })
             .eq('id', userId)
+          
           const new_clap_tool_ids = await fetchClapToolIds(userId);
           setClapToolIds(new_clap_tool_ids);
+          
           const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
           if (latestToolsStringify) {
+
             const latestTools: any = JSON.parse(latestToolsStringify);
             const latest_tools = latestTools.map((latestTool: any) => {
               if (latestTool.id === tool.id) {
@@ -95,8 +107,25 @@ export const ToolCardInfo = (props: {
                 return latestTool;
               }
             });
+
             LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(latest_tools));
           }
+          
+          const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
+          if (orderToolsStringify) {
+
+            const orderTools: any = JSON.parse(orderToolsStringify);
+            const order_tools = orderTools.map((orderTool: any) => {
+              if (orderTool.id === tool.id) {
+                return { ...orderTool, clap_count: orderTool.clap_count + 1 };
+              } else {
+                return orderTool;
+              }
+            });
+            
+            LocalStorageHandler.set(ORDER_TOOLS, JSON.stringify(order_tools));
+          }
+
           setIsClapping(false);
         } else {
           clap_count -= 1;

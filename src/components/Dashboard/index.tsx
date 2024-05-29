@@ -150,7 +150,7 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
     <>
       {
         category?.name === "Trending Tools" ?
-          <MarketingToolHero toolName="trending" />
+          <MarketingToolHero toolName="trending " />
           :
           <BreadCrumb pagination={pagination} category={category} />
       }

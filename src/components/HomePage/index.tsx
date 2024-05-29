@@ -15,15 +15,15 @@ import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
-import LocalStorageHandler, {USER, LATEST_TOOLS} from "@/helpers/localStorage";
+import LocalStorageHandler, {USER, ORDER_TOOLS} from "@/helpers/localStorage";
 import { supabase } from "@/lib/supabaseClient";
 
-interface ILatestTools {
+interface IHomePage {
   categoryLists: Category[]
   filterTools: any
 }
 
-const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
+const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
   const [categories, setCategories] = useState<Category[]>([])
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
   const [categoryId, setCategoryId] = useState<string>("");
@@ -62,19 +62,19 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
       setTools(filterTools);
       setCategories(categoryLists);
       setIsFirstRender(false);
-      LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(filterTools))
+      LocalStorageHandler.set(ORDER_TOOLS, JSON.stringify(filterTools))
     } else if (isPublishedTool) {
-      const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
-      if (latestToolsStringify) {
-        const latestTools: any = JSON.parse(latestToolsStringify);
-        setTools(latestTools);
+      const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
+      if (orderToolsStringify) {
+        const orderTools: any = JSON.parse(orderToolsStringify);
+        setTools(orderTools);
         setCategories(categoryLists);
       }
     } else {
-      const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
-      if (latestToolsStringify) {
-        const latestTools: any = JSON.parse(latestToolsStringify);
-        setTools(latestTools);
+      const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
+      if (orderToolsStringify) {
+        const orderTools: any = JSON.parse(orderToolsStringify);
+        setTools(orderTools);
         setCategories(categoryLists);
       }
     }
@@ -103,7 +103,7 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   return (
 
     <>
-      <MarketingToolHero toolName="latest " />
+      <MarketingToolHero />
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
@@ -162,4 +162,4 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   )
 }
 
-export default LatestTools
+export default HomePage
