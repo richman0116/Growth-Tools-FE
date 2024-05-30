@@ -27,7 +27,7 @@ const fetchToolLists = async () => {
 export async function generateMetadata() {
 
   return {
-    title: `"Growth Tools - #1 Curated Marketing Tools List by Growth Virality`,
+    title: `Growth Tools - #1 Curated Marketing Tools List by Growth Virality`,
     description: `Explore the best Growth tools. Over 500+ curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more.`,
     icons: {
       icon: [
