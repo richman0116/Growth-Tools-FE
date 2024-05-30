@@ -102,7 +102,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
 
     <>
       <MarketingToolHero />
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-12 md:pb-14">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
             categories={categories}
@@ -144,7 +144,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
               <p className="text-sm">We have no tool to show.</p>
             </div>
           )}
-          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-7 gap-y-9">
             {orderToolsData?.length ?
               orderToolsData.map((tool: { id: any; clap_count?:any }) => (
                 <ToolCardInfo
