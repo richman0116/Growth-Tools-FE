@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { getCategoryList } from '../../../services/tool';
 import { useGlobalStoreContext } from '../../../hooks/GlobalStoreContext';
+import { useAuthContext } from '@/hooks/AuthContext';
 import Image from "next/image";
 import { cn } from '@/lib/utils';
 
 export default function CategoryPage() {
     const { isCategoryLoading, setCategoryLoading } = useGlobalStoreContext()
+    const { isAdmin } = useAuthContext();
     const [dashboardNavigation, setDashboardNavigation] = useState<Category[]>(
         []
     );
@@ -20,10 +22,15 @@ export default function CategoryPage() {
             const temp = newArr[2];
             newArr[2] = newArr[3];
             newArr[3] = temp;
-            setDashboardNavigation(newArr);
+            if (isAdmin) {
+                setDashboardNavigation(newArr);
+            } else {
+                const categories = newArr.filter(item => item.name !== 'Admin');
+                setDashboardNavigation(categories)
+            }
             setCategoryLoading(false);
         });
-    }, [setCategoryLoading]);
+    }, [isAdmin, setCategoryLoading]);
 
     return (
         <div className='min-h-[70vh]'>

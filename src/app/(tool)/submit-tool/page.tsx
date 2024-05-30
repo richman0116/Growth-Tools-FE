@@ -451,6 +451,7 @@ export default function SubmitToolPage() {
 
   return (
     <section>
+
       {editModalComp()}
 
       <div className="container">
