@@ -18,6 +18,10 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        'xxs': '400px',
+        'xs': '470px', // Adding a custom breakpoint for 500px
+      },
       fontFamily: {
         clash: ["var(--font-clash)"],
         satoshi: ["var(--font-satoshi)"],

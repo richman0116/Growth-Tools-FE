@@ -5,15 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-  filterTool,
   getCategoryById,
-  getCategoryList,
 } from "@/services/tool";
-import { usePathname } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
-import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
 import LocalStorageHandler, {USER, LATEST_TOOLS} from "@/helpers/localStorage";
 import { supabase } from "@/lib/supabaseClient";
@@ -30,8 +25,7 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
   const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [tools, setTools] = useState([]);
-  const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool } = useGlobalStoreContext();
+  const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool, latestToolsData,  setLatestToolsData } = useGlobalStoreContext();
 
 
   useEffect(() => {
@@ -59,7 +53,7 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
 
   useEffect(() => {
     if (isFirstRender) {
-      setTools(filterTools);
+      setLatestToolsData(filterTools);
       setCategories(categoryLists);
       setIsFirstRender(false);
       LocalStorageHandler.set(LATEST_TOOLS, JSON.stringify(filterTools))
@@ -67,19 +61,19 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
       const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
       if (latestToolsStringify) {
         const latestTools: any = JSON.parse(latestToolsStringify);
-        setTools(latestTools);
+        setLatestToolsData(latestTools);
         setCategories(categoryLists);
       }
     } else {
       const latestToolsStringify = LocalStorageHandler.get(LATEST_TOOLS)
       if (latestToolsStringify) {
         const latestTools: any = JSON.parse(latestToolsStringify);
-        setTools(latestTools);
+        setLatestToolsData(latestTools);
         setCategories(categoryLists);
       }
     }
 
-  }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender])
+  }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender, setLatestToolsData])
 
   const onFilter = (
     category?: Category,
@@ -137,7 +131,7 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
             />
           </Button>
         </div>
-        {!tools?.length && (
+        {!latestToolsData?.length && (
             <div
               className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
               role="alert"
@@ -147,15 +141,15 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
             </div>
           )}
           <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {tools?.length &&
-              tools.map((tool: { id: any; clap_count?:any }) => (
+            {latestToolsData?.length ?
+              latestToolsData.map((tool: { id: any; clap_count?:any }) => (
                 <ToolCardInfo
                   key={`tool-card-${tool?.id}`}
                   variant={variant}
                   tool={tool}
                   isLoading={false}
                 />
-              ))}
+              )) : ""}
           </div>
       </section>
     </>
