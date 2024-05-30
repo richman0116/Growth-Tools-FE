@@ -62,7 +62,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
   })
 
   return (
-    <section className="px-4 py-6 lg:px-12 lg:py-18">
+    <section className="px-5 sm:px-7 md:px-10 py-6 lg:px-12 lg:py-18">
       {toolData && (
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,_1fr)_365px] lg:flex lg:flex-col xl:grid xl:grid-cols-[minmax(0,_1fr)_365px] gap-5 lg:gap-20 2xl:gap-[100px]">
           <div>
@@ -70,9 +70,9 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               <BreadcrumbDashboard displayName={toolData?.name} />
             </div>
 
-            <div className="flex flex-col sm:flex-row lg:flex-row items-center lg:justify-start gap-8 xl:gap-7 mb-6">
-              <h3 className="w-full font-bold text-lg md:text-[18] 2xl:text-[38px] font-clash text-black dark:text-white whitespace-nowrap block sm:hidden">{toolData?.name}</h3>
-              <div className="flex gap-4 2xl:gap-7 items-center flex-col-reverse sm:flex-row">
+            <div className="flex flex-col sm:flex-row lg:flex-row items-start sm:items-center lg:justify-start gap-8 xl:gap-7 mb-6 ">
+              {/* <h3 className="w-full font-bold text-lg md:text-[18] 2xl:text-[38px] font-clash text-black dark:text-white whitespace-nowrap block sm:hidden">{toolData?.name}</h3> */}
+              <div className="flex gap-4 2xl:gap-7 items-start sm:items-center flex-col-reverse sm:flex-row">
                 <div className="w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center border rounded-lg shadow">
                   <Image
                     src={toolData?.logo ?? Placeholder}
@@ -82,7 +82,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                     className="w-full h-full rounded-md"
                   />
                 </div>
-                <h3 className="font-bold text-lg md:text-[18] 2xl:text-[38px] font-clash text-black dark:text-white whitespace-nowrap hidden sm:block">{toolData?.name}</h3>
+                <h3 className="font-bold text-lg md:text-[18] 2xl:text-[38px] font-clash text-black dark:text-white whitespace-nowrap">{toolData?.name}</h3>
               </div>
               <div className="flex items-center gap-6">
                 <Button className="flex items-center gap-1 2xl:gap-2 bg-gradient-to-r from-blue-700 to-blue-500 rounded-[8px] px-2.5">
@@ -198,7 +198,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
               </p>
             </div>
             
-            <div className="hidden lg:block xl:hidden mb-20">
+            <div className="block xl:hidden mb-20">
               <div>
                 <h4 className="text-[18px] font-semibold mb-4 font-clash text-black dark:text-white">Key Features</h4>
                 <p className="text-base font-medium font-satoshi text-description dark:text-white">
@@ -304,7 +304,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                 </div>
               </div>
               <h4 className="text-sm font-medium font-clash text-secondary dark:text-white">
-                Browse <span>1</span> Ads
+                Browse <span>{relatedTools?.data?.length}</span> Ads
                 Management tools
               </h4>
             </div>
@@ -314,7 +314,7 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
           </div>
 
           {/* left sidebar */}
-          <div className="block lg:hidden xl:block">
+          <div className="hidden xl:block">
             <div>
               <h4 className="text-[18px] font-semibold mb-4 font-clash text-black dark:text-white">Key Features</h4>
               <p className="text-base font-medium font-satoshi text-description dark:text-white">
