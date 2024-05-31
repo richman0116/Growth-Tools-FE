@@ -30,9 +30,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
   const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [tools, setTools] = useState([]);
-  const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool } = useGlobalStoreContext();
-
+  const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool, orderToolsData, setOrderToolsData } = useGlobalStoreContext();
 
   useEffect(() => {
     const userInfoStringify = LocalStorageHandler.get(USER);
@@ -59,7 +57,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
 
   useEffect(() => {
     if (isFirstRender) {
-      setTools(filterTools);
+      setOrderToolsData(filterTools);
       setCategories(categoryLists);
       setIsFirstRender(false);
       LocalStorageHandler.set(ORDER_TOOLS, JSON.stringify(filterTools))
@@ -67,19 +65,19 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
       const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
       if (orderToolsStringify) {
         const orderTools: any = JSON.parse(orderToolsStringify);
-        setTools(orderTools);
+        setOrderToolsData(orderTools);
         setCategories(categoryLists);
       }
     } else {
       const orderToolsStringify = LocalStorageHandler.get(ORDER_TOOLS)
       if (orderToolsStringify) {
         const orderTools: any = JSON.parse(orderToolsStringify);
-        setTools(orderTools);
+        setOrderToolsData(orderTools);
         setCategories(categoryLists);
       }
     }
 
-  }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender])
+  }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender, setOrderToolsData])
 
   const onFilter = (
     category?: Category,
@@ -104,7 +102,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
 
     <>
       <MarketingToolHero />
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-12 md:pb-14">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
             categories={categories}
@@ -137,7 +135,7 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
             />
           </Button>
         </div>
-        {!tools?.length && (
+        {!orderToolsData?.length && (
             <div
               className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
               role="alert"
@@ -146,16 +144,16 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
               <p className="text-sm">We have no tool to show.</p>
             </div>
           )}
-          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {tools?.length &&
-              tools.map((tool: { id: any; clap_count?:any }) => (
+          <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-7 gap-y-9">
+            {orderToolsData?.length ?
+              orderToolsData.map((tool: { id: any; clap_count?:any }) => (
                 <ToolCardInfo
                   key={`tool-card-${tool?.id}`}
                   variant={variant}
                   tool={tool}
                   isLoading={false}
                 />
-              ))}
+              )) : ""}
           </div>
       </section>
     </>

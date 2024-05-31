@@ -1,5 +1,6 @@
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import ToolsDetail from "@/components/ToolsDetail"
+import { supabase } from '@/lib/supabaseClient';
 
 interface GenericToolsDetailPageProps {
   params: { name: string };
@@ -16,13 +17,23 @@ const fetchToolDatas = async (name:string) => {
   return res.json()
 } 
 
+const fetchToolStatus = async (name: string) => {
+  const realName = decodeURIComponent(name);
+  const { data, error } = await supabase.from('tools').select('*').eq('name', realName);
+  if (error) {
+    return []
+  }
+  else {
+    return data ? data : [];
+  }
+}
 
 export async function generateMetadata(
   { params }: GenericToolsDetailPageProps,
 ): Promise<Metadata> {
   const { name } = params;
   const toolDataRes = await fetchToolDatas(name);
-  const realName = name.replaceAll('%20', ' ');
+  const realName = decodeURIComponent(name);
   return {
     title: `${toolDataRes.result.category.name} - ${realName} Tool Review & Alternatives of ${new Date().getFullYear()}`,
     description: `Explore the best ${realName} tools. Over 500+ curated marketing tools to use across AI, Content SEO, Social, Paid, Email, Productivity, & more.`,
@@ -49,7 +60,8 @@ export async function generateMetadata(
 
 const GenericToolsDetailPage = async ({ params: { name } }: GenericToolsDetailPageProps) => {
   const toolDataRes = await fetchToolDatas(name);
-  return <ToolsDetail toolData={toolDataRes.result} />
+  const toolStatusRes = await fetchToolStatus(name);
+  return <ToolsDetail toolData={toolDataRes.result} peerReviewedStatus={toolStatusRes[0].peer_reviewed_status} trendingStatus={toolStatusRes[0].trending_status} />
 }
 
 export default GenericToolsDetailPage

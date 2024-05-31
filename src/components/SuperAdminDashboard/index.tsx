@@ -69,7 +69,7 @@ const SuperAdminDashboard = () => {
   }, [])
 
   useEffect(() => {
-    const page_View_Button_Count = Math.floor(toolInfos.length / parseInt(selectedValue)) + 1;
+    const page_View_Button_Count = Math.ceil(toolInfos.length / parseInt(selectedValue));
     setPageViewButtonCount(page_View_Button_Count)
     const toolsPerPage = toolInfos.slice((pageNumber - 1) * parseInt(selectedValue), (pageNumber - 1) * parseInt(selectedValue) + parseInt(selectedValue))
     setToolInfosPerPage(toolsPerPage)

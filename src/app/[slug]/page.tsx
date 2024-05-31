@@ -17,18 +17,13 @@ const fetchCategoryLists = async () => {
   return res.json()
 }
 
-const fetchFilterTools = async (id: any) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tools/filter?page=1&take=10&order=ASC&categoryId=${id}`)
-
-  if (!res.ok) {
-    throw new Error('Data fetching was failed on filter')
-  }
-
-  return res.json()
-}
-
-const fetchAllTools =  async () => {
-  const { data } = await supabase.from('tools').select('*')
+const fetchAllTools = async (slug: string) => {
+  const { data: categoryData, error: categoryError } = await supabase.from('categories').select('id').eq('handle', `/${slug}`)
+    const categoryId = categoryData ? categoryData[0].id : "";
+    const { data, error } = await supabase
+      .from('tools')
+      .select('*')
+      .eq('category_id', categoryId);
   const toolsAllData = data ? data : [];
   return toolsAllData;
 };
@@ -88,11 +83,9 @@ export async function generateMetadata(
 const GenericPage = async ({ params: { slug } }: GenericPageProps) => {
   const categories = await fetchCategoryLists();
 
-  const cateInfo = categories.result.filter((category: Category) => category.handle === '/' + slug)?.[0]
-  const filterTools = await fetchFilterTools(cateInfo.id);
-  const toolsAllData = await fetchAllTools();
+  const toolsAllData = await fetchAllTools(slug);
   return (
-    <Dashboard categoryLists={categories.result} filterTools={filterTools.result} toolsAllData={toolsAllData} />
+    <Dashboard categoryLists={categories.result} toolsAllData={toolsAllData} />
   )
 }
 

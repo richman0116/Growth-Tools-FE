@@ -33,9 +33,11 @@ import { supabase } from "@/lib/supabaseClient";
 
 interface IToolsDetail {
   toolData: ToolInfo
+  peerReviewedStatus: any
+  trendingStatus:any
 }
 
-const ToolsDetail = ({ toolData }: IToolsDetail) => {
+const ToolsDetail = ({ toolData, peerReviewedStatus, trendingStatus }: IToolsDetail) => {
   
   const [clapCount, setClapCount] = useState<number>(0);
 
@@ -85,11 +87,16 @@ const ToolsDetail = ({ toolData }: IToolsDetail) => {
                 <h3 className="font-bold text-lg md:text-[18] 2xl:text-[38px] font-clash text-black dark:text-white whitespace-nowrap">{toolData?.name}</h3>
               </div>
               <div className="flex items-center gap-6">
-                <Button className="flex items-center gap-1 2xl:gap-2 bg-gradient-to-r from-blue-700 to-blue-500 rounded-[8px] px-2.5">
-                  <Prize fill="white" />
-                  <p className="font-clash font-normal text-[13px]">Peer Reviewed</p>
-                </Button>
-                <GasIcon />
+                {
+                  peerReviewedStatus ? 
+                    <Button className="flex items-center gap-1 2xl:gap-2 bg-gradient-to-r from-blue-700 to-blue-500 rounded-[8px] px-2.5">
+                      <Prize fill="white" />
+                      <p className="font-clash font-normal text-[13px]">Peer Reviewed</p>
+                    </Button> : ""
+                }
+                {
+                  trendingStatus ? <GasIcon /> : ""
+                }
               </div>
             </div>
 

@@ -5,12 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-  filterTool,
   getCategoryById,
-  getCategoryList,
 } from "@/services/tool";
 import { usePathname } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import BreadCrumb from "@/components/marketingTools/BreadCrumb";
@@ -19,36 +16,23 @@ import { supabase } from "@/lib/supabaseClient";
 import LocalStorageHandler, { USER } from "@/helpers/localStorage";
 interface IDashboard {
   categoryLists: Category[]
-  filterTools: any
   toolsAllData: any
 }
 
-export default function Dashboard({ categoryLists, filterTools, toolsAllData }: IDashboard) {
+export default function Dashboard({ categoryLists, toolsAllData }: IDashboard) {
 
   const pathName = usePathname();
   const categoryHandle = pathName.split("/")[1];
 
-  const { setToolsListLoading, clapToolIds, setClapToolIds, isSlugFirstRender, setIsSlugFirstRender } = useGlobalStoreContext();
+  const { setToolsListLoading, clapToolIds, setClapToolIds, isSlugFirstRender, setIsSlugFirstRender, toolsInfoData, setToolsInfoData } = useGlobalStoreContext();
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
-  const [tools, setTools] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [take] = useState(10);
   const [sort, setSort] = useState<string | undefined>(undefined);
   const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-  const [isLoading, setIsLoading] = useState(false);
-  const [toolsData, setToolsData] = useState<any[]>([]);
-  const [toolsInfoData, setToolsInfoData] = useState<any[]>([]);
 
-  const [pagination, setPagination] = useState<PaginationMeta>({
-    page: 0,
-    take: 0,
-    itemCount: 0,
-    pageCount: 0,
-    hasPreviousPage: false,
-    hasNextPage: false,
-  });
   const [categories, setCategories] = useState<Category[]>([]);
+  const [sliceTools, setSliceTools] = useState<any[]>([])
 
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
 
@@ -99,8 +83,13 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
   },[setClapToolIds])
 
   useEffect(() => {
-    setToolsData(toolsAllData)
-  }, [toolsAllData])
+    setToolsInfoData(toolsAllData)
+  }, [setToolsInfoData, toolsAllData])
+
+  useEffect(() => {
+    const slice_tools = toolsInfoData.slice((page - 1) * 10, (page - 1) * 10 + 10)
+    setSliceTools(slice_tools);
+  }, [page, toolsInfoData])
 
   useEffect(() => {
     setToolsListLoading(true);
@@ -116,35 +105,6 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
     });
   }, [categoryHandle, categoryLists, setToolsListLoading]);
 
-  useEffect(() => {
-    setToolsListLoading(true);
-    setIsLoading(true);
-    if (!categoryId) return;
-    if (page === 1) {
-      setTools(filterTools?.data);
-      setPagination(filterTools?.pagination);
-      setToolsListLoading(false);
-      setIsLoading(false);
-    } else {
-      filterTool({
-        order,
-        page,
-        take,
-        sort,
-        categoryId,
-      }).then((res) => {
-        setTools(res?.data);
-        setPagination(res?.pagination);
-        setToolsListLoading(false);
-        setIsLoading(false);
-      });
-    }
-  }, [categoryId, filterTools?.data, filterTools?.pagination, order, page, setToolsListLoading, sort, take]);
-
-  useEffect(() => {
-    const tools_info_data = toolsData.filter(toolData => tools.some((tool: { id: any; }) => tool.id === toolData.id))
-    setToolsInfoData(tools_info_data)
-  },[tools, toolsData])
 
   return (
     <>
@@ -152,10 +112,10 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
         category?.name === "Trending Tools" ?
           <MarketingToolHero toolName="trending " />
           :
-          <BreadCrumb pagination={pagination} category={category} />
+          <BreadCrumb toolsCount={toolsInfoData.length} category={category} />
       }
 
-      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-8 md:pb-8">
+      <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-12 md:pb-14">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
             categories={categories}
@@ -188,7 +148,7 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
             />
           </Button>
         </div>
-        {!toolsInfoData?.length && !isLoading && (
+        {!toolsInfoData?.length && (
           <div
             className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
             role="alert"
@@ -197,33 +157,25 @@ export default function Dashboard({ categoryLists, filterTools, toolsAllData }: 
             <p className="text-sm">We have no tool to show.</p>
           </div>
         )}
-        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-10">
-          {isLoading && (
-            <div className="flex items-center space-x-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-              </div>
-            </div>
-          )}
-          {!!toolsInfoData?.length &&
-            !isLoading &&
-            toolsInfoData.map((tool: { id: any; clap_count?:any }) => (
+        <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-7 gap-y-9">
+          {sliceTools?.length ?
+            sliceTools.map((tool: { id: any; clap_count?:any }) => (
               <ToolCardInfo
                 key={`tool-card-${tool.id}`}
                 variant={variant}
                 tool={tool}
                 isLoading={false}
               />
-            ))}
+            )) : ""}
         </div>
         <div className="flex justify-center">
-          {pagination?.hasNextPage && (
-            <Button variant="outline" onClick={onNextPage}>
-              View More
-            </Button>
-          )}
+          {
+            !(Math.ceil(toolsInfoData.length / 10) === page) && toolsInfoData.length !== 0 ?
+              <Button variant="outline" onClick={onNextPage}>
+                View More
+              </Button>
+              : ""
+          }
         </div>
       </section>
     </>
