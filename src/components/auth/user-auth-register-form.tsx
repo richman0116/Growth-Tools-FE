@@ -84,34 +84,6 @@ export function UserAuthRegisterForm({
     mutationFn: (authData: AuthRequest) => register(authData),
     mutationKey: ["register"],
     async onSuccess(data, _variables, _context) {
-
-      const apiKey = process.env.NEXT_PUBLIC_BREVO_API_KEY;
-
-      if (!apiKey) {
-        console.log('API key is missing');
-        return;
-      }
-
-      const response = await fetch('https://api.brevo.com/v3/contacts', {
-        method: 'POST',
-        headers: new Headers({
-          'Content-Type': 'application/json',
-          'api-key': apiKey,
-        }),
-        body: JSON.stringify({
-          email: _variables.email,
-          // listIds: [2],  // Replace with your actual list ID
-          updateEnabled: true,
-        }),
-      });
-
-      if (response.ok) {
-        console.log('Subscription successful!');
-      } else {
-        const errorData = await response.json();
-        console.log(`Subscription failed: ${errorData.message}`);
-      }
-
       toastSuccess("Create user successfully!, you can login now");
       router.push('sign-in')
       form.reset();
