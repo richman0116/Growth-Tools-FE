@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Overlay } from "../common/overlay";
 import { Filter } from "../icons/Filter";
@@ -9,44 +9,51 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { supabase } from "@/lib/supabaseClient";
+import { useGlobalStoreContext } from "@/hooks/GlobalStoreContext";
 
 export const FilterPopoverTool = (props: {
-  categories: Category[];
-  onSubmitFilter: (
-    category?: Category,
-    sort?: string,
-    order?: "ASC" | "DESC"
-  ) => void;
+  categories: any[];
 }) => {
-  const { categories, onSubmitFilter } = props;
-
+  const { categories } = props;
   const [open, setOpen] = useState(false);
 
-  const form = useForm<Filters>({
+  const { setOrderToolsData } = useGlobalStoreContext();
+
+  const form = useForm<any>({
     defaultValues: {
-      //   filter: {
-      //     deals: false,
-      //     trends: false,
-      //   },
-      //   categories: {
-      //     analytics: false,
-      //     content: false,
-      //     customerSupport: false,
-      //     design: false,
-      //     emailMarketing: false,
-      //     fileManagement: false,
-      //     productivity: false,
-      //     seo: false,
-      //     socialMedia: false,
-      //   },
-      categories: categories?.map((category) => {
-        return {
-          [category.name]: false,
-        };
-      }),
+      filter: {
+        deals: false,
+        trends: false,
+      },
+      categories: {
+        "Design": false,
+        "Email Marketing": false,
+        "Social Media": false,
+        "Customer Support": false,
+        "File Management": false,
+        "Project Management": false,
+        "SEO": false,
+        "Marketing": false,
+        "Influencer Management": false,
+        "Content": false,
+        "Ads Management": false,
+        "AI": false,
+        "Trending Tools": false,
+        "Analytics": false,
+        "Productivity": false,
+        "Admin": false
+      },
       sortBy: "name",
     },
   });
+
+  const handleReset = () => {
+    form.reset();
+    form.reset({
+      sortBy: 'name'
+    })
+  }
 
   const contentForm = () => {
     return (
@@ -98,7 +105,7 @@ export const FilterPopoverTool = (props: {
                 </div>
                 <h4 className="font-semibold text-base font-clash text-black dark:text-white">Categories</h4>
 
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                   {categories?.map((category) => {
                     return (
                       <FormField
@@ -144,7 +151,7 @@ export const FilterPopoverTool = (props: {
                                   />
                               </FormControl>
                               <FormLabel className="font-medium text-label2 font-satoshi text-sm dark:text-white">Rating</FormLabel>
-                          </FormItem>
+                            </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
                                 <RadioGroupItem value="name-DESC" />
@@ -165,13 +172,13 @@ export const FilterPopoverTool = (props: {
                 </div>
               </div>
               <span
-                  className="text-secondary font-bold cursor-pointer text-sm dark:text-white"
-                  onClick={() => form.reset()}
+                className="text-secondary font-bold cursor-pointer text-sm dark:text-white"
+                onClick={handleReset}
                 >
                   Reset
               </span>
             </div>
-            <div className="pt-9">
+            <div className="pt-8">
               <Button type="submit" className="w-full p-6 font-bold text-base font-clash">
                 Apply
               </Button>
@@ -205,30 +212,41 @@ export const FilterPopoverTool = (props: {
     );
   };
 
-  const onSubmit = async (data: Filters) => {
-    console.log("====================================");
-    console.log("data", data);
-    console.log("====================================");
-    let categoryName = "";
-    for (const key in data.categories) {
-      if (data.categories.hasOwnProperty(key)) {
-        // Check if the property value is true
-        if (data.categories[key]) {
-          // Add the key to the list of true properties
-          categoryName = key;
-        }
-      }
+  const onSubmit = async (data: any) => {
+    console.log(data)
+    let toolsDataInfo;
+    let baseQuery = supabase
+      .from('tools')
+      .select(`
+        *,
+        categories (
+          id,
+          name
+        )
+      `);
+    switch (data.sortBy) {
+      case "rating":
+        baseQuery = baseQuery.order('order', { ascending: false });
+        break;
+      case "name-ASC":
+        baseQuery = baseQuery.order('name', { ascending: true });
+        break;
+      case "name-DESC":
+        baseQuery = baseQuery.order('name', { ascending: false });
+        break;
     }
-    const category = categories.find(
-      (category) => category.name === categoryName
-    );
-    const sort = data.sortBy?.split("-")[0] ?? "name";
-    const order = data.sortBy?.split("-")[1] ?? "DESC";
-    console.log("====================================");
-    console.log("sortsortsort", sort);
-    console.log("orderorderorderorder", order);
-    console.log("====================================");
-    onSubmitFilter(category, sort, order as "ASC" | "DESC");
+
+    const { data: toolsData, error } = await baseQuery;
+    if (error) {
+      setOrderToolsData([])
+      return;
+    }
+
+    toolsDataInfo = toolsData.filter(item => item.trending_status === data.filter.trends || item.deal_status === data.filter.deals);
+
+    const selectedCategories = Object.keys(data.categories).filter(key => data.categories[key] === true);
+    toolsDataInfo = toolsDataInfo.filter(item => selectedCategories.includes(item.categories.name))
+    setOrderToolsData(toolsDataInfo)
   };
 
   return (
@@ -237,17 +255,19 @@ export const FilterPopoverTool = (props: {
         {open && <Overlay />}
         <Popover onOpenChange={(open: boolean) => setOpen(open)}>
           <PopoverTrigger>{triggerButton()}</PopoverTrigger>
-          <PopoverContent align="start" className="rounded-2xl md:w-[412px]">
-            {contentForm()}
-          </PopoverContent>
+          {open ?
+            <PopoverContent align="start" className="rounded-2xl md:w-[412px] max-h-[90vh] overflow-y-auto">
+              {contentForm()}
+            </PopoverContent> : "" }
         </Popover>
       </div>
       <div className="block md:hidden">
         <Dialog onOpenChange={(open: boolean) => setOpen(open)}>
           <DialogTrigger asChild>{triggerButton()}</DialogTrigger>
-          <DialogContent className="p-4 w-[90%] rounded-2xl" hideIconClose>
-            {contentForm()}
-          </DialogContent>
+          {open ?
+            <DialogContent className="p-4 w-[90%] rounded-2xl" hideIconClose>
+              {contentForm()}
+            </DialogContent> : ""}
         </Dialog>
       </div>
     </>
