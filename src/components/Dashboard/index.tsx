@@ -1,12 +1,8 @@
 'use client'
-import { FilterPopoverTool } from "@/components/admin/filter-popover-tool";
 import { ToolCardInfo } from "@/components/cards/tool-card-info";
 import { Button } from "@/components/ui/button";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  getCategoryById,
-} from "@/services/tool";
 import { usePathname } from "next/navigation";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
@@ -28,8 +24,6 @@ export default function Dashboard({ categoryLists, toolsAllData }: IDashboard) {
   const [categoryId, setCategoryId] = useState<string>("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<string | undefined>(undefined);
-  const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [sliceTools, setSliceTools] = useState<any[]>([])
@@ -38,25 +32,6 @@ export default function Dashboard({ categoryLists, toolsAllData }: IDashboard) {
 
   const onNextPage = () => {
     setPage(page + 1);
-  };
-
-  const onFilter = (
-    category?: Category,
-    sort?: string,
-    order?: "ASC" | "DESC"
-  ) => {
-    if (category) {
-      setCategoryId(category.id);
-      getCategoryById(category.id).then((res) => {
-        setCategory(res);
-      });
-    }
-    if (sort) {
-      setSort(sort);
-    }
-    if (order) {
-      setOrder(order);
-    }
   };
 
   useEffect(() => {
@@ -117,11 +92,6 @@ export default function Dashboard({ categoryLists, toolsAllData }: IDashboard) {
 
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-12 md:pb-14">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
-          <FilterPopoverTool
-            categories={categories}
-            onSubmitFilter={onFilter}
-          />
-
           <span className="font-medium font-sm font-satoshi text-description dark:text-white text-sm">Show as:</span>
           <Button
             variant="ghost"

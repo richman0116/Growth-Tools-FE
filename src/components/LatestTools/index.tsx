@@ -1,12 +1,8 @@
 'use client'
-import { FilterPopoverTool } from "@/components/admin/filter-popover-tool";
 import { ToolCardInfo } from "@/components/cards/tool-card-info";
 import { Button } from "@/components/ui/button";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  getCategoryById,
-} from "@/services/tool";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
 import clsx from "clsx";
@@ -21,10 +17,6 @@ interface ILatestTools {
 const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
   const [categories, setCategories] = useState<Category[]>([])
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [sort, setSort] = useState<string | undefined>(undefined);
-  const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-  const [category, setCategory] = useState<Category | undefined>(undefined);
   const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool, latestToolsData,  setLatestToolsData } = useGlobalStoreContext();
 
 
@@ -75,36 +67,12 @@ const LatestTools = ({ categoryLists, filterTools }: ILatestTools) => {
 
   }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender, setLatestToolsData])
 
-  const onFilter = (
-    category?: Category,
-    sort?: string,
-    order?: "ASC" | "DESC"
-  ) => {
-    if (category) {
-      setCategoryId(category.id);
-      getCategoryById(category.id).then((res) => {
-        setCategory(res);
-      });
-    }
-    if (sort) {
-      setSort(sort);
-    }
-    if (order) {
-      setOrder(order);
-    }
-  };
-  
   return (
 
     <>
       <MarketingToolHero toolName="latest " />
       <section className="h-auto min-h-[70vh] flex flex-col gap-6 px-4 pb-4 md:px-12 md:pb-14">
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
-          <FilterPopoverTool
-            categories={categories}
-            onSubmitFilter={onFilter}
-          />
-
           <span className="font-medium font-sm font-satoshi text-description dark:text-white text-sm">Show as:</span>
           <Button
             variant="ghost"

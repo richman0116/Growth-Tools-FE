@@ -4,16 +4,8 @@ import { ToolCardInfo } from "@/components/cards/tool-card-info";
 import { Button } from "@/components/ui/button";
 import { Grid3X3, TableProperties } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  filterTool,
-  getCategoryById,
-  getCategoryList,
-} from "@/services/tool";
-import { usePathname } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useGlobalStoreContext } from "../../hooks/GlobalStoreContext";
 import MarketingToolHero from "@/components/marketingTools/MarketingToolHero";
-import BreadCrumb from "@/components/marketingTools/BreadCrumb";
 import clsx from "clsx";
 import LocalStorageHandler, {USER, ORDER_TOOLS} from "@/helpers/localStorage";
 import { supabase } from "@/lib/supabaseClient";
@@ -26,10 +18,6 @@ interface IHomePage {
 const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
   const [categories, setCategories] = useState<Category[]>([])
   const [variant, setVariant] = useState<"default" | "thumbnail">("default");
-  const [categoryId, setCategoryId] = useState<string>("");
-  const [sort, setSort] = useState<string | undefined>(undefined);
-  const [order, setOrder] = useState<"ASC" | "DESC">("ASC");
-  const [category, setCategory] = useState<Category | undefined>(undefined);
   const { isFirstRender, setClapToolIds, setIsFirstRender, isPublishedTool, orderToolsData, setOrderToolsData } = useGlobalStoreContext();
 
   useEffect(() => {
@@ -79,25 +67,6 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
 
   }, [categoryLists, filterTools, isFirstRender, isPublishedTool, setIsFirstRender, setOrderToolsData])
 
-  const onFilter = (
-    category?: Category,
-    sort?: string,
-    order?: "ASC" | "DESC"
-  ) => {
-    if (category) {
-      setCategoryId(category.id);
-      getCategoryById(category.id).then((res) => {
-        setCategory(res);
-      });
-    }
-    if (sort) {
-      setSort(sort);
-    }
-    if (order) {
-      setOrder(order);
-    }
-  };
-  
   return (
 
     <>
@@ -106,7 +75,6 @@ const HomePage = ({ categoryLists, filterTools }: IHomePage) => {
         <div className="flex gap-4 items-center border-t-[1px] pt-4 md:pt-8">
           <FilterPopoverTool
             categories={categories}
-            onSubmitFilter={onFilter}
           />
 
           <span className="font-medium font-sm font-satoshi text-description dark:text-white text-sm">Show as:</span>
