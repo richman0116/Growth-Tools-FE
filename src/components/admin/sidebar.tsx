@@ -19,6 +19,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useAuthContext } from "@/hooks/AuthContext";
 import { useEffect, useState } from "react";
+import BrevoModal from "../BrevoModal";
 
 export function Sidebar({
   links,
@@ -28,6 +29,7 @@ export function Sidebar({
   const { isLoggedIn, isAdmin } = useAuthContext();
   const [sidebarLinks, setSidebarLinks] = useState<Category[]>([]);
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (isLoggedIn && isAdmin) {
@@ -38,6 +40,10 @@ export function Sidebar({
       setSidebarLinks(userLinks)
     }
   }, [isAdmin, isLoggedIn, links]);
+
+  const handleClick = () => {
+    setIsOpen(true);
+  }
 
   const navigation = (isFullText?: boolean) => {
     return (
@@ -121,9 +127,10 @@ export function Sidebar({
           )}
           
         </nav>
-        <div className="relative w-full p-4 md:block hidden">
+        <div className="relative w-full p-4 md:block hidden cursor-pointer" onClick={handleClick}>
           <Image src={AI_SEARCH} alt="" width={500} height={500} style={{width:'auto', height:'auto'}} />
         </div>
+        {isOpen && <BrevoModal closeModal={() => setIsOpen(false)} />}
       </>
     );
   };
