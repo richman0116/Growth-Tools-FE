@@ -114,3 +114,4 @@ type ToolInfo = {
   tierCategory: any,
   clapCount?: number;
 };
+// types...
